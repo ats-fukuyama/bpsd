@@ -5,16 +5,17 @@ c
       use bpsd_flags
       use bpsd_types
       use bpsd_types_internal
-      public bpsd_set_plasmaf,bpsd_get_plasmaf
+      public bpsd_set_plasmaf,bpsd_get_plasmaf,
+     &       bpsd_save_plasmaf,bpsd_load_plasmaf
       private
 c
-      logical, save :: bpsd_plasmaf_init_flag = .TRUE.
-      type(bpsd_1ddatax_type), save :: plasmafx
+      logical, save :: bpsd_plasmafx_init_flag = .TRUE.
+      type(bpsd_data1Dx_type), save :: plasmafx
 c
       contains
 c
 c-----------------------------------------------------------------------
-      subroutine bpsd_plasmaf_init
+      subroutine bpsd_plasmafx_init
 c-----------------------------------------------------------------------
       use bpsd_subs
       implicit none
@@ -23,10 +24,10 @@ c
       plasmafx%dataName='plasmaf'
       plasmafx%ndmax=0
 c
-      bpsd_plasmaf_init_flag = .FALSE.
+      bpsd_plasmafx_init_flag = .FALSE.
 c
       return
-      end subroutine bpsd_plasmaf_init
+      end subroutine bpsd_plasmafx_init
 c
 c-----------------------------------------------------------------------
       subroutine bpsd_set_plasmaf(plasmaf_in,ierr)
@@ -34,11 +35,11 @@ c-----------------------------------------------------------------------
 c
       use bpsd_subs
       implicit none
-      type(bpsd_plasmaf_type):: plasmaf_in
-      integer :: ierr
+      type(bpsd_plasmaf_type),intent(in):: plasmaf_in
+      integer,intent(out) :: ierr
       integer :: ns,nr,nd
 c
-      if(bpsd_plasmaf_init_flag) call bpsd_plasmaf_init
+      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
 c
       if(plasmafx%status.ne.0) then
          if((plasmaf_in%nrmax.ne.plasmafx%nrmax) .or.
@@ -110,13 +111,13 @@ c-----------------------------------------------------------------------
 c
       use bpsd_subs
       implicit none
-      type(bpsd_plasmaf_type) :: plasmaf_out
-      integer :: ierr
+      type(bpsd_plasmaf_type),intent(out) :: plasmaf_out
+      integer,intent(out) :: ierr
       integer :: nr, nd, ns
       real(8) :: s
       real(8), dimension(:), allocatable :: v
 c
-      if(bpsd_plasmaf_init_flag) call bpsd_plasmaf_init
+      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
 c
       if(plasmafx%status.eq.0) then
          write(6,*) 
@@ -186,7 +187,7 @@ c
 c
       if(plasmafx%status.eq.3) then
          do nd=1,plasmafx%ndmax
-            call spl1D_bpsd(plasmafx,nd,ierr)
+            call bpsd_spl1D(plasmafx,nd,ierr)
          enddo
          plasmafx%status=4
       endif
@@ -195,7 +196,7 @@ c
       do nr=1,plasmaf_out%nrmax
          s = plasmaf_out%s(nr)
          do nd=1,plasmafx%ndmax
-            call spl1DF_bpsd(s,v(nd),plasmafx,nd,ierr)
+            call bpsd_spl1DF(s,v(nd),plasmafx,nd,ierr)
          enddo
          do ns=1,plasmaf_out%nsmax
             nd=5*(ns-1)
@@ -238,5 +239,76 @@ c
       endif
       return
       end subroutine bpsd_get_plasmaf
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_plasmaf(fid,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_subs
+      implicit none
+      integer,intent(in) :: fid
+      integer,intent(out) :: ierr
+c
+      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
+c
+      if(plasmafx%status.gt.1) 
+     &     call bpsd_save_data1Dx(fid,plasmafx,ierr)
+      return
+c
+      end subroutine bpsd_save_plasmaf
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_load_plasmaf(datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_subs
+      implicit none
+      type(bpsd_data1Dx_type),intent(in) :: datax
+      integer,intent(out) :: ierr
+      integer:: ns,nr,nd
+c
+      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
+c
+      if(plasmafx%status.ne.0) then
+         if((datax%nrmax.ne.plasmafx%nrmax) .or.
+     &      (datax%ndmax.ne.plasmafx%ndmax))  then
+            if(plasmafx%status.ge.3) deallocate(plasmafx%spline)
+            deallocate(plasmafx%data)
+            deallocate(plasmafx%s)
+            deallocate(plasmafx%kid)
+            plasmafx%status=0
+         endif
+      endif
+c
+      if(plasmafx%status.eq.0) then
+         plasmafx%ndmax=datax%ndmax
+         plasmafx%nrmax=datax%nrmax
+         allocate(plasmafx%kid(plasmafx%ndmax))
+         allocate(plasmafx%s(plasmafx%nrmax))
+         allocate(plasmafx%data(plasmafx%nrmax,plasmafx%ndmax))
+         do ns=1,(plasmafx%ndmax-1)/5
+            nd=5*(ns-1)
+            plasmafx%kid(nd+1)='plasmaf%pn'
+            plasmafx%kid(nd+2)='plasmaf%pt'
+            plasmafx%kid(nd+3)='plasmaf%ptpr'
+            plasmafx%kid(nd+4)='plasmaf%ptpp'
+            plasmafx%kid(nd+5)='plasmaf%pu'
+         enddo
+         plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
+         plasmafx%status=1
+      endif
+c
+      plasmafx%time = datax%time
+      do nr=1,plasmafx%nrmax
+         plasmafx%s(nr) = datax%s(nr)
+         do nd=1,plasmafx%ndmax
+            plasmafx%data(nr,nd) = datax%data(nr,nd)
+         enddo
+      enddo
+      plasmafx%status=2
+      ierr=0
+      return
+c
+      end subroutine bpsd_load_plasmaf
 c
       end module bpsd_plasmaf

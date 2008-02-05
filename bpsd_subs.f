@@ -5,13 +5,13 @@ c
       contains
 c
 c-----------------------------------------------------------------------
-      subroutine spl1D_bpsd(data1D,nd,ierr)
+      subroutine bpsd_spl1D(data1D,nd,ierr)
 c-----------------------------------------------------------------------
 c
 !      use libspl_mod
       use bpsd_types_internal
       implicit none
-      type(bpsd_1ddatax_type) :: data1D
+      type(bpsd_data1Dx_type) :: data1D
       integer :: nd     ! position of dependent variable
       integer :: ierr    ! error indicator
       real(8), dimension(:), allocatable :: deriv
@@ -24,10 +24,10 @@ c
      &                ': ierr=',ierr
       deallocate(deriv)
       return
-      end subroutine spl1D_bpsd
+      end subroutine bpsd_spl1D
 c
 c-----------------------------------------------------------------------
-      subroutine spl1DF_bpsd(pos,val,data1D,nd,ierr)
+      subroutine bpsd_spl1DF(pos,val,data1D,nd,ierr)
 c-----------------------------------------------------------------------
 c
 !      use libspl_mod
@@ -35,7 +35,7 @@ c
       implicit none
       real(8) :: pos     ! value of independent variable
       real(8) :: val     ! value of dependent variable
-      type(bpsd_1ddatax_type) :: data1D
+      type(bpsd_data1Dx_type) :: data1D
       integer :: nd      ! position of dependent variable
       integer :: ierr    ! error indicator
 
@@ -47,6 +47,130 @@ c
          write(6,'(1P3E12.4)')  
      &        pos,data1D%s(1),data1D%s(data1D%nrmax)
       endif
-      end subroutine spl1DF_bpsd
+      end subroutine bpsd_spl1DF
 c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_shotx(fid,datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_types_internal
+      implicit none
+      integer,intent(in):: fid
+      type(bpsd_shotx_type),intent(in):: datax
+      integer,intent(out):: ierr
+c
+      write(fid,IOSTAT=ierr,ERR=8) 'data:str'
+      write(fid,IOSTAT=ierr,ERR=8) datax%dataName
+      write(fid,IOSTAT=ierr,ERR=8) datax%deviceID
+      write(fid,IOSTAT=ierr,ERR=8) datax%shotID,datax%modelID
+
+      ierr=0
+      return
+
+    8 continue
+      return
+      end subroutine bpsd_save_shotx
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_data0Dx(fid,datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_types_internal
+      implicit none
+      integer,intent(in):: fid
+      type(bpsd_data0Dx_type),intent(in):: datax
+      integer,intent(out):: ierr
+c
+      write(fid,IOSTAT=ierr,ERR=8) 'data::0D'
+      write(fid,IOSTAT=ierr,ERR=8) datax%dataName
+      write(fid,IOSTAT=ierr,ERR=8) datax%time
+      write(fid,IOSTAT=ierr,ERR=8) datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%kid
+      write(fid,IOSTAT=ierr,ERR=8) datax%data
+
+      ierr=0
+      return
+
+    8 continue
+      return
+      end subroutine bpsd_save_data0Dx
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_data1Dx(fid,datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_types_internal
+      implicit none
+      integer,intent(in):: fid
+      type(bpsd_data1Dx_type),intent(in):: datax
+      integer,intent(out):: ierr
+c
+      write(fid,IOSTAT=ierr,ERR=8) 'data::1D'
+      write(fid,IOSTAT=ierr,ERR=8) datax%dataName
+      write(fid,IOSTAT=ierr,ERR=8) datax%time
+      write(fid,IOSTAT=ierr,ERR=8) datax%nrmax,datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%kid
+      write(fid,IOSTAT=ierr,ERR=8) datax%s
+      write(fid,IOSTAT=ierr,ERR=8) datax%data
+
+      ierr=0
+      return
+
+    8 continue
+      return
+      end subroutine bpsd_save_data1Dx
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_data2Dx(fid,datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_types_internal
+      implicit none
+      integer,intent(in):: fid
+      type(bpsd_data2Dx_type),intent(in):: datax
+      integer,intent(out):: ierr
+c
+      write(fid,IOSTAT=ierr,ERR=8) 'data::2D'
+      write(fid,IOSTAT=ierr,ERR=8) datax%dataName
+      write(fid,IOSTAT=ierr,ERR=8) datax%time
+      write(fid,IOSTAT=ierr,ERR=8) datax%nrmax,datax%nthmax,datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%kid
+      write(fid,IOSTAT=ierr,ERR=8) datax%s
+      write(fid,IOSTAT=ierr,ERR=8) datax%th
+      write(fid,IOSTAT=ierr,ERR=8) datax%data
+
+      ierr=0
+      return
+
+    8 continue
+      return
+      end subroutine bpsd_save_data2Dx
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_data3Dx(fid,datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_types_internal
+      implicit none
+      integer,intent(in):: fid
+      type(bpsd_data3Dx_type),intent(in):: datax
+      integer,intent(out):: ierr
+c
+      write(fid,IOSTAT=ierr,ERR=8) 'data::3D'
+      write(fid,IOSTAT=ierr,ERR=8) datax%dataName
+      write(fid,IOSTAT=ierr,ERR=8) datax%time
+      write(fid,IOSTAT=ierr,ERR=8) 
+     &     datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%kid
+      write(fid,IOSTAT=ierr,ERR=8) datax%s
+      write(fid,IOSTAT=ierr,ERR=8) datax%th
+      write(fid,IOSTAT=ierr,ERR=8) datax%ph
+      write(fid,IOSTAT=ierr,ERR=8) datax%data
+
+      ierr=0
+      return
+
+    8 continue
+      return
+      end subroutine bpsd_save_data3Dx
       end module bpsd_subs

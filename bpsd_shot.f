@@ -5,39 +5,39 @@ c
       use bpsd_flags
       use bpsd_types
       use bpsd_types_internal
-      public bpsd_set_shot,bpsd_get_shot
+      public bpsd_set_shot,bpsd_get_shot,
+     &       bpsd_save_shot,bpsd_load_shot
       private
 c
-      logical, save :: bpsd_shot_init_flag = .TRUE.
+      logical, save :: bpsd_shotx_init_flag = .TRUE.
       type(bpsd_shotx_type), save :: shotx
 c
       contains
 c
 c-----------------------------------------------------------------------
-      subroutine bpsd_shot_init
+      subroutine bpsd_shotx_init
 c-----------------------------------------------------------------------
       use bpsd_subs
       implicit none
 c
-      bpsd_shot_init_flag = .FALSE.
+      shotx%dataName = 'shot'
+      bpsd_shotx_init_flag = .FALSE.
 c
       return
-      end subroutine bpsd_shot_init
+      end subroutine bpsd_shotx_init
 c
 c-----------------------------------------------------------------------
       subroutine bpsd_set_shot(shot_in,ierr)
 c-----------------------------------------------------------------------
 c
-      use bpsd_types_internal
       use bpsd_subs
       implicit none
       type(bpsd_shot_type) :: shot_in
       integer :: ierr
 c
-      if(bpsd_shot_init_flag) call bpsd_shot_init
+      if(bpsd_shotx_init_flag) call bpsd_shotx_init
 c
       shotx%deviceID = shot_in%deviceID
-      shotx%dataName = 'shot'
       shotx%shotID = shot_in%shotID
       shotx%modelID = shot_in%modelID
       shotx%status = 2
@@ -57,13 +57,12 @@ c-----------------------------------------------------------------------
       subroutine bpsd_get_shot(shot_out,ierr)
 c-----------------------------------------------------------------------
 c
-      use bpsd_types_internal
       use bpsd_subs
       implicit none
       type(bpsd_shot_type) :: shot_out
       integer :: ierr
 c
-      if(bpsd_shot_init_flag) call bpsd_shot_init
+      if(bpsd_shotx_init_flag) call bpsd_shotx_init
 c
       if(shotx%status.eq.1) then
          write(6,*) 'XX bpsd_get_shot: no data in shot'
@@ -85,5 +84,42 @@ c
       endif
       return
       end subroutine bpsd_get_shot
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_shot(fid,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_subs
+      implicit none
+      integer,intent(in) :: fid
+      integer,intent(out) :: ierr
+c
+      if(bpsd_shotx_init_flag) call bpsd_shotx_init
+c
+      if(shotx%status.gt.1) 
+     &     call bpsd_save_shotx(fid,shotx,ierr)
+      return
+c
+      end subroutine bpsd_save_shot
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_load_shot(datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_subs
+      implicit none
+      type(bpsd_shotx_type),intent(in) :: datax
+      integer,intent(out) :: ierr
+c
+      if(bpsd_shotx_init_flag) call bpsd_shotx_init
+c
+      shotx%deviceID = datax%deviceID
+      shotx%shotID = datax%shotID
+      shotx%modelID = datax%modelID
+      shotx%status=2
+      ierr=0
+      return
+c
+      end subroutine bpsd_load_shot
 c
       end module bpsd_shot

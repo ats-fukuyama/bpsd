@@ -96,16 +96,16 @@ c
          type(bpsd_plasmaf_data), dimension(:,:), allocatable :: data
       end type bpsd_plasmaf_type
 c
-      type bpsd_0ddata_type
+      type bpsd_data0D_type
          integer :: ndmax     ! Number of data
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
          real(rkind), dimension(:), allocatable :: data
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_0ddata_type
+      end type bpsd_data0D_type
 c
-      type bpsd_1ddata_type
+      type bpsd_data1D_type
          integer :: nrmax     ! Number of radial points
          integer :: ndmax     ! Number of data
          character(len=32) :: dataName
@@ -113,9 +113,9 @@ c
          real(rkind), dimension(:), allocatable :: s 
          real(rkind), dimension(:,:), allocatable :: data
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_1ddata_type
+      end type bpsd_data1D_type
 c
-      type bpsd_2ddata_type
+      type bpsd_data2D_type
          integer :: nthmax    ! Number of poloidal points
          integer :: nrmax     ! Number of radial points
          integer :: ndmax     ! Number of data
@@ -126,9 +126,9 @@ c
          real(rkind), dimension(:), allocatable :: s 
          real(rkind), dimension(:,:,:), allocatable :: data
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_2ddata_type
+      end type bpsd_data2D_type
 c
-      type bpsd_3ddata_type
+      type bpsd_data3D_type
          integer :: nphmax    ! Number of toroidal points
          integer :: nthmax    ! Number of poloidal points
          integer :: nrmax     ! Number of radial points
@@ -140,6 +140,6 @@ c
          real(rkind), dimension(:), allocatable :: s 
          real(rkind), dimension(:,:,:,:), allocatable :: data
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_3ddata_type
+      end type bpsd_data3D_type
 c
       end module bpsd_types

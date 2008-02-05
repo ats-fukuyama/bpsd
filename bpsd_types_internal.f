@@ -13,7 +13,7 @@ c
          character(len=32) :: deviceID
       end type bpsd_shotx_type
 c
-      type bpsd_0ddatax_type
+      type bpsd_data0Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
          integer :: ndmax     ! Number of data
@@ -21,9 +21,9 @@ c
          real(rkind) :: time
          real(rkind), dimension(:), allocatable :: data
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_0ddatax_type
+      end type bpsd_data0Dx_type
 c
-      type bpsd_1ddatax_type
+      type bpsd_data1Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
          integer :: nrmax     ! Number of radial points
@@ -35,9 +35,9 @@ c
          real(rkind), dimension(:,:), allocatable :: data
          real(rkind), dimension(:,:,:), allocatable :: spline
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_1ddatax_type
+      end type bpsd_data1Dx_type
 c
-      type bpsd_2ddatax_type
+      type bpsd_data2Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
          integer :: nrmax     ! Number of radial points
@@ -50,9 +50,9 @@ c
          real(rkind), dimension(:,:,:), allocatable :: data
          real(rkind), dimension(:,:,:,:), allocatable :: spline
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_2ddatax_type
+      end type bpsd_data2Dx_type
 c
-      type bpsd_3ddatax_type
+      type bpsd_data3Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
          integer :: nrmax     ! Number of radial points
@@ -68,6 +68,6 @@ c
          real(rkind), dimension(:,:,:,:), allocatable :: data
          real(rkind), dimension(:,:,:,:,:,:), allocatable :: spline
          character(len=32), dimension(:), allocatable :: kid
-      end type bpsd_3ddatax_type
+      end type bpsd_data3Dx_type
 c
       end module bpsd_types_internal

@@ -5,16 +5,17 @@ c
       use bpsd_flags
       use bpsd_types
       use bpsd_types_internal
-      public bpsd_set_device,bpsd_get_device
+      public bpsd_set_device,bpsd_get_device,
+     &       bpsd_save_device,bpsd_load_device
       private
 c
-      logical, save :: bpsd_device_init_flag = .TRUE.
-      type(bpsd_0ddatax_type), save :: devicex
+      logical, save :: bpsd_devicex_init_flag = .TRUE.
+      type(bpsd_data0Dx_type), save :: devicex
 c
       contains
 c
 c-----------------------------------------------------------------------
-      subroutine bpsd_device_init
+      subroutine bpsd_devicex_init
 c-----------------------------------------------------------------------
       use bpsd_subs
       implicit none
@@ -33,22 +34,21 @@ c
       devicex%kid(7)='device%elip'
       devicex%kid(8)='device%trig'
 c
-      bpsd_device_init_flag = .FALSE.
+      bpsd_devicex_init_flag = .FALSE.
 c
       return
-      end subroutine bpsd_device_init
+      end subroutine bpsd_devicex_init
 c
 c-----------------------------------------------------------------------
       subroutine bpsd_set_device(device_in,ierr)
 c-----------------------------------------------------------------------
 c
-      use bpsd_types_internal
       use bpsd_subs
       implicit none
       type(bpsd_device_type) :: device_in
       integer :: ierr, nd
 c
-      if(bpsd_device_init_flag) call bpsd_device_init
+      if(bpsd_devicex_init_flag) call bpsd_devicex_init
 c
       devicex%dataName = 'device'
       devicex%time = 0.D0
@@ -77,13 +77,12 @@ c-----------------------------------------------------------------------
       subroutine bpsd_get_device(device_out,ierr)
 c-----------------------------------------------------------------------
 c
-      use bpsd_types_internal
       use bpsd_subs
       implicit none
       type(bpsd_device_type) :: device_out
       integer :: ierr, nd
 c
-      if(bpsd_device_init_flag) call bpsd_device_init
+      if(bpsd_devicex_init_flag) call bpsd_devicex_init
 c
       if(devicex%status.eq.1) then
          write(6,*) 'XX bpsd_get_device: no data in device'
@@ -110,5 +109,44 @@ c
       endif
       return
       end subroutine bpsd_get_device
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_save_device(fid,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_subs
+      implicit none
+      integer,intent(in) :: fid
+      integer,intent(out) :: ierr
+c
+      if(bpsd_devicex_init_flag) call bpsd_devicex_init
+c
+      if(devicex%status.gt.1) 
+     &     call bpsd_save_data0Dx(fid,devicex,ierr)
+      return
+c
+      end subroutine bpsd_save_device
+c
+c-----------------------------------------------------------------------
+      subroutine bpsd_load_device(datax,ierr)
+c-----------------------------------------------------------------------
+c
+      use bpsd_subs
+      implicit none
+      type(bpsd_data0Dx_type),intent(in) :: datax
+      integer,intent(out) :: ierr
+      integer:: nd
+c
+      if(bpsd_devicex_init_flag) call bpsd_devicex_init
+c
+      devicex%time = datax%time
+      do nd=1,devicex%ndmax
+         devicex%data(nd) = datax%data(nd)
+      enddo
+      devicex%status=2
+      ierr=0
+      return
+c
+      end subroutine bpsd_load_device
 c
       end module bpsd_device
