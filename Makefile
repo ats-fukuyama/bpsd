@@ -8,7 +8,8 @@ FFLAGS=$(OFLAGS)
 #FFLAGS=$(DFLAGS)
 
 SRCSFIXED = bpsd_flags.f bpsd_types.f bpsd_types_internal.f bpsd_subs.f \
-            bpsd_plasmaf.f bpsd_base.f
+            bpsd_shot.f bpsd_device.f bpsd_species.f \
+            bpsd_equ1d.f bpsd_metric1d.f bpsd_plasmaf.f bpsd_base.f
 SRCSFREE = bpsd_kind.f90 bpsd_constant.f90
 
 OBJS = $(SRCSFREE:.f90=.o) $(SRCSFIXED:.f=.o) 

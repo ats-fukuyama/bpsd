@@ -5,9 +5,11 @@ c
       use bpsd_flags
       use bpsd_types
       use bpsd_types_internal
+      public bpsd_set_plasmaf,bpsd_get_plasmaf
+      private
 c
-      logical, private, save :: bpsd_plasmaf_init_flag = .TRUE.
-      type(bpsd_1ddatax_type), private, save :: plasmafx
+      logical, save :: bpsd_plasmaf_init_flag = .TRUE.
+      type(bpsd_1ddatax_type), save :: plasmafx
 c
       contains
 c
