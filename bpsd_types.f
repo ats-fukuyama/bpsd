@@ -1,15 +1,15 @@
 c     $Id$
 c=======================================================================
       module bpsd_types
-c
+
       use bpsd_kind
-c
+
       type bpsd_shot_type
          integer :: shotID
          integer :: modelID
          character(len=32) :: deviceID
       end type bpsd_shot_type
-c
+
       type bpsd_device_type
          real(rkind) :: rr     ! Geometrical major radius [m]
          real(rkind) :: zz     ! Geometrical vetical position [m]
@@ -50,6 +50,41 @@ c
          type(bpsd_equ1D_data), dimension(:), allocatable :: data
       end type bpsd_equ1D_type
 c
+      type bpsd_equ2D_data
+         real(rkind) :: psip2d  ! Poloidal magnetic flux [Wb] ~pi*R*r*Bp
+      end type bpsd_equ2D_data
+      type bpsd_equ2D_type
+         integer :: nrrmax      ! Number of major radius points
+         integer :: nzzmax      ! Number of vertical points
+         real(rkind) :: time
+         real(rkind), dimension(:), allocatable :: rr
+                              ! Major radius
+         real(rkind), dimension(:), allocatable :: zz
+                              ! Vertical position
+         real(rkind) :: psip_axis,psip_boundary
+         type(bpsd_equ2D_data), dimension(:,:), allocatable :: data
+      end type bpsd_equ2D_type
+
+c
+      type bpsd_equ3D_data
+         real(rkind) :: psip3d  ! Poloidal magnetic flux [Wb] ~pi*R*r*Bp
+      end type bpsd_equ3D_data
+      type bpsd_equ3D_type
+         integer :: nrmax       ! Number of radial radius points
+         integer :: nthmax      ! Number of poloidal points
+         integer :: nphmax      ! Number of toroidal points
+         integer :: idum      ! Dummy
+         real(rkind) :: time
+         real(rkind) :: psip_axis,psip_boundary
+         real(rkind), dimension(:), allocatable :: s 
+                              ! (rho^2) normarized toroidal magnetic flux
+         real(rkind), dimension(:), allocatable :: theta
+                              ! poloidal angle
+         real(rkind), dimension(:), allocatable :: phi
+                              ! toroidal angle
+         type(bpsd_equ3D_data), dimension(:,:,:), allocatable :: data
+      end type bpsd_equ3D_type
+c
       type bpsd_metric1D_data
          real(rkind) :: pvol     ! Plasma volude [m^3] ~2*pi*R*pi*r^2
          real(rkind) :: psur     ! Plasma surface [m^2] ~pi*r^2
@@ -76,7 +111,7 @@ c
                                 ! (rho^2) normarized toroidal magnetic flux
          type(bpsd_metric1D_data), dimension(:), allocatable :: data
       end type bpsd_metric1D_type
-c
+
       type bpsd_plasmaf_data
          real(rkind) :: pn     ! Number density [m^-3]
          real(rkind) :: pt     ! Temperature [eV]
@@ -95,6 +130,18 @@ c
                               ! 1/q : inverse of safety factor
          type(bpsd_plasmaf_data), dimension(:,:), allocatable :: data
       end type bpsd_plasmaf_type
+
+      type bpsd_dielectric_data
+         complex(rkind),dimension(3,3) :: tensor     ! permeability
+      end type bpsd_dielectric_data
+      type bpsd_dielectric_type
+         integer :: nrmax     ! Number of radial points
+         integer :: nsmax     ! Number of particle species
+         real(rkind) :: time
+         real(rkind), dimension(:), allocatable :: s 
+                              ! (rho^2) : normarized toroidal magnetic flux
+         type(bpsd_dielectric_data), dimension(:,:), allocatable :: data
+      end type bpsd_dielectric_type
 c
       type bpsd_data0D_type
          integer :: ndmax     ! Number of data
