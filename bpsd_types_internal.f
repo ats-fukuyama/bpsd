@@ -2,7 +2,7 @@ c     $Id$
 c=======================================================================
       module bpsd_types_internal
 c
-      use bpsd_kind
+      use bpsd_kinds
 c
       type bpsd_shotx_type
          integer :: status = 1! 1:undef 2:assigned

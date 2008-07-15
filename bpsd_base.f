@@ -2,8 +2,8 @@ c     $Id$
 c=======================================================================
       module bpsd
 c
-      use bpsd_kind
-      use bpsd_constant
+      use bpsd_kinds
+      use bpsd_constants
       use bpsd_flags
       use bpsd_types
       use bpsd_shot

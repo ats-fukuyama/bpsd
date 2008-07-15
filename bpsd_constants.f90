@@ -1,5 +1,5 @@
-module bpsd_constant
-  use bpsd_kind
+module bpsd_constants
+  use bpsd_kinds
   implicit none
 
   real(rkind),parameter :: ZERO = 0.0_dp
@@ -18,4 +18,4 @@ module bpsd_constant
   real(rkind),parameter :: EPS0 = ONE/(VC*VC*RMU0) ! permittivity
 
   complex(rkind),parameter :: CI   = (0.0_dp,1.0_dp)
-end module bpsd_constant
+end module bpsd_constants

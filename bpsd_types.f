@@ -2,7 +2,7 @@ c     $Id$
 c=======================================================================
       module bpsd_types
 
-      use bpsd_kind
+      use bpsd_kinds
 
       type bpsd_shot_type
          integer :: shotID
