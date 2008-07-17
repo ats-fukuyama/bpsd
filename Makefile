@@ -30,7 +30,7 @@ libs: ../task/lib/tasklib.a
 	(cd ../task/lib; make tasklib.a)
 
 bpsdlib.a: $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+	$(LD) $(LDFLAGS) $@ $(OBJS)
 
 clean:
 	-rm -f core a.out *.o *.mod ./*~ ./#* *.a
