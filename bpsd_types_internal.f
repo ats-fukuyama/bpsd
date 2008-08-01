@@ -19,8 +19,8 @@ c
          integer :: ndmax     ! Number of data
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: data
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: data
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data0Dx_type
 c
       type bpsd_data1Dx_type
@@ -31,10 +31,10 @@ c
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
-         real(rkind), dimension(:,:), allocatable :: data
-         real(rkind), dimension(:,:,:), allocatable :: spline
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:,:), pointer :: data
+         real(rkind), dimension(:,:,:), pointer :: spline
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data1Dx_type
 c
       type bpsd_data2Dx_type
@@ -45,11 +45,11 @@ c
          integer :: ndmax     ! Number of data
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
-         real(rkind), dimension(:), allocatable :: th
-         real(rkind), dimension(:,:,:), allocatable :: data
-         real(rkind), dimension(:,:,:,:), allocatable :: spline
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:), pointer :: th
+         real(rkind), dimension(:,:,:), pointer :: data
+         real(rkind), dimension(:,:,:,:), pointer :: spline
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data2Dx_type
 c
       type bpsd_data3Dx_type
@@ -62,12 +62,12 @@ c
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
-         real(rkind), dimension(:), allocatable :: th
-         real(rkind), dimension(:), allocatable :: ph
-         real(rkind), dimension(:,:,:,:), allocatable :: data
-         real(rkind), dimension(:,:,:,:,:,:), allocatable :: spline
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:), pointer :: th
+         real(rkind), dimension(:), pointer :: ph
+         real(rkind), dimension(:,:,:,:), pointer :: data
+         real(rkind), dimension(:,:,:,:,:,:), pointer :: spline
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data3Dx_type
 c
       end module bpsd_types_internal

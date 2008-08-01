@@ -94,7 +94,7 @@ c
       integer :: ierr
       integer :: nr, nd, ns
       real(8) :: s
-      real(8), dimension(:), allocatable :: v
+      real(8), dimension(:), pointer :: v
 c
       if(bpsd_speciesx_init_flag) call bpsd_speciesx_init
 c
@@ -112,7 +112,7 @@ c
       endif
 c
       if(species_out%nsmax.eq.0) then
-         if(allocated(species_out%data)) then
+         if(associated(species_out%data)) then
             if(speciesx%ndmax.ne.size(species_out%data,1)*3) then
                deallocate(species_out%data)
                species_out%nsmax = speciesx%ndmax/3
@@ -124,7 +124,7 @@ c
          endif
       endif
 c
-      if(allocated(species_out%data)) then
+      if(associated(species_out%data)) then
          if(speciesx%ndmax.le.size(species_out%data,1)*3) then
             species_out%nsmax = speciesx%ndmax/3
             do ns=1,species_out%nsmax

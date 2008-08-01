@@ -115,7 +115,7 @@ c
       integer,intent(out) :: ierr
       integer :: nr, nd, ns
       real(8) :: s
-      real(8), dimension(:), allocatable :: v
+      real(8), dimension(:), pointer :: v
 c
       if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
 c
@@ -133,7 +133,7 @@ c
       endif
 c
       if(plasmaf_out%nrmax.eq.0) then
-         if(allocated(plasmaf_out%data)) then
+         if(associated(plasmaf_out%data)) then
             if(plasmafx%nrmax.ne.size(plasmaf_out%data,1)) then
                deallocate(plasmaf_out%qinv)
                deallocate(plasmaf_out%data)
@@ -155,7 +155,7 @@ c
          endif
       endif
 c
-      if(allocated(plasmaf_out%data)) then
+      if(associated(plasmaf_out%data)) then
          if(plasmafx%nrmax.le.size(plasmaf_out%data,1)) then
             plasmaf_out%time  = plasmafx%time
             plasmaf_out%nrmax = plasmafx%nrmax

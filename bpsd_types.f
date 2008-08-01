@@ -30,7 +30,7 @@ c
       type bpsd_species_type
          integer :: nsmax     ! Number of particle species
          integer :: idum      ! Dummy
-         type(bpsd_species_data), dimension(:), allocatable :: data
+         type(bpsd_species_data), dimension(:), pointer :: data
       end type bpsd_species_type
 c
       type bpsd_equ1D_data
@@ -45,9 +45,9 @@ c
          integer :: nrmax     ! Number of radial points
          integer :: idum      ! Dummy
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
+         real(rkind), dimension(:), pointer :: s 
                               ! (rho^2) normarized toroidal magnetic flux
-         type(bpsd_equ1D_data), dimension(:), allocatable :: data
+         type(bpsd_equ1D_data), dimension(:), pointer :: data
       end type bpsd_equ1D_type
 c
       type bpsd_equ2D_data
@@ -57,12 +57,12 @@ c
          integer :: nrrmax      ! Number of major radius points
          integer :: nzzmax      ! Number of vertical points
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: rr
+         real(rkind), dimension(:), pointer :: rr
                               ! Major radius
-         real(rkind), dimension(:), allocatable :: zz
+         real(rkind), dimension(:), pointer :: zz
                               ! Vertical position
          real(rkind) :: psip_axis,psip_boundary
-         type(bpsd_equ2D_data), dimension(:,:), allocatable :: data
+         type(bpsd_equ2D_data), dimension(:,:), pointer :: data
       end type bpsd_equ2D_type
 
 c
@@ -76,17 +76,17 @@ c
          integer :: idum      ! Dummy
          real(rkind) :: time
          real(rkind) :: psip_axis,psip_boundary
-         real(rkind), dimension(:), allocatable :: s 
+         real(rkind), dimension(:), pointer :: s 
                               ! (rho^2) normarized toroidal magnetic flux
-         real(rkind), dimension(:), allocatable :: theta
+         real(rkind), dimension(:), pointer :: theta
                               ! poloidal angle
-         real(rkind), dimension(:), allocatable :: phi
+         real(rkind), dimension(:), pointer :: phi
                               ! toroidal angle
-         type(bpsd_equ3D_data), dimension(:,:,:), allocatable :: data
+         type(bpsd_equ3D_data), dimension(:,:,:), pointer :: data
       end type bpsd_equ3D_type
 c
       type bpsd_metric1D_data
-         real(rkind) :: pvol     ! Plasma volude [m^3] ~2*pi*R*pi*r^2
+         real(rkind) :: pvol     ! Plasma volume [m^3] ~2*pi*R*pi*r^2
          real(rkind) :: psur     ! Plasma surface [m^2] ~pi*r^2
          real(rkind) :: dvpsit   ! dV/dPsit
          real(rkind) :: dvpsip   ! dV/dPsip
@@ -107,9 +107,9 @@ c
          integer :: nrmax       ! Number of radial points
          integer :: idum      ! Dummy
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
+         real(rkind), dimension(:), pointer :: s 
                                 ! (rho^2) normarized toroidal magnetic flux
-         type(bpsd_metric1D_data), dimension(:), allocatable :: data
+         type(bpsd_metric1D_data), dimension(:), pointer :: data
       end type bpsd_metric1D_type
 
       type bpsd_plasmaf_data
@@ -124,11 +124,11 @@ c
          integer :: nrmax     ! Number of radial points
          integer :: nsmax     ! Number of particle species
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
+         real(rkind), dimension(:), pointer :: s 
                               ! (rho^2) : normarized toroidal magnetic flux
-         real(rkind), dimension(:), allocatable :: qinv 
+         real(rkind), dimension(:), pointer :: qinv 
                               ! 1/q : inverse of safety factor
-         type(bpsd_plasmaf_data), dimension(:,:), allocatable :: data
+         type(bpsd_plasmaf_data), dimension(:,:), pointer :: data
       end type bpsd_plasmaf_type
 
       type bpsd_dielectric_data
@@ -138,9 +138,9 @@ c
          integer :: nrmax     ! Number of radial points
          integer :: nsmax     ! Number of particle species
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
+         real(rkind), dimension(:), pointer :: s 
                               ! (rho^2) : normarized toroidal magnetic flux
-         type(bpsd_dielectric_data), dimension(:,:), allocatable :: data
+         type(bpsd_dielectric_data), dimension(:,:), pointer :: data
       end type bpsd_dielectric_type
 c
       type bpsd_data0D_type
@@ -148,8 +148,8 @@ c
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: data
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: data
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data0D_type
 c
       type bpsd_data1D_type
@@ -157,9 +157,9 @@ c
          integer :: ndmax     ! Number of data
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: s 
-         real(rkind), dimension(:,:), allocatable :: data
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:,:), pointer :: data
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data1D_type
 c
       type bpsd_data2D_type
@@ -169,10 +169,10 @@ c
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: th
-         real(rkind), dimension(:), allocatable :: s 
-         real(rkind), dimension(:,:,:), allocatable :: data
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: th
+         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:,:,:), pointer :: data
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data2D_type
 c
       type bpsd_data3D_type
@@ -182,11 +182,11 @@ c
          integer :: ndmax     ! Number of data
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), allocatable :: ph
-         real(rkind), dimension(:), allocatable :: th
-         real(rkind), dimension(:), allocatable :: s 
-         real(rkind), dimension(:,:,:,:), allocatable :: data
-         character(len=32), dimension(:), allocatable :: kid
+         real(rkind), dimension(:), pointer :: ph
+         real(rkind), dimension(:), pointer :: th
+         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:,:,:,:), pointer :: data
+         character(len=32), dimension(:), pointer :: kid
       end type bpsd_data3D_type
 c
       end module bpsd_types

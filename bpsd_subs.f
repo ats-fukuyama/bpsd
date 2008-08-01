@@ -14,7 +14,7 @@ c
       type(bpsd_data1Dx_type) :: data1D
       integer :: nd     ! position of dependent variable
       integer :: ierr    ! error indicator
-      real(8), dimension(:), allocatable :: deriv
+      real(8), dimension(:), pointer :: deriv
 c
       allocate(deriv(data1D%nrmax))
       call spl1D(data1D%s,data1D%data(1,nd),deriv,data1D%spline(1,1,nd),

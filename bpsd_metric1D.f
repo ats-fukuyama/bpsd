@@ -121,8 +121,8 @@ c
       implicit none
       type(bpsd_metric1D_type) :: metric1D_out
       integer :: ierr
-      real(8), dimension(:,:), allocatable ::  temp
-      real(8), dimension(:), allocatable ::  deriv
+      real(8), dimension(:,:), pointer ::  temp
+      real(8), dimension(:), pointer ::  deriv
       integer :: nr, nd
       real(8) :: s
       real(8), dimension(15) :: v
@@ -143,7 +143,7 @@ c
       endif
 c
       if(metric1D_out%nrmax.eq.0) then
-         if(allocated(metric1D_out%data)) then
+         if(associated(metric1D_out%data)) then
             if(metric1Dx%nrmax.ne.size(metric1D_out%data,1)) then
                deallocate(metric1D_out%data)
                metric1D_out%nrmax = metric1Dx%nrmax
@@ -155,7 +155,7 @@ c
          endif
       endif
 c
-      if(allocated(metric1D_out%data)) then
+      if(associated(metric1D_out%data)) then
          if(metric1Dx%nrmax.le.size(metric1D_out%data,1)) then
             metric1D_out%time  = metric1Dx%time
             metric1D_out%nrmax = metric1Dx%nrmax
