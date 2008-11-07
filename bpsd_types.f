@@ -45,8 +45,8 @@ c
          integer :: nrmax     ! Number of radial points
          integer :: idum      ! Dummy
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
-                              ! (rho^2) normarized toroidal magnetic flux
+         real(rkind), dimension(:), pointer :: rho
+                              ! normalized minor radius
          type(bpsd_equ1D_data), dimension(:), pointer :: data
       end type bpsd_equ1D_type
 c
@@ -76,8 +76,8 @@ c
          integer :: idum      ! Dummy
          real(rkind) :: time
          real(rkind) :: psip_axis,psip_boundary
-         real(rkind), dimension(:), pointer :: s 
-                              ! (rho^2) normarized toroidal magnetic flux
+         real(rkind), dimension(:), pointer :: rho
+                              ! normalized minor radius
          real(rkind), dimension(:), pointer :: theta
                               ! poloidal angle
          real(rkind), dimension(:), pointer :: phi
@@ -107,8 +107,8 @@ c
          integer :: nrmax       ! Number of radial points
          integer :: idum      ! Dummy
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
-                                ! (rho^2) normarized toroidal magnetic flux
+         real(rkind), dimension(:), pointer :: rho 
+                                ! normailized minor radius
          type(bpsd_metric1D_data), dimension(:), pointer :: data
       end type bpsd_metric1D_type
 
@@ -124,8 +124,8 @@ c
          integer :: nrmax     ! Number of radial points
          integer :: nsmax     ! Number of particle species
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
-                              ! (rho^2) : normarized toroidal magnetic flux
+         real(rkind), dimension(:), pointer :: rho
+                              ! normalized minor radius
          real(rkind), dimension(:), pointer :: qinv 
                               ! 1/q : inverse of safety factor
          type(bpsd_plasmaf_data), dimension(:,:), pointer :: data
@@ -138,8 +138,8 @@ c
          integer :: nrmax     ! Number of radial points
          integer :: nsmax     ! Number of particle species
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
-                              ! (rho^2) : normarized toroidal magnetic flux
+         real(rkind), dimension(:), pointer :: rho
+                              ! normalized minor radius
          type(bpsd_dielectric_data), dimension(:,:), pointer :: data
       end type bpsd_dielectric_type
 c

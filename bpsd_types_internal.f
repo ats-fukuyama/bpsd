@@ -31,7 +31,7 @@ c
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:), pointer :: rho
          real(rkind), dimension(:,:), pointer :: data
          real(rkind), dimension(:,:,:), pointer :: spline
          character(len=32), dimension(:), pointer :: kid
@@ -45,7 +45,7 @@ c
          integer :: ndmax     ! Number of data
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:), pointer :: rho
          real(rkind), dimension(:), pointer :: th
          real(rkind), dimension(:,:,:), pointer :: data
          real(rkind), dimension(:,:,:,:), pointer :: spline
@@ -62,7 +62,7 @@ c
          integer :: idum      ! Dummy
          character(len=32) :: dataName
          real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
+         real(rkind), dimension(:), pointer :: rho
          real(rkind), dimension(:), pointer :: th
          real(rkind), dimension(:), pointer :: ph
          real(rkind), dimension(:,:,:,:), pointer :: data

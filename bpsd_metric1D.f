@@ -61,21 +61,21 @@ c
          if(metric1D_in%nrmax.ne.metric1Dx%nrmax) then
             if(metric1Dx%status.ge.3) deallocate(metric1Dx%spline)
             deallocate(metric1Dx%data)
-            deallocate(metric1Dx%s)
+            deallocate(metric1Dx%rho)
             metric1Dx%status=0
          endif
       endif
 c
       if(metric1Dx%status.eq.0) then
          metric1Dx%nrmax=metric1D_in%nrmax
-         allocate(metric1Dx%s(metric1Dx%nrmax))
+         allocate(metric1Dx%rho(metric1Dx%nrmax))
          allocate(metric1Dx%data(metric1Dx%nrmax,metric1Dx%ndmax))
          metric1Dx%status=1
       endif
 c
       metric1Dx%time = metric1D_in%time
       do nr=1,metric1D_in%nrmax
-         metric1Dx%s(nr) = metric1D_in%s(nr)
+         metric1Dx%rho(nr) = metric1D_in%rho(nr)
          metric1Dx%data(nr, 1) = metric1D_in%data(nr)%pvol
          metric1Dx%data(nr, 2) = metric1D_in%data(nr)%psur
          metric1Dx%data(nr, 3) = metric1D_in%data(nr)%dvpsit
@@ -101,9 +101,9 @@ c
 c
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_set_metric1D'
-         write(6,*) '---- metric1Dx%s'
+         write(6,*) '---- metric1Dx%rho'
          write(6,'(1P5E12.4)') 
-     &        (metric1Dx%s(nr),nr=1,metric1Dx%nrmax)
+     &        (metric1Dx%rho(nr),nr=1,metric1Dx%nrmax)
          do nd=1,metric1Dx%ndmax
             write(6,*) '---- ',metric1Dx%kid(nd)
             write(6,'(1P5E12.4)') 
@@ -197,7 +197,7 @@ c
       endif
 c
       do nr=1,metric1D_out%nrmax
-         s = metric1D_out%s(nr)
+         s = metric1D_out%rho(nr)
          do nd=1,metric1Dx%ndmax
             call bpsd_spl1DF(s,v(nd),metric1Dx,nd,ierr)
          enddo
@@ -221,9 +221,9 @@ c
 c
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_get_metric1D'
-         write(6,*) '---- metric1Dx%s'
+         write(6,*) '---- metric1Dx%rho'
          write(6,'(1P5E12.4)') 
-     &        (metric1D_out%s(nr),nr=1,metric1D_out%nrmax)
+     &        (metric1D_out%rho(nr),nr=1,metric1D_out%nrmax)
          write(6,*) '---- metric1Dx%pvol'
          write(6,'(1P5E12.4)') 
      &        (metric1D_out%data(nr)%pvol,nr=1,metric1D_out%nrmax)
@@ -306,21 +306,21 @@ c
          if(datax%nrmax.ne.metric1Dx%nrmax) then
             if(metric1Dx%status.ge.3) deallocate(metric1Dx%spline)
             deallocate(metric1Dx%data)
-            deallocate(metric1Dx%s)
+            deallocate(metric1Dx%rho)
             metric1Dx%status=0
          endif
       endif
 c
       if(metric1Dx%status.eq.0) then
          metric1Dx%nrmax=datax%nrmax
-         allocate(metric1Dx%s(metric1Dx%nrmax))
+         allocate(metric1Dx%rho(metric1Dx%nrmax))
          allocate(metric1Dx%data(metric1Dx%nrmax,metric1Dx%ndmax))
          metric1Dx%status=1
       endif
 c
       metric1Dx%time = datax%time
       do nr=1,metric1Dx%nrmax
-         metric1Dx%s(nr) = datax%s(nr)
+         metric1Dx%rho(nr) = datax%rho(nr)
          do nd=1,metric1Dx%ndmax
             metric1Dx%data(nr,nd) = datax%data(nr,nd)
          enddo

@@ -46,7 +46,7 @@ c
      &      (plasmaf_in%nsmax*5.ne.plasmafx%ndmax))  then
             if(plasmafx%status.ge.3) deallocate(plasmafx%spline)
             deallocate(plasmafx%data)
-            deallocate(plasmafx%s)
+            deallocate(plasmafx%rho)
             deallocate(plasmafx%kid)
             plasmafx%status=0
          endif
@@ -56,7 +56,7 @@ c
          plasmafx%ndmax=plasmaf_in%nsmax*5+1
          plasmafx%nrmax=plasmaf_in%nrmax
          allocate(plasmafx%kid(plasmafx%ndmax))
-         allocate(plasmafx%s(plasmafx%nrmax))
+         allocate(plasmafx%rho(plasmafx%nrmax))
          allocate(plasmafx%data(plasmafx%nrmax,plasmafx%ndmax))
          do ns=1,plasmaf_in%nsmax
             nd=5*(ns-1)
@@ -72,7 +72,7 @@ c
 c
       plasmafx%time = plasmaf_in%time
       do nr=1,plasmaf_in%nrmax
-         plasmafx%s(nr) = plasmaf_in%s(nr)
+         plasmafx%rho(nr) = plasmaf_in%rho(nr)
          do ns=1,plasmaf_in%nsmax
             nd=5*(ns-1)
             plasmafx%data(nr,nd+1) = plasmaf_in%data(nr,ns)%pn
@@ -93,9 +93,9 @@ c
 c
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_set_plasmaf'
-         write(6,*) '---- plasmafx%s'
+         write(6,*) '---- plasmafx%rho'
          write(6,'(1P5E12.4)') 
-     &        (plasmafx%s(nr),nr=1,plasmafx%nrmax)
+     &        (plasmafx%rho(nr),nr=1,plasmafx%nrmax)
          do nd=1,plasmafx%ndmax
             write(6,*) '---- ',plasmafx%kid(nd)
             write(6,'(1P5E12.4)') 
@@ -137,10 +137,10 @@ c
             if(plasmafx%nrmax.ne.size(plasmaf_out%data,1)) then
                deallocate(plasmaf_out%qinv)
                deallocate(plasmaf_out%data)
-               deallocate(plasmaf_out%s)
+               deallocate(plasmaf_out%rho)
                plasmaf_out%nrmax = plasmafx%nrmax
                plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
-               allocate(plasmaf_out%s(plasmaf_out%nrmax))
+               allocate(plasmaf_out%rho(plasmaf_out%nrmax))
                allocate(plasmaf_out%data(plasmaf_out%nrmax,
      &                                   plasmaf_out%nsmax))
                allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
@@ -148,7 +148,7 @@ c
          else
             plasmaf_out%nrmax = plasmafx%nrmax
             plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
-            allocate(plasmaf_out%s(plasmaf_out%nrmax))
+            allocate(plasmaf_out%rho(plasmaf_out%nrmax))
             allocate(plasmaf_out%data(plasmaf_out%nrmax,
      &                                plasmaf_out%nsmax))
             allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
@@ -161,7 +161,7 @@ c
             plasmaf_out%nrmax = plasmafx%nrmax
             plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
             do nr=1,plasmafx%nrmax
-               plasmaf_out%s(nr)=plasmafx%s(nr)
+               plasmaf_out%rho(nr)=plasmafx%rho(nr)
                do ns=1,plasmaf_out%nsmax
                   nd=5*(ns-1)
                   plasmaf_out%data(nr,ns)%pn  =plasmafx%data(nr,nd+1)
@@ -194,7 +194,7 @@ c
 c
       allocate(v(plasmafx%ndmax))
       do nr=1,plasmaf_out%nrmax
-         s = plasmaf_out%s(nr)
+         s = plasmaf_out%rho(nr)
          do nd=1,plasmafx%ndmax
             call bpsd_spl1DF(s,v(nd),plasmafx,nd,ierr)
          enddo
@@ -213,9 +213,9 @@ c
 c
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_get_plasmaf'
-         write(6,*) '---- plasmafx%s'
+         write(6,*) '---- plasmafx%rho'
          write(6,'(1P5E12.4)') 
-     &        (plasmaf_out%s(nr),nr=1,plasmaf_out%nrmax)
+     &        (plasmaf_out%rho(nr),nr=1,plasmaf_out%nrmax)
          do ns=1,plasmaf_out%nsmax
             write(6,*) '---- plasmafx%pn(',ns,')'
             write(6,'(1P5E12.4)') 
@@ -274,7 +274,7 @@ c
      &      (datax%ndmax.ne.plasmafx%ndmax))  then
             if(plasmafx%status.ge.3) deallocate(plasmafx%spline)
             deallocate(plasmafx%data)
-            deallocate(plasmafx%s)
+            deallocate(plasmafx%rho)
             deallocate(plasmafx%kid)
             plasmafx%status=0
          endif
@@ -284,7 +284,7 @@ c
          plasmafx%ndmax=datax%ndmax
          plasmafx%nrmax=datax%nrmax
          allocate(plasmafx%kid(plasmafx%ndmax))
-         allocate(plasmafx%s(plasmafx%nrmax))
+         allocate(plasmafx%rho(plasmafx%nrmax))
          allocate(plasmafx%data(plasmafx%nrmax,plasmafx%ndmax))
          do ns=1,(plasmafx%ndmax-1)/5
             nd=5*(ns-1)
@@ -300,7 +300,7 @@ c
 c
       plasmafx%time = datax%time
       do nr=1,plasmafx%nrmax
-         plasmafx%s(nr) = datax%s(nr)
+         plasmafx%rho(nr) = datax%rho(nr)
          do nd=1,plasmafx%ndmax
             plasmafx%data(nr,nd) = datax%data(nr,nd)
          enddo

@@ -227,10 +227,10 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%nrmax,datax%ndmax
       allocate(datax%kid(datax%ndmax))
-      allocate(datax%s(datax%nrmax))
+      allocate(datax%rho(datax%nrmax))
       allocate(datax%data(datax%nrmax,datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
-      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%s
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
       if(datax%dataName(1:5).eq.'equ1D') 
@@ -241,7 +241,7 @@ c
      &     call bpsd_load_plasmaf(datax,ierr)
 
       deallocate(datax%data)
-      deallocate(datax%s)
+      deallocate(datax%rho)
       deallocate(datax%kid)
 
       ierr=0
@@ -268,11 +268,11 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) 
      &     datax%nrmax,datax%nthmax,datax%ndmax
       allocate(datax%kid(datax%ndmax))
-      allocate(datax%s(datax%nrmax))
+      allocate(datax%rho(datax%nrmax))
       allocate(datax%th(datax%nthmax))
       allocate(datax%data(datax%nrmax,datax%nthmax,datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
-      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%s
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%th
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
@@ -281,7 +281,7 @@ c
 
       deallocate(datax%data)
       deallocate(datax%th)
-      deallocate(datax%s)
+      deallocate(datax%rho)
       deallocate(datax%kid)
 
       ierr=0
@@ -308,13 +308,13 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) 
      &     datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
       allocate(datax%kid(datax%ndmax))
-      allocate(datax%s(datax%nrmax))
+      allocate(datax%rho(datax%nrmax))
       allocate(datax%th(datax%nthmax))
       allocate(datax%ph(datax%nphmax))
       allocate(datax%data(datax%nrmax,datax%nthmax,datax%nphmax,
      &         datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
-      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%s
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%th
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%ph
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
@@ -325,7 +325,7 @@ c
       deallocate(datax%data)
       deallocate(datax%ph)
       deallocate(datax%th)
-      deallocate(datax%s)
+      deallocate(datax%rho)
       deallocate(datax%kid)
 
       ierr=0
