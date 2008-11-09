@@ -64,6 +64,7 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%deviceID
       write(fid,IOSTAT=ierr,ERR=8) datax%shotID,datax%modelID
 
+      write(6,*) '+++ ',datax%dataName,': saved'
       ierr=0
       return
 
@@ -92,6 +93,7 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%kunit
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
+      write(6,*) '+++ ',datax%dataName,': saved'
       ierr=0
       return
 
@@ -122,6 +124,7 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%rho
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
+      write(6,*) '+++ ',datax%dataName,': saved'
       ierr=0
       return
 
@@ -151,6 +154,7 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%th
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
+      write(6,*) '+++ ',datax%dataName,': saved'
       ierr=0
       return
 
@@ -182,6 +186,7 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%ph
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
+      write(6,*) '+++ ',datax%dataName,': saved'
       ierr=0
       return
 

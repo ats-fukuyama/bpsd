@@ -169,6 +169,7 @@ c
       if(datax%dataName(1:4).eq.'shot') 
      &     call bpsd_load_shot(datax,ierr)
 
+      write(6,*) '+++ ',datax%dataName,': loaded'
       ierr=0
       return
 
@@ -209,6 +210,7 @@ c
       deallocate(datax%data)
       deallocate(datax%kid)
 
+      write(6,*) '+++ ',datax%dataName,': loaded'
       ierr=0
       return
 
@@ -254,6 +256,7 @@ c
       deallocate(datax%rho)
       deallocate(datax%kid)
 
+      write(6,*) '+++ ',datax%dataName,': loaded'
       ierr=0
       return
 
@@ -299,6 +302,7 @@ c
       deallocate(datax%rho)
       deallocate(datax%kid)
 
+      write(6,*) '+++ ',datax%dataName,': loaded'
       ierr=0
       return
 
@@ -348,6 +352,7 @@ c
       deallocate(datax%rho)
       deallocate(datax%kid)
 
+      write(6,*) '+++ ',datax%dataName,': loaded'
       ierr=0
       return
 

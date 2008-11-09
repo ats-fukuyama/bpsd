@@ -169,7 +169,6 @@ c
 c
       if(bpsd_speciesx_init_flag) call bpsd_speciesx_init
 c
-      write(6,*) '++ bpsd_save_species: ',speciesx%status
       if(speciesx%status.gt.1) 
      &     call bpsd_save_data0Dx(fid,speciesx,ierr)
       return
