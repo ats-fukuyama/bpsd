@@ -66,9 +66,6 @@ c
             speciesx%kunit(nd+2)=' '
             speciesx%kunit(nd+3)=' '
          enddo
-         CALL DATE_AND_TIME(speciesx%created_date,
-     &                      speciesx%created_time,
-     &                      speciesx%created_timezone)
          speciesx%status=1
       endif
 
@@ -79,6 +76,9 @@ c
          speciesx%data(nd+2)=species_in%data(ns)%pz
          speciesx%data(nd+3)=species_in%data(ns)%pz0
       enddo
+      CALL DATE_AND_TIME(speciesx%created_date,
+     &                   speciesx%created_time,
+     &                   speciesx%created_timezone)
       speciesx%status = 2
       ierr = 0
 
@@ -120,34 +120,25 @@ c
          return
       endif
 c
-      if(species_out%nsmax.eq.0) then
-         if(associated(species_out%data)) then
-            if(speciesx%ndmax.ne.size(species_out%data,1)*3) then
-               deallocate(species_out%data)
-               species_out%nsmax = speciesx%ndmax/3
-               allocate(species_out%data(species_out%nsmax))
-            endif
-         else
-            species_out%nsmax = speciesx%ndmax/3
+      species_out%nsmax=speciesx%ndmax/3
+
+      if(associated(species_out%data)) then
+         if(species_out%nsmax.ne.size(species_out%data,1)) then
+            deallocate(species_out%data)
             allocate(species_out%data(species_out%nsmax))
          endif
-      endif
-c
-      if(associated(species_out%data)) then
-         if(speciesx%ndmax.le.size(species_out%data,1)*3) then
-            species_out%nsmax = speciesx%ndmax/3
-            do ns=1,species_out%nsmax
-               nd=3*(ns-1)
-               species_out%data(ns)%pa =speciesx%data(nd+1)
-               species_out%data(ns)%pz =speciesx%data(nd+2)
-               species_out%data(ns)%pz0=speciesx%data(nd+3)
-            enddo
-         endif
       else
-         ierr=3
-         return
+         allocate(species_out%data(species_out%nsmax))
       endif
-c
+
+      do ns=1,species_out%nsmax
+         nd=3*(ns-1)
+         species_out%data(ns)%pa =speciesx%data(nd+1)
+         species_out%data(ns)%pz =speciesx%data(nd+2)
+         species_out%data(ns)%pz0=speciesx%data(nd+3)
+      enddo
+      ierr=0
+
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_get_species'
          do nd=1,speciesx%ndmax
@@ -189,21 +180,25 @@ c
 c
       if(speciesx%status.eq.0) then
          speciesx%ndmax=datax%ndmax
-         allocate(speciesx%kid(speciesx%ndmax))
-         allocate(speciesx%data(speciesx%ndmax))
-         do ns=1,speciesx%ndmax/3
-            nd=3*(ns-1)
-            speciesx%kid(nd+1)='species%pa'
-            speciesx%kid(nd+2)='species%pz'
-            speciesx%kid(nd+3)='species%pz0'
-         enddo
+         allocate(speciesx%kid(datax%ndmax))
+         allocate(speciesx%kunit(datax%ndmax))
+         allocate(speciesx%data(datax%ndmax))
          speciesx%status=1
       endif
 c
+      speciesx%dataName = datax%dataName
+      speciesx%ndmax=datax%ndmax
       speciesx%time = datax%time
       do nd=1,speciesx%ndmax
          speciesx%data(nd) = datax%data(nd)
       enddo
+      do nd=1,speciesx%ndmax
+         speciesx%kid(nd)=datax%kid(nd)
+         speciesx%kunit(nd)=datax%kunit(nd)
+      enddo
+      speciesx%created_date = datax%created_date
+      speciesx%created_time = datax%created_time
+      speciesx%created_timezone = datax%created_timezone
       speciesx%status=2
       ierr=0
       return

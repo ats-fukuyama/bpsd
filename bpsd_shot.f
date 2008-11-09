@@ -20,6 +20,7 @@ c-----------------------------------------------------------------------
       use bpsd_subs
       implicit none
 c
+      shotx%status = 2
       shotx%dataName = 'shot'
       bpsd_shotx_init_flag = .FALSE.
 c
@@ -40,6 +41,9 @@ c
       shotx%deviceID = shot_in%deviceID
       shotx%shotID = shot_in%shotID
       shotx%modelID = shot_in%modelID
+      CALL DATE_AND_TIME(shotx%created_date,
+     &                   shotx%created_time,
+     &                   shotx%created_timezone)
       shotx%status = 2
       ierr = 0
 c
@@ -116,6 +120,9 @@ c
       shotx%deviceID = datax%deviceID
       shotx%shotID = datax%shotID
       shotx%modelID = datax%modelID
+      shotx%created_date = datax%created_date
+      shotx%created_time = datax%created_time
+      shotx%created_timezone = datax%created_timezone
       shotx%status=2
       ierr=0
       return

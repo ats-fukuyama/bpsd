@@ -8,7 +8,6 @@ c-----------------------------------------------------------------------
       subroutine bpsd_spl1D(data1D,nd,ierr)
 c-----------------------------------------------------------------------
 c
-!      use libspl_mod
       use bpsd_types_internal
       implicit none
       type(bpsd_data1Dx_type) :: data1D
@@ -30,7 +29,6 @@ c-----------------------------------------------------------------------
       subroutine bpsd_spl1DF(pos,val,data1D,nd,ierr)
 c-----------------------------------------------------------------------
 c
-!      use libspl_mod
       use bpsd_types_internal
       implicit none
       real(8) :: pos     ! value of independent variable

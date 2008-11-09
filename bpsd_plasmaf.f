@@ -73,9 +73,7 @@ c
             plasmafx%kunit(nd+5)='m/s'
          enddo
          plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
-         CALL DATE_AND_TIME(plasmafx%created_date,
-     &                      plasmafx%created_time,
-     &                      plasmafx%created_timezone)
+         plasmafx%kunit(plasmafx%ndmax)=' '
          plasmafx%status=1
       endif
 c
@@ -92,6 +90,10 @@ c
          enddo
          plasmafx%data(nr,plasmafx%ndmax) = plasmaf_in%qinv(nr)
       enddo
+      CALL DATE_AND_TIME(plasmafx%created_date,
+     &                   plasmafx%created_time,
+     &                   plasmafx%created_timezone)
+
       if(plasmafx%status.ge.3) then 
          plasmafx%status=3
       else
@@ -301,29 +303,23 @@ c
             if(plasmafx%status.ge.3) deallocate(plasmafx%spline)
             deallocate(plasmafx%data)
             deallocate(plasmafx%rho)
+            deallocate(plasmafx%kunit)
             deallocate(plasmafx%kid)
             plasmafx%status=0
          endif
       endif
 c
       if(plasmafx%status.eq.0) then
-         plasmafx%ndmax=datax%ndmax
-         plasmafx%nrmax=datax%nrmax
-         allocate(plasmafx%kid(plasmafx%ndmax))
-         allocate(plasmafx%rho(plasmafx%nrmax))
-         allocate(plasmafx%data(plasmafx%nrmax,plasmafx%ndmax))
-         do ns=1,(plasmafx%ndmax-1)/5
-            nd=5*(ns-1)
-            plasmafx%kid(nd+1)='plasmaf%pn'
-            plasmafx%kid(nd+2)='plasmaf%pt'
-            plasmafx%kid(nd+3)='plasmaf%ptpr'
-            plasmafx%kid(nd+4)='plasmaf%ptpp'
-            plasmafx%kid(nd+5)='plasmaf%pu'
-         enddo
-         plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
+         allocate(plasmafx%kid(datax%ndmax))
+         allocate(plasmafx%kunit(datax%ndmax))
+         allocate(plasmafx%rho(datax%nrmax))
+         allocate(plasmafx%data(datax%nrmax,datax%ndmax))
          plasmafx%status=1
       endif
 c
+      plasmafx%dataName=datax%dataName
+      plasmafx%ndmax=datax%ndmax
+      plasmafx%nrmax=datax%nrmax
       plasmafx%time = datax%time
       do nr=1,plasmafx%nrmax
          plasmafx%rho(nr) = datax%rho(nr)
@@ -331,6 +327,13 @@ c
             plasmafx%data(nr,nd) = datax%data(nr,nd)
          enddo
       enddo
+      do nd=1,plasmafx%ndmax
+         plasmafx%kid(nd)=datax%kid(nd)
+         plasmafx%kunit(nd)=datax%kunit(nd)
+      enddo
+      plasmafx%created_date = datax%created_date
+      plasmafx%created_time = datax%created_time
+      plasmafx%created_timezone = datax%created_timezone
       plasmafx%status=2
       ierr=0
       return

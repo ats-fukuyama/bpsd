@@ -33,6 +33,14 @@ c
       devicex%kid(6)='device%ip'
       devicex%kid(7)='device%elip'
       devicex%kid(8)='device%trig'
+      devicex%kid(1)='m'
+      devicex%kid(2)='m'
+      devicex%kid(3)='m'
+      devicex%kid(4)='m'
+      devicex%kid(5)='T'
+      devicex%kid(6)='A'
+      devicex%kid(7)=' '
+      devicex%kid(8)=' '
 c
       bpsd_devicex_init_flag = .FALSE.
 c
@@ -60,6 +68,9 @@ c
       devicex%data(6) = device_in%ip
       devicex%data(7) = device_in%elip
       devicex%data(8) = device_in%trig
+      CALL DATE_AND_TIME(devicex%created_date,
+     &                   devicex%created_time,
+     &                   devicex%created_timezone)
       devicex%status = 2
       ierr = 0
 c
@@ -139,10 +150,19 @@ c
 c
       if(bpsd_devicex_init_flag) call bpsd_devicex_init
 c
+      devicex%dataName=datax%dataName
+      devicex%ndmax=datax%ndmax
       devicex%time = datax%time
       do nd=1,devicex%ndmax
          devicex%data(nd) = datax%data(nd)
       enddo
+      do nd=1,devicex%ndmax
+         devicex%kid(nd)=datax%kid(nd)
+         devicex%kunit(nd)=datax%kunit(nd)
+      enddo
+      devicex%created_date = datax%created_date
+      devicex%created_time = datax%created_time
+      devicex%created_timezone = datax%created_timezone
       devicex%status=2
       ierr=0
       return
