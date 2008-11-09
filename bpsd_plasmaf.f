@@ -56,6 +56,7 @@ c
          plasmafx%ndmax=plasmaf_in%nsmax*5+1
          plasmafx%nrmax=plasmaf_in%nrmax
          allocate(plasmafx%kid(plasmafx%ndmax))
+         allocate(plasmafx%kunit(plasmafx%ndmax))
          allocate(plasmafx%rho(plasmafx%nrmax))
          allocate(plasmafx%data(plasmafx%nrmax,plasmafx%ndmax))
          do ns=1,plasmaf_in%nsmax
@@ -65,8 +66,16 @@ c
             plasmafx%kid(nd+3)='plasmaf%ptpr'
             plasmafx%kid(nd+4)='plasmaf%ptpp'
             plasmafx%kid(nd+5)='plasmaf%pu'
+            plasmafx%kunit(nd+1)='10^20/m^3'
+            plasmafx%kunit(nd+2)='eV'
+            plasmafx%kunit(nd+3)='eV'
+            plasmafx%kunit(nd+4)='eV'
+            plasmafx%kunit(nd+5)='m/s'
          enddo
          plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
+         CALL DATE_AND_TIME(plasmafx%created_date,
+     &                      plasmafx%created_time,
+     &                      plasmafx%created_timezone)
          plasmafx%status=1
       endif
 c
@@ -113,70 +122,76 @@ c
       implicit none
       type(bpsd_plasmaf_type),intent(out) :: plasmaf_out
       integer,intent(out) :: ierr
-      integer :: nr, nd, ns
+      integer :: nr, nd, ns, mode
       real(8) :: s
       real(8), dimension(:), pointer :: v
-c
+
       if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
-c
+
       if(plasmafx%status.eq.0) then
          write(6,*) 
      &   'XX bpsd_get_plasmaf: no space allocated to plasmafx%data'
          ierr=1
          return
       endif
-c
+
       if(plasmafx%status.eq.1) then
          write(6,*) 'XX bpsd_get_plasmaf: no data in plasmafx%data'
-         ierr=1
+         ierr=2
          return
       endif
-c
+
       if(plasmaf_out%nrmax.eq.0) then
-         if(associated(plasmaf_out%data)) then
-            if(plasmafx%nrmax.ne.size(plasmaf_out%data,1)) then
-               deallocate(plasmaf_out%qinv)
-               deallocate(plasmaf_out%data)
-               deallocate(plasmaf_out%rho)
-               plasmaf_out%nrmax = plasmafx%nrmax
-               plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
-               allocate(plasmaf_out%rho(plasmaf_out%nrmax))
-               allocate(plasmaf_out%data(plasmaf_out%nrmax,
-     &                                   plasmaf_out%nsmax))
-               allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
-            endif
-         else
-            plasmaf_out%nrmax = plasmafx%nrmax
-            plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
-            allocate(plasmaf_out%rho(plasmaf_out%nrmax))
-            allocate(plasmaf_out%data(plasmaf_out%nrmax,
-     &                                plasmaf_out%nsmax))
-            allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
-         endif
+         mode=0
+         plasmaf_out%nrmax = plasmafx%nrmax
+      else
+         mode=1
       endif
-c
-      if(associated(plasmaf_out%data)) then
-         if(plasmafx%nrmax.le.size(plasmaf_out%data,1)) then
-            plasmaf_out%time  = plasmafx%time
-            plasmaf_out%nrmax = plasmafx%nrmax
-            plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
-            do nr=1,plasmafx%nrmax
-               plasmaf_out%rho(nr)=plasmafx%rho(nr)
-               do ns=1,plasmaf_out%nsmax
-                  nd=5*(ns-1)
-                  plasmaf_out%data(nr,ns)%pn  =plasmafx%data(nr,nd+1)
-                  plasmaf_out%data(nr,ns)%pt  =plasmafx%data(nr,nd+2)
-                  plasmaf_out%data(nr,ns)%ptpr=plasmafx%data(nr,nd+3)
-                  plasmaf_out%data(nr,ns)%ptpp=plasmafx%data(nr,nd+4)
-                  plasmaf_out%data(nr,ns)%pu  =plasmafx%data(nr,nd+5)
-               enddo
-               plasmaf_out%qinv(nr)=plasmafx%data(nr,plasmafx%ndmax)
-            enddo
-            ierr=0
-            return
+      plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
+
+      if(associated(plasmaf_out%rho)) then
+         if(plasmaf_out%nrmax.ne.size(plasmaf_out%rho)) then
+            deallocate(plasmaf_out%rho)
+            allocate(plasmaf_out%rho(plasmaf_out%nrmax))
          endif
       else
-         ierr=3
+         allocate(plasmaf_out%rho(plasmaf_out%nrmax))
+      endif
+      if(associated(plasmaf_out%qinv)) then
+         if(plasmaf_out%nrmax.ne.size(plasmaf_out%qinv)) then
+            deallocate(plasmaf_out%qinv)
+            allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
+         endif
+      else
+         allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
+      endif
+      if(associated(plasmaf_out%data)) then
+         if(plasmaf_out%nrmax.ne.size(plasmaf_out%data,1).or.
+     &      plasmaf_out%nsmax.ne.size(plasmaf_out%data,2)) then
+            deallocate(plasmaf_out%data)
+            allocate(plasmaf_out%data(plasmaf_out%nrmax,
+     &                                plasmaf_out%nsmax))
+         endif
+      else
+         allocate(plasmaf_out%data(plasmaf_out%nrmax,
+     &                             plasmaf_out%nsmax))
+      endif
+
+      if(mode.eq.0) then
+         plasmaf_out%time  = plasmafx%time
+         do nr=1,plasmafx%nrmax
+            plasmaf_out%rho(nr)=plasmafx%rho(nr)
+            do ns=1,plasmaf_out%nsmax
+               nd=5*(ns-1)
+               plasmaf_out%data(nr,ns)%pn  =plasmafx%data(nr,nd+1)
+               plasmaf_out%data(nr,ns)%pt  =plasmafx%data(nr,nd+2)
+               plasmaf_out%data(nr,ns)%ptpr=plasmafx%data(nr,nd+3)
+               plasmaf_out%data(nr,ns)%ptpp=plasmafx%data(nr,nd+4)
+               plasmaf_out%data(nr,ns)%pu  =plasmafx%data(nr,nd+5)
+            enddo
+            plasmaf_out%qinv(nr)=plasmafx%data(nr,plasmafx%ndmax)
+         enddo
+         ierr=0
          return
       endif
 c
@@ -186,15 +201,26 @@ c
       endif
 c
       if(plasmafx%status.eq.3) then
+         if(associated(plasmafx%s)) then
+            if(plasmafx%nrmax.ne.size(plasmafx%s,1)) then
+               deallocate(plasmafx%s)
+               allocate(plasmafx%s(plasmafx%nrmax))
+            endif
+         else
+            allocate(plasmafx%s(plasmafx%nrmax))
+         endif
+         do nr=1,plasmafx%nrmax
+            plasmafx%s(nr)=plasmafx%rho(nr)**2
+         enddo
          do nd=1,plasmafx%ndmax
             call bpsd_spl1D(plasmafx,nd,ierr)
          enddo
          plasmafx%status=4
       endif
-c
+!
       allocate(v(plasmafx%ndmax))
       do nr=1,plasmaf_out%nrmax
-         s = plasmaf_out%rho(nr)
+         s = plasmaf_out%rho(nr)**2
          do nd=1,plasmafx%ndmax
             call bpsd_spl1DF(s,v(nd),plasmafx,nd,ierr)
          enddo
@@ -206,7 +232,7 @@ c
             plasmaf_out%data(nr,ns)%ptpp = v(nd+4)
             plasmaf_out%data(nr,ns)%pu   = v(nd+5)
          enddo
-         plasmaf_out%qinv(nr)  = plasmafx%data(nr,plasmafx%ndmax)
+         plasmaf_out%qinv(nr)  = v(plasmafx%ndmax)
       enddo
       deallocate(v)
       ierr = 0

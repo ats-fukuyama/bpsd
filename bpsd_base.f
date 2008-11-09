@@ -87,11 +87,11 @@ c
 c
       read(fid,IOSTAT=ierr,ERR=8,END=9) line
       if(line(1:12).ne.'##bspd.data ') then
-         ierr=1001
+         ierr=1
          goto 9000
       endif
       if(line(21:24).ne.'0.01') then
-         ierr=1002
+         ierr=2
          goto 9000
       endif
 c
@@ -172,9 +172,9 @@ c
       ierr=0
       return
 
-    8 ierr=8000+ierr
+    8 ierr=800+ierr
       return
-    9 ierr=9000+ierr
+    9 ierr=900+ierr
       return
       end subroutine bpsd_load_shotx
 c
@@ -191,9 +191,14 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%dataName
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%ndmax
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date,
+     &                                  datax%created_time,
+     &                                  datax%created_timezone
       allocate(datax%kid(datax%ndmax))
+      allocate(datax%kunit(datax%ndmax))
       allocate(datax%data(datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kunit
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
       if(datax%dataName(1:6).eq.'device') 
@@ -207,9 +212,9 @@ c
       ierr=0
       return
 
-    8 ierr=8000+ierr
+    8 ierr=800+ierr
       return
-    9 ierr=9000+ierr
+    9 ierr=900+ierr
       return
       end subroutine bpsd_load_data0Dx
 c
@@ -226,10 +231,15 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%dataName
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%nrmax,datax%ndmax
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date,
+     &                                  datax%created_time,
+     &                                  datax%created_timezone
       allocate(datax%kid(datax%ndmax))
+      allocate(datax%kunit(datax%ndmax))
       allocate(datax%rho(datax%nrmax))
       allocate(datax%data(datax%nrmax,datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kunit
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
@@ -247,9 +257,9 @@ c
       ierr=0
       return
 
-    8 ierr=8000+ierr
+    8 ierr=800+ierr
       return
-    9 ierr=9000+ierr
+    9 ierr=900+ierr
       return
       end subroutine bpsd_load_data1Dx
 c
@@ -267,11 +277,16 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
       read(fid,IOSTAT=ierr,ERR=8,END=9) 
      &     datax%nrmax,datax%nthmax,datax%ndmax
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date,
+     &                                  datax%created_time,
+     &                                  datax%created_timezone
       allocate(datax%kid(datax%ndmax))
+      allocate(datax%kunit(datax%ndmax))
       allocate(datax%rho(datax%nrmax))
       allocate(datax%th(datax%nthmax))
       allocate(datax%data(datax%nrmax,datax%nthmax,datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kunit
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%th
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
@@ -287,9 +302,9 @@ c
       ierr=0
       return
 
-    8 ierr=8000+ierr
+    8 ierr=800+ierr
       return
-    9 ierr=9000+ierr
+    9 ierr=900+ierr
       return
       end subroutine bpsd_load_data2Dx
 c
@@ -307,13 +322,18 @@ c
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
       read(fid,IOSTAT=ierr,ERR=8,END=9) 
      &     datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date,
+     &                                  datax%created_time,
+     &                                  datax%created_timezone
       allocate(datax%kid(datax%ndmax))
+      allocate(datax%kunit(datax%ndmax))
       allocate(datax%rho(datax%nrmax))
       allocate(datax%th(datax%nthmax))
       allocate(datax%ph(datax%nphmax))
       allocate(datax%data(datax%nrmax,datax%nthmax,datax%nphmax,
      &         datax%ndmax))
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
+      read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kunit
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%th
       read(fid,IOSTAT=ierr,ERR=8,END=9) datax%ph
@@ -331,9 +351,9 @@ c
       ierr=0
       return
 
-    8 ierr=8000+ierr
+    8 ierr=800+ierr
       return
-    9 ierr=9000+ierr
+    9 ierr=900+ierr
       return
       end subroutine bpsd_load_data3Dx
 c

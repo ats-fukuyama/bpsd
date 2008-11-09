@@ -39,7 +39,9 @@ c
       type(bpsd_species_type):: species_in
       integer :: ierr
       integer :: ns, nd
-c
+
+      ierr=0
+
       if(bpsd_speciesx_init_flag) call bpsd_speciesx_init
 c
       if(speciesx%status.ne.0) then
@@ -53,16 +55,23 @@ c
       if(speciesx%status.eq.0) then
          speciesx%ndmax=species_in%nsmax*3
          allocate(speciesx%kid(speciesx%ndmax))
+         allocate(speciesx%kunit(speciesx%ndmax))
          allocate(speciesx%data(speciesx%ndmax))
          do ns=1,species_in%nsmax
             nd=3*(ns-1)
             speciesx%kid(nd+1)='species%pa'
             speciesx%kid(nd+2)='species%pz'
             speciesx%kid(nd+3)='species%pz0'
+            speciesx%kunit(nd+1)=' '
+            speciesx%kunit(nd+2)=' '
+            speciesx%kunit(nd+3)=' '
          enddo
+         CALL DATE_AND_TIME(speciesx%created_date,
+     &                      speciesx%created_time,
+     &                      speciesx%created_timezone)
          speciesx%status=1
       endif
-c
+
       speciesx%time=0.D0
       do ns=1,species_in%nsmax
          nd=3*(ns-1)
@@ -72,7 +81,7 @@ c
       enddo
       speciesx%status = 2
       ierr = 0
-c
+
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_set_species'
          do nd=1,speciesx%ndmax
@@ -160,6 +169,7 @@ c
 c
       if(bpsd_speciesx_init_flag) call bpsd_speciesx_init
 c
+      write(6,*) '++ bpsd_save_species: ',speciesx%status
       if(speciesx%status.gt.1) 
      &     call bpsd_save_data0Dx(fid,speciesx,ierr)
       return

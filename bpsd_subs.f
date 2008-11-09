@@ -39,13 +39,13 @@ c
       integer :: nd      ! position of dependent variable
       integer :: ierr    ! error indicator
 
-      call spl1DF(pos,val,
+      call spl1DF(pos**2,val,
      &            data1D%s,data1D%spline(1,1,nd),data1D%nrmax,ierr)
       if(ierr.ne.0) then
          write(6,*) 'XX spl1DF_bpsd : '//data1D%kid(nd)//
      &                ': ierr=',ierr
          write(6,'(1P3E12.4)')  
-     &        pos,data1D%s(1),data1D%s(data1D%nrmax)
+     &        pos**2,data1D%s(1),data1D%s(data1D%nrmax)
       endif
       end subroutine bpsd_spl1DF
 c
@@ -85,13 +85,18 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%dataName
       write(fid,IOSTAT=ierr,ERR=8) datax%time
       write(fid,IOSTAT=ierr,ERR=8) datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%created_date,
+     &                             datax%created_time,
+     &                             datax%created_timezone
       write(fid,IOSTAT=ierr,ERR=8) datax%kid
+      write(fid,IOSTAT=ierr,ERR=8) datax%kunit
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
       ierr=0
       return
 
     8 continue
+      write(6,*) 'XXX', ierr
       return
       end subroutine bpsd_save_data0Dx
 c
@@ -109,8 +114,12 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%dataName
       write(fid,IOSTAT=ierr,ERR=8) datax%time
       write(fid,IOSTAT=ierr,ERR=8) datax%nrmax,datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%created_date,
+     &                             datax%created_time,
+     &                             datax%created_timezone
       write(fid,IOSTAT=ierr,ERR=8) datax%kid
-      write(fid,IOSTAT=ierr,ERR=8) datax%s
+      write(fid,IOSTAT=ierr,ERR=8) datax%kunit
+      write(fid,IOSTAT=ierr,ERR=8) datax%rho
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
       ierr=0
@@ -134,8 +143,11 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%dataName
       write(fid,IOSTAT=ierr,ERR=8) datax%time
       write(fid,IOSTAT=ierr,ERR=8) datax%nrmax,datax%nthmax,datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%created_date,
+     &                             datax%created_time,
+     &                             datax%created_timezone
       write(fid,IOSTAT=ierr,ERR=8) datax%kid
-      write(fid,IOSTAT=ierr,ERR=8) datax%s
+      write(fid,IOSTAT=ierr,ERR=8) datax%rho
       write(fid,IOSTAT=ierr,ERR=8) datax%th
       write(fid,IOSTAT=ierr,ERR=8) datax%data
 
@@ -161,8 +173,11 @@ c
       write(fid,IOSTAT=ierr,ERR=8) datax%time
       write(fid,IOSTAT=ierr,ERR=8) 
      &     datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
+      write(fid,IOSTAT=ierr,ERR=8) datax%created_date,
+     &                             datax%created_time,
+     &                             datax%created_timezone
       write(fid,IOSTAT=ierr,ERR=8) datax%kid
-      write(fid,IOSTAT=ierr,ERR=8) datax%s
+      write(fid,IOSTAT=ierr,ERR=8) datax%rho
       write(fid,IOSTAT=ierr,ERR=8) datax%th
       write(fid,IOSTAT=ierr,ERR=8) datax%ph
       write(fid,IOSTAT=ierr,ERR=8) datax%data
