@@ -151,33 +151,10 @@ c
       endif
       plasmaf_out%nsmax = (plasmafx%ndmax-1)/5
 
-      if(associated(plasmaf_out%rho)) then
-         if(plasmaf_out%nrmax.ne.size(plasmaf_out%rho)) then
-            deallocate(plasmaf_out%rho)
-            allocate(plasmaf_out%rho(plasmaf_out%nrmax))
-         endif
-      else
-         allocate(plasmaf_out%rho(plasmaf_out%nrmax))
-      endif
-      if(associated(plasmaf_out%qinv)) then
-         if(plasmaf_out%nrmax.ne.size(plasmaf_out%qinv)) then
-            deallocate(plasmaf_out%qinv)
-            allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
-         endif
-      else
-         allocate(plasmaf_out%qinv(plasmaf_out%nrmax))
-      endif
-      if(associated(plasmaf_out%data)) then
-         if(plasmaf_out%nrmax.ne.size(plasmaf_out%data,1).or.
-     &      plasmaf_out%nsmax.ne.size(plasmaf_out%data,2)) then
-            deallocate(plasmaf_out%data)
-            allocate(plasmaf_out%data(plasmaf_out%nrmax,
-     &                                plasmaf_out%nsmax))
-         endif
-      else
-         allocate(plasmaf_out%data(plasmaf_out%nrmax,
-     &                             plasmaf_out%nsmax))
-      endif
+      CALL bpsd_adjust_array1D(plasmaf_out%rho,plasmaf_out%nrmax)
+      CALL bpsd_adjust_array1D(plasmaf_out%qinv,plasmaf_out%nrmax)
+      CALL bpsd_adjust_plasmaf_data(plasmaf_out%data,plasmaf_out%nrmax,
+     &                                               plasmaf_out%nsmax)
 
       if(mode.eq.0) then
          plasmaf_out%time  = plasmafx%time
@@ -203,14 +180,7 @@ c
       endif
 c
       if(plasmafx%status.eq.3) then
-         if(associated(plasmafx%s)) then
-            if(plasmafx%nrmax.ne.size(plasmafx%s,1)) then
-               deallocate(plasmafx%s)
-               allocate(plasmafx%s(plasmafx%nrmax))
-            endif
-         else
-            allocate(plasmafx%s(plasmafx%nrmax))
-         endif
+         CALL bpsd_adjust_array1D(plasmafx%s,plasmafx%nrmax)
          do nr=1,plasmafx%nrmax
             plasmafx%s(nr)=plasmafx%rho(nr)**2
          enddo

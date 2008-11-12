@@ -1,5 +1,5 @@
-c     $Id$
-c=======================================================================
+!     $Id$
+!=======================================================================
       module bpsd_types
 
       use bpsd_kinds
@@ -20,7 +20,7 @@ c=======================================================================
          real(rkind) :: elip   ! Typical ellipticity
          real(rkind) :: trig   ! Typical triangularity
       end type bpsd_device_type
-c
+
       type bpsd_species_data
          real(rkind) :: pa     ! Mass number (n. of protons + n. of neutrons)
          real(rkind) :: pz     ! Charge number (n. of protons - n. of electrons)
@@ -32,7 +32,7 @@ c
          integer :: idum      ! Dummy
          type(bpsd_species_data), dimension(:), pointer :: data
       end type bpsd_species_type
-c
+
       type bpsd_equ1D_data
          real(rkind) :: psit   ! Toroidal magnetic flux [Wb] ~pi*r^2*B
          real(rkind) :: psip   ! Poloidal magnetic flux [Wb] ~pi*R*r*Bp
@@ -49,7 +49,7 @@ c
                               ! normalized minor radius
          type(bpsd_equ1D_data), dimension(:), pointer :: data
       end type bpsd_equ1D_type
-c
+
       type bpsd_equ2D_data
          real(rkind) :: psip2d  ! Poloidal magnetic flux [Wb] ~pi*R*r*Bp
       end type bpsd_equ2D_data
@@ -65,7 +65,6 @@ c
          type(bpsd_equ2D_data), dimension(:,:), pointer :: data
       end type bpsd_equ2D_type
 
-c
       type bpsd_equ3D_data
          real(rkind) :: psip3d  ! Poloidal magnetic flux [Wb] ~pi*R*r*Bp
       end type bpsd_equ3D_data
@@ -84,7 +83,7 @@ c
                               ! toroidal angle
          type(bpsd_equ3D_data), dimension(:,:,:), pointer :: data
       end type bpsd_equ3D_type
-c
+
       type bpsd_metric1D_data
          real(rkind) :: pvol     ! Plasma volume [m^3] ~2*pi*R*pi*r^2
          real(rkind) :: psur     ! Plasma surface [m^2] ~pi*r^2
@@ -102,7 +101,7 @@ c
          real(rkind) :: elip     ! elipticity
          real(rkind) :: trig     ! triangularity
       end type bpsd_metric1D_data
-c
+
       type bpsd_metric1D_type
          integer :: nrmax       ! Number of radial points
          integer :: idum      ! Dummy
@@ -142,7 +141,7 @@ c
                               ! normalized minor radius
          type(bpsd_dielectric_data), dimension(:,:), pointer :: data
       end type bpsd_dielectric_type
-c
+
       type bpsd_data0D_type
          integer :: ndmax     ! Number of data
          integer :: idum      ! Dummy
@@ -151,7 +150,7 @@ c
          real(rkind), dimension(:), pointer :: data
          character(len=32), dimension(:), pointer :: kid
       end type bpsd_data0D_type
-c
+
       type bpsd_data1D_type
          integer :: nrmax     ! Number of radial points
          integer :: ndmax     ! Number of data
@@ -161,7 +160,7 @@ c
          real(rkind), dimension(:,:), pointer :: data
          character(len=32), dimension(:), pointer :: kid
       end type bpsd_data1D_type
-c
+
       type bpsd_data2D_type
          integer :: nthmax    ! Number of poloidal points
          integer :: nrmax     ! Number of radial points
@@ -174,7 +173,7 @@ c
          real(rkind), dimension(:,:,:), pointer :: data
          character(len=32), dimension(:), pointer :: kid
       end type bpsd_data2D_type
-c
+
       type bpsd_data3D_type
          integer :: nphmax    ! Number of toroidal points
          integer :: nthmax    ! Number of poloidal points
@@ -188,5 +187,5 @@ c
          real(rkind), dimension(:,:,:,:), pointer :: data
          character(len=32), dimension(:), pointer :: kid
       end type bpsd_data3D_type
-c
+
       end module bpsd_types

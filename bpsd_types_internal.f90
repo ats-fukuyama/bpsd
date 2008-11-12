@@ -1,14 +1,13 @@
-c     $Id$
-c=======================================================================
+!     $Id$
+!=======================================================================
       module bpsd_types_internal
-c
+
       use bpsd_kinds
-c
+
       type bpsd_shotx_type
          integer :: status = 1! 1:undef 2:assigned
          integer :: shotID
          integer :: modelID
-!         integer :: idum      ! Dummy
          character(len=32) :: dataName
          character(len=32) :: deviceID
          character(len=8)  :: created_date
@@ -16,7 +15,7 @@ c
          character(len=5)  :: created_timezone
          character(len=9)  :: dummy
       end type bpsd_shotx_type
-c
+
       type bpsd_data0Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
@@ -31,7 +30,7 @@ c
          character(len=32), dimension(:), pointer :: kid
          character(len=32), dimension(:), pointer :: kunit
       end type bpsd_data0Dx_type
-c
+
       type bpsd_data1Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
@@ -51,7 +50,7 @@ c
          character(len=32), dimension(:), pointer :: kid
          character(len=32), dimension(:), pointer :: kunit
       end type bpsd_data1Dx_type
-c
+
       type bpsd_data2Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
@@ -72,7 +71,7 @@ c
          character(len=32), dimension(:), pointer :: kid
          character(len=32), dimension(:), pointer :: kunit
       end type bpsd_data2Dx_type
-c
+
       type bpsd_data3Dx_type
          integer :: status = 0! 0:unalloc 1:undef 2:assigned 
                               ! 3:sp-alloc 4:splined
@@ -96,5 +95,5 @@ c
          character(len=32), dimension(:), pointer :: kid
          character(len=32), dimension(:), pointer :: kunit
       end type bpsd_data3Dx_type
-c
+
       end module bpsd_types_internal
