@@ -33,7 +33,7 @@ bpsdlib.a: $(OBJS)
 	$(LD) $(LDFLAGS) $@ $(OBJS)
 
 clean:
-	-rm -f core a.out *.o *.mod ./*~ ./#* *.a
+	-rm -f core a.out *.o *.mod ./*~ ./#* *.a $(MOD)/*.mod
 
 veryclean: clean
 
