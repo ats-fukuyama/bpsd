@@ -22,7 +22,7 @@ c-----------------------------------------------------------------------
 c
       metric1Dx%status=0
       metric1Dx%dataName='metric1D'
-      metric1Dx%ndmax=15
+      metric1Dx%ndmax=16
 
       allocate(metric1Dx%kid(metric1Dx%ndmax))
       allocate(metric1Dx%kunit(metric1Dx%ndmax))
@@ -34,13 +34,14 @@ c
       metric1Dx%kid( 6)='metric1D%aver2i'
       metric1Dx%kid( 7)='metric1D%aveb2'
       metric1Dx%kid( 8)='metric1D%aveb2i'
-      metric1Dx%kid( 9)='metric1D%avegv2'
-      metric1Dx%kid(10)='metric1D%avegvr2'
-      metric1Dx%kid(11)='metric1D%avegpp2'
-      metric1Dx%kid(12)='metric1D%rr'
-      metric1Dx%kid(13)='metric1D%rs'
-      metric1Dx%kid(14)='metric1D%elip'
-      metric1Dx%kid(15)='metric1D%trig'
+      metric1Dx%kid( 9)='metric1D%avegv'
+      metric1Dx%kid(10)='metric1D%avegv2'
+      metric1Dx%kid(11)='metric1D%avegvr2'
+      metric1Dx%kid(12)='metric1D%avegpp2'
+      metric1Dx%kid(13)='metric1D%rr'
+      metric1Dx%kid(14)='metric1D%rs'
+      metric1Dx%kid(15)='metric1D%elip'
+      metric1Dx%kid(16)='metric1D%trig'
       metric1Dx%kunit( 1)='m^3 '
       metric1Dx%kunit( 2)='m^2 '
       metric1Dx%kunit( 3)=' '
@@ -52,10 +53,11 @@ c
       metric1Dx%kunit( 9)=' '
       metric1Dx%kunit(10)=' '
       metric1Dx%kunit(11)=' '
-      metric1Dx%kunit(12)='m'
+      metric1Dx%kunit(12)=' '
       metric1Dx%kunit(13)='m'
-      metric1Dx%kunit(14)=' '
+      metric1Dx%kunit(14)='m'
       metric1Dx%kunit(15)=' '
+      metric1Dx%kunit(16)=' '
 c
       bpsd_metric1Dx_init_flag = .FALSE.
 c
@@ -113,13 +115,14 @@ c
          metric1Dx%data(nr, 6) = metric1D_in%data(nr)%aver2i
          metric1Dx%data(nr, 7) = metric1D_in%data(nr)%aveb2
          metric1Dx%data(nr, 8) = metric1D_in%data(nr)%aveb2i
-         metric1Dx%data(nr, 9) = metric1D_in%data(nr)%avegv2
-         metric1Dx%data(nr,10) = metric1D_in%data(nr)%avegvr2
-         metric1Dx%data(nr,11) = metric1D_in%data(nr)%avegpp2
-         metric1Dx%data(nr,12) = metric1D_in%data(nr)%rr
-         metric1Dx%data(nr,13) = metric1D_in%data(nr)%rs
-         metric1Dx%data(nr,14) = metric1D_in%data(nr)%elip
-         metric1Dx%data(nr,15) = metric1D_in%data(nr)%trig
+         metric1Dx%data(nr, 9) = metric1D_in%data(nr)%avegv
+         metric1Dx%data(nr,10) = metric1D_in%data(nr)%avegv2
+         metric1Dx%data(nr,11) = metric1D_in%data(nr)%avegvr2
+         metric1Dx%data(nr,12) = metric1D_in%data(nr)%avegpp2
+         metric1Dx%data(nr,13) = metric1D_in%data(nr)%rr
+         metric1Dx%data(nr,14) = metric1D_in%data(nr)%rs
+         metric1Dx%data(nr,15) = metric1D_in%data(nr)%elip
+         metric1Dx%data(nr,16) = metric1D_in%data(nr)%trig
       enddo
       CALL DATE_AND_TIME(metric1Dx%created_date,
      &                   metric1Dx%created_time,
@@ -156,7 +159,7 @@ c
       integer,intent(out) :: ierr
       integer :: nr, nd, mode
       real(8) :: s
-      real(8), dimension(15) :: v
+      real(8), dimension(16) :: v
 c
       if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 c
@@ -196,13 +199,14 @@ c
             metric1D_out%data(nr)%aver2i   = metric1Dx%data(nr, 6)
             metric1D_out%data(nr)%aveb2    = metric1Dx%data(nr, 7)
             metric1D_out%data(nr)%aveb2i   = metric1Dx%data(nr, 8)
-            metric1D_out%data(nr)%avegv2   = metric1Dx%data(nr, 9)
-            metric1D_out%data(nr)%avegvr2  = metric1Dx%data(nr,10)
-            metric1D_out%data(nr)%avegpp2  = metric1Dx%data(nr,11)
-            metric1D_out%data(nr)%rr       = metric1Dx%data(nr,12)
-            metric1D_out%data(nr)%rs       = metric1Dx%data(nr,13)
-            metric1D_out%data(nr)%elip     = metric1Dx%data(nr,14)
-            metric1D_out%data(nr)%trig     = metric1Dx%data(nr,15)
+            metric1D_out%data(nr)%avegv    = metric1Dx%data(nr, 9)
+            metric1D_out%data(nr)%avegv2   = metric1Dx%data(nr,10)
+            metric1D_out%data(nr)%avegvr2  = metric1Dx%data(nr,11)
+            metric1D_out%data(nr)%avegpp2  = metric1Dx%data(nr,12)
+            metric1D_out%data(nr)%rr       = metric1Dx%data(nr,13)
+            metric1D_out%data(nr)%rs       = metric1Dx%data(nr,14)
+            metric1D_out%data(nr)%elip     = metric1Dx%data(nr,15)
+            metric1D_out%data(nr)%trig     = metric1Dx%data(nr,16)
          enddo
          ierr=0
          return
@@ -219,7 +223,7 @@ c
          do nr=1,metric1Dx%nrmax
             metric1Dx%s(nr)=metric1Dx%rho(nr)**2
          enddo
-         do nd=1,6
+         do nd=1,metric1Dx%ndmax
             call bpsd_spl1D(metric1Dx,nd,ierr)
          enddo
          metric1Dx%status=4
@@ -227,7 +231,7 @@ c
 
       do nr=1,metric1D_out%nrmax
          s = (metric1D_out%rho(nr))**2
-         do nd=1,6
+         do nd=1,metric1Dx%ndmax
             call bpsd_spl1DF(s,v(nd),metric1Dx,nd,ierr)
          enddo
          metric1D_out%data(nr)%pvol     = v( 1)
@@ -238,13 +242,14 @@ c
          metric1D_out%data(nr)%aver2i   = v( 6)
          metric1D_out%data(nr)%aveb2    = v( 7)
          metric1D_out%data(nr)%aveb2i   = v( 8)
-         metric1D_out%data(nr)%avegv2   = v( 9)
-         metric1D_out%data(nr)%avegvr2  = v(10)
-         metric1D_out%data(nr)%avegpp2  = v(11)
-         metric1D_out%data(nr)%rr       = v(12)
-         metric1D_out%data(nr)%rs       = v(13)
-         metric1D_out%data(nr)%elip     = v(14)
-         metric1D_out%data(nr)%trig     = v(15)
+         metric1D_out%data(nr)%avegv    = v( 9)
+         metric1D_out%data(nr)%avegv2   = v(10)
+         metric1D_out%data(nr)%avegvr2  = v(11)
+         metric1D_out%data(nr)%avegpp2  = v(12)
+         metric1D_out%data(nr)%rr       = v(13)
+         metric1D_out%data(nr)%rs       = v(14)
+         metric1D_out%data(nr)%elip     = v(15)
+         metric1D_out%data(nr)%trig     = v(16)
       enddo
       ierr = 0
 c

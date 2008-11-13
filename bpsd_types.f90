@@ -93,6 +93,7 @@
          real(rkind) :: aver2i   ! <1/R^2>
          real(rkind) :: aveb2    ! <B^2>
          real(rkind) :: aveb2i   ! <1/B^2>
+         real(rkind) :: avegv    ! <|gradV|>
          real(rkind) :: avegv2   ! <|gradV|^2>
          real(rkind) :: avegvr2  ! <|gradV|^2/R^2>
          real(rkind) :: avegpp2  ! <|gradPsip|^2>
