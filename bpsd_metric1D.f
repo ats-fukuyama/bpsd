@@ -15,7 +15,7 @@ c
       contains
 c
 c-----------------------------------------------------------------------
-      subroutine bpsd_metric1Dx_init
+      subroutine bpsd_init_metric1Dx
 c-----------------------------------------------------------------------
       use bpsd_subs
       implicit none
@@ -23,7 +23,9 @@ c
       metric1Dx%status=0
       metric1Dx%dataName='metric1D'
       metric1Dx%ndmax=15
-      allocate(metric1Dx%kid(15))
+
+      allocate(metric1Dx%kid(metric1Dx%ndmax))
+      allocate(metric1Dx%kunit(metric1Dx%ndmax))
       metric1Dx%kid( 1)='metric1D%pvol'
       metric1Dx%kid( 2)='metric1D%psur'
       metric1Dx%kid( 3)='metric1D%dvpsit'
@@ -39,12 +41,50 @@ c
       metric1Dx%kid(13)='metric1D%rs'
       metric1Dx%kid(14)='metric1D%elip'
       metric1Dx%kid(15)='metric1D%trig'
+      metric1Dx%kunit( 1)='m^3 '
+      metric1Dx%kunit( 2)='m^2 '
+      metric1Dx%kunit( 3)=' '
+      metric1Dx%kunit( 4)=' '
+      metric1Dx%kunit( 5)='m^2 '
+      metric1Dx%kunit( 6)='m^-2 '
+      metric1Dx%kunit( 7)='Wb^2 '
+      metric1Dx%kunit( 8)='Wb^-2'
+      metric1Dx%kunit( 9)=' '
+      metric1Dx%kunit(10)=' '
+      metric1Dx%kunit(11)=' '
+      metric1Dx%kunit(12)='m'
+      metric1Dx%kunit(13)='m'
+      metric1Dx%kunit(14)=' '
+      metric1Dx%kunit(15)=' '
 c
       bpsd_metric1Dx_init_flag = .FALSE.
 c
       return
-      end subroutine bpsd_metric1Dx_init
+      end subroutine bpsd_init_metric1Dx
+
 c
+!-----------------------------------------------------------------------
+      SUBROUTINE bpsd_adjust_metric1D_data(data,n1)
+!-----------------------------------------------------------------------
+      IMPLICIT NONE
+      TYPE(bpsd_metric1D_data),DIMENSION(:),POINTER,INTENT(INOUT):: 
+     &     data
+      INTEGER(ikind),INTENT(IN):: n1
+
+      IF(ASSOCIATED(data)) THEN
+         IF(n1.LE.0) THEN
+            DEALLOCATE(data)
+         ELSE IF(n1.NE.SIZE(data,1)) THEN
+            DEALLOCATE(data)
+            ALLOCATE(data(n1))
+         END IF
+      ELSE
+         IF(n1.GT.0)  THEN
+            ALLOCATE(data(n1))
+         ENDIF
+      ENDIF
+      END SUBROUTINE bpsd_adjust_metric1D_data
+
 c-----------------------------------------------------------------------
       subroutine bpsd_set_metric1D(metric1D_in,ierr)
 c-----------------------------------------------------------------------
@@ -55,27 +95,16 @@ c
       integer :: ierr
       integer :: nr,nd
 c
-      if(bpsd_metric1Dx_init_flag) call bpsd_metric1Dx_init
+      if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 c
-      if(metric1Dx%status.ne.0) then
-         if(metric1D_in%nrmax.ne.metric1Dx%nrmax) then
-            if(metric1Dx%status.ge.3) deallocate(metric1Dx%spline)
-            deallocate(metric1Dx%data)
-            deallocate(metric1Dx%rho)
-            metric1Dx%status=0
-         endif
-      endif
-c
-      if(metric1Dx%status.eq.0) then
-         metric1Dx%nrmax=metric1D_in%nrmax
-         allocate(metric1Dx%rho(metric1Dx%nrmax))
-         allocate(metric1Dx%data(metric1Dx%nrmax,metric1Dx%ndmax))
-         metric1Dx%status=1
-      endif
-c
-      metric1Dx%time = metric1D_in%time
-      do nr=1,metric1D_in%nrmax
-         metric1Dx%rho(nr) = metric1D_in%rho(nr)
+      metric1Dx%nrmax=metric1D_in%nrmax
+      CALL bpsd_adjust_array1D(metric1Dx%rho,metric1Dx%nrmax)
+      CALL bpsd_adjust_array2D(metric1Dx%data,metric1Dx%nrmax,
+     &                                     metric1Dx%ndmax)
+
+      metric1Dx%time=metric1D_in%time
+      do nr=1,metric1Dx%nrmax
+         metric1Dx%rho(nr)    = metric1D_in%rho(nr)
          metric1Dx%data(nr, 1) = metric1D_in%data(nr)%pvol
          metric1Dx%data(nr, 2) = metric1D_in%data(nr)%psur
          metric1Dx%data(nr, 3) = metric1D_in%data(nr)%dvpsit
@@ -92,6 +121,10 @@ c
          metric1Dx%data(nr,14) = metric1D_in%data(nr)%elip
          metric1Dx%data(nr,15) = metric1D_in%data(nr)%trig
       enddo
+      CALL DATE_AND_TIME(metric1Dx%created_date,
+     &                   metric1Dx%created_time,
+     &                   metric1Dx%created_timezone)
+
       if(metric1Dx%status.ge.3) then
          metric1Dx%status=3
       else
@@ -101,7 +134,7 @@ c
 c
       if(bpsd_debug_flag) then
          write(6,*) '-- bpsd_set_metric1D'
-         write(6,*) '---- metric1Dx%rho'
+         write(6,*) '---- metric1Dx%s'
          write(6,'(1P5E12.4)') 
      &        (metric1Dx%rho(nr),nr=1,metric1Dx%nrmax)
          do nd=1,metric1Dx%ndmax
@@ -119,19 +152,17 @@ c-----------------------------------------------------------------------
 c
       use bpsd_subs
       implicit none
-      type(bpsd_metric1D_type) :: metric1D_out
-      integer :: ierr
-      real(8), dimension(:,:), pointer ::  temp
-      real(8), dimension(:), pointer ::  deriv
-      integer :: nr, nd
+      type(bpsd_metric1D_type),intent(out) :: metric1D_out
+      integer,intent(out) :: ierr
+      integer :: nr, nd, mode
       real(8) :: s
       real(8), dimension(15) :: v
 c
-      if(bpsd_metric1Dx_init_flag) call bpsd_metric1Dx_init
+      if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 c
       if(metric1Dx%status.eq.0) then
          write(6,*) 
-     &   'XX bpsd_get_metric1D: no space allocated to metric1Dx%data'
+     &      'XX bpsd_get_metric1D: no space allocated to metric1Dx%data'
          ierr=1
          return
       endif
@@ -141,64 +172,62 @@ c
          ierr=2
          return
       endif
-c
+
       if(metric1D_out%nrmax.eq.0) then
-         if(associated(metric1D_out%data)) then
-            if(metric1Dx%nrmax.ne.size(metric1D_out%data,1)) then
-               deallocate(metric1D_out%data)
-               metric1D_out%nrmax = metric1Dx%nrmax
-               allocate(metric1D_out%data(metric1D_out%nrmax))
-            endif
-         else
-            metric1D_out%nrmax = metric1Dx%nrmax
-            allocate(metric1D_out%data(metric1D_out%nrmax))
-         endif
-      endif
-c
-      if(associated(metric1D_out%data)) then
-         if(metric1Dx%nrmax.le.size(metric1D_out%data,1)) then
-            metric1D_out%time  = metric1Dx%time
-            metric1D_out%nrmax = metric1Dx%nrmax
-            do nr=1,metric1Dx%nrmax
-               metric1D_out%data(nr)%pvol     = metric1Dx%data(nr, 1)
-               metric1D_out%data(nr)%psur     = metric1Dx%data(nr, 2)
-               metric1D_out%data(nr)%dvpsit   = metric1Dx%data(nr, 3)
-               metric1D_out%data(nr)%dvpsip   = metric1Dx%data(nr, 4)
-               metric1D_out%data(nr)%aver2    = metric1Dx%data(nr, 5)
-               metric1D_out%data(nr)%aver2i   = metric1Dx%data(nr, 6)
-               metric1D_out%data(nr)%aveb2    = metric1Dx%data(nr, 7)
-               metric1D_out%data(nr)%aveb2i   = metric1Dx%data(nr, 8)
-               metric1D_out%data(nr)%avegv2   = metric1Dx%data(nr, 9)
-               metric1D_out%data(nr)%avegvr2  = metric1Dx%data(nr,10)
-               metric1D_out%data(nr)%avegpp2  = metric1Dx%data(nr,11)
-               metric1D_out%data(nr)%rr       = metric1Dx%data(nr,12)
-               metric1D_out%data(nr)%rs       = metric1Dx%data(nr,13)
-               metric1D_out%data(nr)%elip     = metric1Dx%data(nr,14)
-               metric1D_out%data(nr)%trig     = metric1Dx%data(nr,15)
-            enddo
-            ierr=0
-            return
-         endif
+         mode=0
+         metric1D_out%nrmax = metric1Dx%nrmax
       else
-         ierr=3
+         mode=1
+      endif
+
+      CALL bpsd_adjust_array1D(metric1D_out%rho,metric1D_out%nrmax)
+      CALL bpsd_adjust_metric1D_data(metric1D_out%data,
+     &                               metric1D_out%nrmax)
+
+      if(mode.eq.0) then
+         metric1D_out%time  = metric1Dx%time
+         do nr=1,metric1D_out%nrmax
+            metric1D_out%rho(nr)           = metric1Dx%rho(nr)
+            metric1D_out%data(nr)%pvol     = metric1Dx%data(nr, 1)
+            metric1D_out%data(nr)%psur     = metric1Dx%data(nr, 2)
+            metric1D_out%data(nr)%dvpsit   = metric1Dx%data(nr, 3)
+            metric1D_out%data(nr)%dvpsip   = metric1Dx%data(nr, 4)
+            metric1D_out%data(nr)%aver2    = metric1Dx%data(nr, 5)
+            metric1D_out%data(nr)%aver2i   = metric1Dx%data(nr, 6)
+            metric1D_out%data(nr)%aveb2    = metric1Dx%data(nr, 7)
+            metric1D_out%data(nr)%aveb2i   = metric1Dx%data(nr, 8)
+            metric1D_out%data(nr)%avegv2   = metric1Dx%data(nr, 9)
+            metric1D_out%data(nr)%avegvr2  = metric1Dx%data(nr,10)
+            metric1D_out%data(nr)%avegpp2  = metric1Dx%data(nr,11)
+            metric1D_out%data(nr)%rr       = metric1Dx%data(nr,12)
+            metric1D_out%data(nr)%rs       = metric1Dx%data(nr,13)
+            metric1D_out%data(nr)%elip     = metric1Dx%data(nr,14)
+            metric1D_out%data(nr)%trig     = metric1Dx%data(nr,15)
+         enddo
+         ierr=0
          return
       endif
-c
+
       if(metric1Dx%status.eq.2) then
-         allocate(metric1Dx%spline(4,metric1Dx%nrmax,metric1Dx%ndmax))
+         CALL bpsd_adjust_array3D(metric1Dx%spline,4,metric1Dx%nrmax,
+     &                                            metric1Dx%ndmax)
          metric1Dx%status=3
       endif
-c
+
       if(metric1Dx%status.eq.3) then
-         do nd=1,metric1Dx%ndmax
+         CALL bpsd_adjust_array1D(metric1Dx%s,metric1Dx%nrmax)
+         do nr=1,metric1Dx%nrmax
+            metric1Dx%s(nr)=metric1Dx%rho(nr)**2
+         enddo
+         do nd=1,6
             call bpsd_spl1D(metric1Dx,nd,ierr)
          enddo
          metric1Dx%status=4
       endif
-c
+
       do nr=1,metric1D_out%nrmax
-         s = metric1D_out%rho(nr)
-         do nd=1,metric1Dx%ndmax
+         s = (metric1D_out%rho(nr))**2
+         do nd=1,6
             call bpsd_spl1DF(s,v(nd),metric1Dx,nd,ierr)
          enddo
          metric1D_out%data(nr)%pvol     = v( 1)
@@ -282,7 +311,7 @@ c
       integer,intent(in) :: fid
       integer,intent(out) :: ierr
 c
-      if(bpsd_metric1Dx_init_flag) call bpsd_metric1Dx_init
+      if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 c
       if(metric1Dx%status.gt.1) 
      &     call bpsd_save_data1Dx(fid,metric1Dx,ierr)
@@ -299,36 +328,35 @@ c
       type(bpsd_data1Dx_type),intent(in) :: datax
       integer,intent(out) :: ierr
       integer:: ns,nr,nd
-c
-      if(bpsd_metric1Dx_init_flag) call bpsd_metric1Dx_init
-c
-      if(metric1Dx%status.ne.0) then
-         if(datax%nrmax.ne.metric1Dx%nrmax) then
-            if(metric1Dx%status.ge.3) deallocate(metric1Dx%spline)
-            deallocate(metric1Dx%data)
-            deallocate(metric1Dx%rho)
-            metric1Dx%status=0
-         endif
-      endif
-c
-      if(metric1Dx%status.eq.0) then
-         metric1Dx%nrmax=datax%nrmax
-         allocate(metric1Dx%rho(metric1Dx%nrmax))
-         allocate(metric1Dx%data(metric1Dx%nrmax,metric1Dx%ndmax))
-         metric1Dx%status=1
-      endif
-c
+
+      if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
+
+      metric1Dx%dataName=datax%dataName
       metric1Dx%time = datax%time
+      metric1Dx%nrmax=datax%nrmax
+      metric1Dx%ndmax=datax%ndmax
+      CALL bpsd_adjust_karray(metric1Dx%kid,metric1Dx%ndmax)
+      CALL bpsd_adjust_karray(metric1Dx%kunit,metric1Dx%ndmax)
+      CALL bpsd_adjust_array1D(metric1Dx%rho,metric1Dx%nrmax)
+      CALL bpsd_adjust_array2D(metric1Dx%data,metric1Dx%nrmax,
+     &                                     metric1Dx%ndmax)
+
       do nr=1,metric1Dx%nrmax
          metric1Dx%rho(nr) = datax%rho(nr)
          do nd=1,metric1Dx%ndmax
             metric1Dx%data(nr,nd) = datax%data(nr,nd)
          enddo
       enddo
-      metric1Dx%status=2
+
+      if(metric1Dx%status.ge.3) then
+         metric1Dx%status=3
+      else
+         metric1Dx%status=2
+      endif
       ierr=0
       return
 c
       end subroutine bpsd_load_metric1D
 c
       end module bpsd_metric1D
+

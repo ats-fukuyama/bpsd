@@ -15,7 +15,7 @@ c
       contains
 c
 c-----------------------------------------------------------------------
-      subroutine bpsd_plasmafx_init
+      subroutine bpsd_init_plasmafx
 c-----------------------------------------------------------------------
       use bpsd_subs
       implicit none
@@ -27,56 +27,75 @@ c
       bpsd_plasmafx_init_flag = .FALSE.
 c
       return
-      end subroutine bpsd_plasmafx_init
+      end subroutine bpsd_init_plasmafx
 c
+!-----------------------------------------------------------------------
+      SUBROUTINE bpsd_adjust_plasmaf_data(data,n1,n2)
+!-----------------------------------------------------------------------
+      IMPLICIT NONE
+      TYPE(bpsd_plasmaf_data),DIMENSION(:,:),POINTER,INTENT(INOUT):: 
+     &     data
+      INTEGER(ikind),INTENT(IN):: n1,n2
+
+      IF(ASSOCIATED(data)) THEN
+         IF(n1.LE.0.or.n2.LE.0) THEN
+            DEALLOCATE(data)
+         ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2)) THEN
+            DEALLOCATE(data)
+            ALLOCATE(data(n1,n2))
+         END IF
+      ELSE
+         IF(n1.GT.0.AND.n2.GT.0)  THEN
+            ALLOCATE(data(n1,n2))
+         ENDIF
+      ENDIF
+      END SUBROUTINE bpsd_adjust_plasmaf_data
+
+!-----------------------------------------------------------------------
+      SUBROUTINE bpsd_setup_plasmaf_kdata
+!-----------------------------------------------------------------------
+      IMPLICIT NONE
+      integer(ikind):: nd
+
+      do nd=1,(plasmafx%ndmax-1)/5
+         plasmafx%kid(nd+1)='plasmaf%pn'
+         plasmafx%kid(nd+2)='plasmaf%pt'
+         plasmafx%kid(nd+3)='plasmaf%ptpr'
+         plasmafx%kid(nd+4)='plasmaf%ptpp'
+         plasmafx%kid(nd+5)='plasmaf%pu'
+         plasmafx%kunit(nd+1)='10^20/m^3'
+         plasmafx%kunit(nd+2)='eV'
+         plasmafx%kunit(nd+3)='eV'
+         plasmafx%kunit(nd+4)='eV'
+         plasmafx%kunit(nd+5)='m/s'
+      enddo
+      plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
+      plasmafx%kunit(plasmafx%ndmax)=' '
+      RETURN
+      END SUBROUTINE bpsd_setup_plasmaf_kdata
+     
 c-----------------------------------------------------------------------
       subroutine bpsd_set_plasmaf(plasmaf_in,ierr)
 c-----------------------------------------------------------------------
-c
+
       use bpsd_subs
       implicit none
       type(bpsd_plasmaf_type),intent(in):: plasmaf_in
       integer,intent(out) :: ierr
       integer :: ns,nr,nd
-c
-      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
-c
-      if(plasmafx%status.ne.0) then
-         if((plasmaf_in%nrmax.ne.plasmafx%nrmax) .or.
-     &      (plasmaf_in%nsmax*5.ne.plasmafx%ndmax))  then
-            if(plasmafx%status.ge.3) deallocate(plasmafx%spline)
-            deallocate(plasmafx%data)
-            deallocate(plasmafx%rho)
-            deallocate(plasmafx%kid)
-            plasmafx%status=0
-         endif
-      endif
-c
-      if(plasmafx%status.eq.0) then
-         plasmafx%ndmax=plasmaf_in%nsmax*5+1
-         plasmafx%nrmax=plasmaf_in%nrmax
-         allocate(plasmafx%kid(plasmafx%ndmax))
-         allocate(plasmafx%kunit(plasmafx%ndmax))
-         allocate(plasmafx%rho(plasmafx%nrmax))
-         allocate(plasmafx%data(plasmafx%nrmax,plasmafx%ndmax))
-         do ns=1,plasmaf_in%nsmax
-            nd=5*(ns-1)
-            plasmafx%kid(nd+1)='plasmaf%pn'
-            plasmafx%kid(nd+2)='plasmaf%pt'
-            plasmafx%kid(nd+3)='plasmaf%ptpr'
-            plasmafx%kid(nd+4)='plasmaf%ptpp'
-            plasmafx%kid(nd+5)='plasmaf%pu'
-            plasmafx%kunit(nd+1)='10^20/m^3'
-            plasmafx%kunit(nd+2)='eV'
-            plasmafx%kunit(nd+3)='eV'
-            plasmafx%kunit(nd+4)='eV'
-            plasmafx%kunit(nd+5)='m/s'
-         enddo
-         plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
-         plasmafx%kunit(plasmafx%ndmax)=' '
-         plasmafx%status=1
-      endif
-c
+
+      if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
+
+      plasmafx%nrmax=plasmaf_in%nrmax
+      plasmafx%ndmax=plasmaf_in%nsmax*5+1
+      CALL bpsd_adjust_karray(plasmafx%kid,plasmafx%ndmax)
+      CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
+      CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
+      CALL bpsd_adjust_array2D(plasmafx%data,plasmafx%nrmax,
+     &                                       plasmafx%ndmax)
+
+      CALL bpsd_setup_plasmaf_kdata
+
       plasmafx%time = plasmaf_in%time
       do nr=1,plasmaf_in%nrmax
          plasmafx%rho(nr) = plasmaf_in%rho(nr)
@@ -94,7 +113,7 @@ c
      &                   plasmafx%created_time,
      &                   plasmafx%created_timezone)
 
-      if(plasmafx%status.ge.3) then 
+      if(plasmafx%status.ge.3) then
          plasmafx%status=3
       else
          plasmafx%status=2
@@ -128,7 +147,7 @@ c
       real(8) :: s
       real(8), dimension(:), pointer :: v
 
-      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
+      if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 
       if(plasmafx%status.eq.0) then
          write(6,*) 
@@ -175,7 +194,8 @@ c
       endif
 c
       if(plasmafx%status.eq.2) then
-         allocate(plasmafx%spline(4,plasmafx%nrmax,plasmafx%ndmax))
+         CALL bpsd_adjust_array3D(plasmafx%spline,4,plasmafx%nrmax,
+     &                                              plasmafx%ndmax)
          plasmafx%status=3
       endif
 c
@@ -247,7 +267,7 @@ c
       integer,intent(in) :: fid
       integer,intent(out) :: ierr
 c
-      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
+      if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 c
       if(plasmafx%status.gt.1) 
      &     call bpsd_save_data1Dx(fid,plasmafx,ierr)
@@ -265,32 +285,18 @@ c
       integer,intent(out) :: ierr
       integer:: ns,nr,nd
 c
-      if(bpsd_plasmafx_init_flag) call bpsd_plasmafx_init
-c
-      if(plasmafx%status.ne.0) then
-         if((datax%nrmax.ne.plasmafx%nrmax) .or.
-     &      (datax%ndmax.ne.plasmafx%ndmax))  then
-            if(plasmafx%status.ge.3) deallocate(plasmafx%spline)
-            deallocate(plasmafx%data)
-            deallocate(plasmafx%rho)
-            deallocate(plasmafx%kunit)
-            deallocate(plasmafx%kid)
-            plasmafx%status=0
-         endif
-      endif
-c
-      if(plasmafx%status.eq.0) then
-         allocate(plasmafx%kid(datax%ndmax))
-         allocate(plasmafx%kunit(datax%ndmax))
-         allocate(plasmafx%rho(datax%nrmax))
-         allocate(plasmafx%data(datax%nrmax,datax%ndmax))
-         plasmafx%status=1
-      endif
+      if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 c
       plasmafx%dataName=datax%dataName
-      plasmafx%ndmax=datax%ndmax
-      plasmafx%nrmax=datax%nrmax
       plasmafx%time = datax%time
+      plasmafx%nrmax=datax%nrmax
+      plasmafx%ndmax=datax%ndmax
+      CALL bpsd_adjust_karray(plasmafx%kid,plasmafx%ndmax)
+      CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
+      CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
+      CALL bpsd_adjust_array2D(plasmafx%data,plasmafx%nrmax,
+     &                                       plasmafx%ndmax)
+
       do nr=1,plasmafx%nrmax
          plasmafx%rho(nr) = datax%rho(nr)
          do nd=1,plasmafx%ndmax
@@ -304,7 +310,13 @@ c
       plasmafx%created_date = datax%created_date
       plasmafx%created_time = datax%created_time
       plasmafx%created_timezone = datax%created_timezone
-      plasmafx%status=2
+
+      if(plasmafx%status.ge.3) then
+         plasmafx%status=3
+      else
+         plasmafx%status=2
+      endif
+
       ierr=0
       return
 c

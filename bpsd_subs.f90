@@ -4,6 +4,29 @@ MODULE bpsd_subs
 
 CONTAINS
 !-----------------------------------------------------------------------
+  SUBROUTINE bpsd_adjust_karray(data,n1)
+!-----------------------------------------------------------------------
+    USE bpsd_kinds
+    IMPLICIT NONE
+    CHARACTER(LEN=*),DIMENSION(:),POINTER,INTENT(INOUT):: data
+    INTEGER(ikind),INTENT(IN):: n1
+
+    IF(ASSOCIATED(data)) THEN
+       IF(n1.LE.0) THEN
+          DEALLOCATE(data)
+       ELSE IF(n1.NE.SIZE(data,1)) THEN
+          DEALLOCATE(data)
+          ALLOCATE(data(n1))
+       END IF
+    ELSE
+       IF(n1.GT.0)  THEN
+          ALLOCATE(data(n1))
+       ENDIF
+    ENDIF
+    RETURN
+  END SUBROUTINE bpsd_adjust_karray
+
+!-----------------------------------------------------------------------
   SUBROUTINE bpsd_adjust_array1D(data,n1)
 !-----------------------------------------------------------------------
     USE bpsd_kinds
@@ -70,29 +93,6 @@ CONTAINS
        ENDIF
     ENDIF
   END SUBROUTINE bpsd_adjust_array3D
-
-!-----------------------------------------------------------------------
-  SUBROUTINE bpsd_adjust_plasmaf_data(data,n1,n2)
-!-----------------------------------------------------------------------
-    USE bpsd_kinds
-    USE bpsd_types
-    IMPLICIT NONE
-    TYPE(bpsd_plasmaf_data),DIMENSION(:,:),POINTER,INTENT(INOUT):: data
-    INTEGER(ikind),INTENT(IN):: n1,n2
-
-    IF(ASSOCIATED(data)) THEN
-       IF(n1.LE.0.or.n2.LE.0) THEN
-          DEALLOCATE(data)
-       ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2)) THEN
-          DEALLOCATE(data)
-          ALLOCATE(data(n1,n2))
-       END IF
-    ELSE
-       IF(n1.GT.0.AND.n2.GT.0)  THEN
-          ALLOCATE(data(n1,n2))
-       ENDIF
-    ENDIF
-  END SUBROUTINE bpsd_adjust_plasmaf_data
 
 !-----------------------------------------------------------------------
   SUBROUTINE bpsd_spl1D(data1D,nd,ierr)
