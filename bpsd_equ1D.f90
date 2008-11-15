@@ -123,7 +123,6 @@ contains
     type(bpsd_equ1D_type),intent(out) :: equ1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
-    real(8) :: s
     real(8), dimension(6) :: v
 
     if(bpsd_equ1Dx_init_flag) call bpsd_init_equ1Dx
@@ -182,9 +181,8 @@ contains
     endif
 
     do nr=1,equ1D_out%nrmax
-       s = (equ1D_out%rho(nr))**2
        do nd=1,6
-          call bpsd_spl1DF(s,v(nd),equ1Dx,nd,ierr)
+          call bpsd_spl1DF(equ1D_out%rho(nr),v(nd),equ1Dx,nd,ierr)
        enddo
        equ1D_out%data(nr)%psit = v(1)
        equ1D_out%data(nr)%psip = v(2)

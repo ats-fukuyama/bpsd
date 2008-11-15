@@ -108,7 +108,7 @@ CONTAINS
     call spl1D(data1D%s,data1D%data(1,nd),deriv,data1D%spline(1,1,nd), &
          &     data1D%nrmax,0,ierr)
     if(ierr.ne.0) &
-         &     write(6,*) 'XX spl1D_bpsd : '//data1D%kid(nd)//': ierr=',ierr
+         &     write(6,*) 'XX bpsd_spl1D : '//data1D%kid(nd)//': ierr=',ierr
     deallocate(deriv)
     return
   end subroutine bpsd_spl1D
@@ -126,7 +126,7 @@ CONTAINS
 
     call spl1DF(pos**2,val,data1D%s,data1D%spline(1,1,nd),data1D%nrmax,ierr)
     if(ierr.ne.0) then
-       write(6,*) 'XX spl1DF_bpsd : '//data1D%kid(nd)//': ierr=',ierr
+       write(6,*) 'XX bpsd_spl1DF : '//data1D%kid(nd)//': ierr=',ierr
        write(6,'(1P3E12.4)')  &
             &        pos**2,data1D%s(1),data1D%s(data1D%nrmax)
     endif

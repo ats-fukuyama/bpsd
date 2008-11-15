@@ -156,7 +156,6 @@ contains
     type(bpsd_metric1D_type),intent(out) :: metric1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
-    real(8) :: s
     real(8), dimension(16) :: v
 
     if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
@@ -227,9 +226,8 @@ contains
     endif
 
     do nr=1,metric1D_out%nrmax
-       s = (metric1D_out%rho(nr))**2
        do nd=1,metric1Dx%ndmax
-          call bpsd_spl1DF(s,v(nd),metric1Dx,nd,ierr)
+          call bpsd_spl1DF(metric1D_out%rho(nr),v(nd),metric1Dx,nd,ierr)
        enddo
        metric1D_out%data(nr)%pvol     = v( 1)
        metric1D_out%data(nr)%psur     = v( 2)

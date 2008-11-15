@@ -142,7 +142,6 @@ contains
     type(bpsd_plasmaf_type),intent(out) :: plasmaf_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
-    real(8) :: s
     real(8), dimension(:), pointer :: v
 
     if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
@@ -208,10 +207,14 @@ contains
     endif
     !
     allocate(v(plasmafx%ndmax))
+!    do nr=1,plasmaf_out%nrmax
+!       write(6,'(I5,1P3E12.4)') nr,plasmafx%rho(nr),plasmafx%s(nr), &
+!            & plasmafx%data(nr,1)
+!    enddo
+!    pause
     do nr=1,plasmaf_out%nrmax
-       s = plasmaf_out%rho(nr)**2
        do nd=1,plasmafx%ndmax
-          call bpsd_spl1DF(s,v(nd),plasmafx,nd,ierr)
+          call bpsd_spl1DF(plasmaf_out%rho(nr),v(nd),plasmafx,nd,ierr)
        enddo
        do ns=1,plasmaf_out%nsmax
           nd=5*(ns-1)
