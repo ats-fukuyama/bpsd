@@ -47,6 +47,27 @@ contains
   END SUBROUTINE bpsd_setup_species_kdata
 
 !-----------------------------------------------------------------------
+  SUBROUTINE bpsd_adjust_species_data(data,n1)
+!-----------------------------------------------------------------------
+    IMPLICIT NONE
+    TYPE(bpsd_species_data),DIMENSION(:),POINTER,INTENT(INOUT):: data
+    INTEGER(ikind),INTENT(IN):: n1
+
+    IF(ASSOCIATED(data)) THEN
+       IF(n1.LE.0) THEN
+          DEALLOCATE(data)
+       ELSE IF(n1.NE.SIZE(data,1)) THEN
+          DEALLOCATE(data)
+          ALLOCATE(data(n1))
+       END IF
+    ELSE
+       IF(n1.GT.0)  THEN
+          ALLOCATE(data(n1))
+       ENDIF
+    ENDIF
+  END SUBROUTINE bpsd_adjust_species_data
+
+!-----------------------------------------------------------------------
   subroutine bpsd_set_species(species_in,ierr)
 !-----------------------------------------------------------------------
 
