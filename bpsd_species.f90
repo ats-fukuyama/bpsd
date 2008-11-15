@@ -35,7 +35,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,speciesx%ndmax,3
+    do nd=0,speciesx%ndmax-1,3
        speciesx%kid(nd+1)='species%pa'
        speciesx%kid(nd+2)='species%pz'
        speciesx%kid(nd+3)='species%pz0'

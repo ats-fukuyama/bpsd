@@ -56,7 +56,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,plasmafx%ndmax-1,5
+    do nd=0,plasmafx%ndmax-2,5
        plasmafx%kid(nd+1)='plasmaf%pn'
        plasmafx%kid(nd+2)='plasmaf%pt'
        plasmafx%kid(nd+3)='plasmaf%ptpr'
