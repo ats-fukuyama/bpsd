@@ -94,7 +94,7 @@ contains
     use bpsd_subs
     implicit none
     type(bpsd_species_type),intent(out) :: species_out
-    integer,intent(in) :: ierr
+    integer,intent(out) :: ierr
     integer :: nr, nd, ns
     real(8) :: s
     real(8), dimension(:), pointer :: v
