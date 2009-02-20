@@ -8,7 +8,7 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    CHARACTER(LEN=*),DIMENSION(:),POINTER,INTENT(INOUT):: data
+    CHARACTER(LEN=*),DIMENSION(:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1
 
     IF(ASSOCIATED(data)) THEN
@@ -31,7 +31,7 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    REAL(rkind),DIMENSION(:),POINTER,INTENT(INOUT):: data
+    REAL(rkind),DIMENSION(:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1
 
     IF(ASSOCIATED(data)) THEN
@@ -54,7 +54,7 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    REAL(rkind),DIMENSION(:,:),POINTER,INTENT(INOUT):: data
+    REAL(rkind),DIMENSION(:,:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1,n2
 
     IF(ASSOCIATED(data)) THEN
@@ -76,7 +76,7 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    REAL(rkind),DIMENSION(:,:,:),POINTER,INTENT(INOUT):: data
+    REAL(rkind),DIMENSION(:,:,:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1,n2,n3
 
     IF(ASSOCIATED(data)) THEN

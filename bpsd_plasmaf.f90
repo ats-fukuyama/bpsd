@@ -33,7 +33,7 @@ contains
   SUBROUTINE bpsd_adjust_plasmaf_data(data,n1,n2)
 !-----------------------------------------------------------------------
     IMPLICIT NONE
-    TYPE(bpsd_plasmaf_data),DIMENSION(:,:),POINTER,INTENT(INOUT):: data
+    TYPE(bpsd_plasmaf_data),DIMENSION(:,:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1,n2
 
     IF(ASSOCIATED(data)) THEN

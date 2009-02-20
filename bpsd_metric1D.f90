@@ -69,7 +69,7 @@ contains
   SUBROUTINE bpsd_adjust_metric1D_data(data,n1)
 !-----------------------------------------------------------------------
     IMPLICIT NONE
-    TYPE(bpsd_metric1D_data),DIMENSION(:),POINTER,INTENT(INOUT):: data
+    TYPE(bpsd_metric1D_data),DIMENSION(:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1
 
     IF(ASSOCIATED(data)) THEN

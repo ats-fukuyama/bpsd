@@ -50,7 +50,7 @@ contains
   SUBROUTINE bpsd_adjust_species_data(data,n1)
 !-----------------------------------------------------------------------
     IMPLICIT NONE
-    TYPE(bpsd_species_data),DIMENSION(:),POINTER,INTENT(INOUT):: data
+    TYPE(bpsd_species_data),DIMENSION(:),POINTER:: data
     INTEGER(ikind),INTENT(IN):: n1
 
     IF(ASSOCIATED(data)) THEN
