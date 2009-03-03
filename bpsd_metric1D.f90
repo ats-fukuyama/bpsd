@@ -239,6 +239,7 @@ contains
        metric1D_out%data(nr)%aveb2i   = v( 8)
        metric1D_out%data(nr)%avegv    = v( 9)
        metric1D_out%data(nr)%avegv2   = v(10)
+!honda       call aitken(metric1D_out%rho(nr)**2,v(11),metric1Dx%s,metric1Dx%data(1,11),3,metric1Dx%nrmax)
        metric1D_out%data(nr)%avegvr2  = v(11)
        metric1D_out%data(nr)%avegpp2  = v(12)
        metric1D_out%data(nr)%rr       = v(13)
