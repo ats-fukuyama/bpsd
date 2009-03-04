@@ -104,7 +104,7 @@ contains
 
     metric1Dx%time=metric1D_in%time
     do nr=1,metric1Dx%nrmax
-       metric1Dx%rho(nr)    = metric1D_in%rho(nr)
+       metric1Dx%rho(nr)     = metric1D_in%rho(nr)
        metric1Dx%data(nr, 1) = metric1D_in%data(nr)%pvol
        metric1Dx%data(nr, 2) = metric1D_in%data(nr)%psur
        metric1Dx%data(nr, 3) = metric1D_in%data(nr)%dvpsit
