@@ -96,6 +96,9 @@
          real(rkind) :: avegv    ! <|gradV|>
          real(rkind) :: avegv2   ! <|gradV|^2>
          real(rkind) :: avegvr2  ! <|gradV|^2/R^2>
+         real(rkind) :: avegr    ! <|grad rho|>
+         real(rkind) :: avegr2   ! <|grad rho|^2>
+         real(rkind) :: avegrr2  ! <|grad rho|^2/R^2>
          real(rkind) :: avegpp2  ! <|gradPsip|^2>
          real(rkind) :: rr       ! R
          real(rkind) :: rs       ! r

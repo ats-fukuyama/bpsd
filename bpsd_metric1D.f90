@@ -22,7 +22,7 @@ contains
 
     metric1Dx%status=0
     metric1Dx%dataName='metric1D'
-    metric1Dx%ndmax=16
+    metric1Dx%ndmax=19
 
     allocate(metric1Dx%kid(metric1Dx%ndmax))
     allocate(metric1Dx%kunit(metric1Dx%ndmax))
@@ -37,11 +37,14 @@ contains
     metric1Dx%kid( 9)='metric1D%avegv'
     metric1Dx%kid(10)='metric1D%avegv2'
     metric1Dx%kid(11)='metric1D%avegvr2'
-    metric1Dx%kid(12)='metric1D%avegpp2'
-    metric1Dx%kid(13)='metric1D%rr'
-    metric1Dx%kid(14)='metric1D%rs'
-    metric1Dx%kid(15)='metric1D%elip'
-    metric1Dx%kid(16)='metric1D%trig'
+    metric1Dx%kid(12)='metric1D%avegr'
+    metric1Dx%kid(13)='metric1D%avegr2'
+    metric1Dx%kid(14)='metric1D%avegrr2'
+    metric1Dx%kid(15)='metric1D%avegpp2'
+    metric1Dx%kid(16)='metric1D%rr'
+    metric1Dx%kid(17)='metric1D%rs'
+    metric1Dx%kid(18)='metric1D%elip'
+    metric1Dx%kid(19)='metric1D%trig'
     metric1Dx%kunit( 1)='m^3 '
     metric1Dx%kunit( 2)='m^2 '
     metric1Dx%kunit( 3)=' '
@@ -116,11 +119,14 @@ contains
        metric1Dx%data(nr, 9) = metric1D_in%data(nr)%avegv
        metric1Dx%data(nr,10) = metric1D_in%data(nr)%avegv2
        metric1Dx%data(nr,11) = metric1D_in%data(nr)%avegvr2
-       metric1Dx%data(nr,12) = metric1D_in%data(nr)%avegpp2
-       metric1Dx%data(nr,13) = metric1D_in%data(nr)%rr
-       metric1Dx%data(nr,14) = metric1D_in%data(nr)%rs
-       metric1Dx%data(nr,15) = metric1D_in%data(nr)%elip
-       metric1Dx%data(nr,16) = metric1D_in%data(nr)%trig
+       metric1Dx%data(nr,12) = metric1D_in%data(nr)%avegr
+       metric1Dx%data(nr,13) = metric1D_in%data(nr)%avegr2
+       metric1Dx%data(nr,14) = metric1D_in%data(nr)%avegrr2
+       metric1Dx%data(nr,15) = metric1D_in%data(nr)%avegpp2
+       metric1Dx%data(nr,16) = metric1D_in%data(nr)%rr
+       metric1Dx%data(nr,17) = metric1D_in%data(nr)%rs
+       metric1Dx%data(nr,18) = metric1D_in%data(nr)%elip
+       metric1Dx%data(nr,19) = metric1D_in%data(nr)%trig
     enddo
     CALL DATE_AND_TIME(metric1Dx%created_date, &
          &             metric1Dx%created_time, &
@@ -156,7 +162,7 @@ contains
     type(bpsd_metric1D_type),intent(out) :: metric1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
-    real(8), dimension(16) :: v
+    real(8), dimension(19) :: v
 
     if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 
@@ -198,11 +204,14 @@ contains
           metric1D_out%data(nr)%avegv    = metric1Dx%data(nr, 9)
           metric1D_out%data(nr)%avegv2   = metric1Dx%data(nr,10)
           metric1D_out%data(nr)%avegvr2  = metric1Dx%data(nr,11)
-          metric1D_out%data(nr)%avegpp2  = metric1Dx%data(nr,12)
-          metric1D_out%data(nr)%rr       = metric1Dx%data(nr,13)
-          metric1D_out%data(nr)%rs       = metric1Dx%data(nr,14)
-          metric1D_out%data(nr)%elip     = metric1Dx%data(nr,15)
-          metric1D_out%data(nr)%trig     = metric1Dx%data(nr,16)
+          metric1D_out%data(nr)%avegr    = metric1Dx%data(nr,12)
+          metric1D_out%data(nr)%avegr2   = metric1Dx%data(nr,13)
+          metric1D_out%data(nr)%avegrr2  = metric1Dx%data(nr,14)
+          metric1D_out%data(nr)%avegpp2  = metric1Dx%data(nr,15)
+          metric1D_out%data(nr)%rr       = metric1Dx%data(nr,16)
+          metric1D_out%data(nr)%rs       = metric1Dx%data(nr,17)
+          metric1D_out%data(nr)%elip     = metric1Dx%data(nr,18)
+          metric1D_out%data(nr)%trig     = metric1Dx%data(nr,19)
        enddo
        ierr=0
        return
@@ -239,13 +248,15 @@ contains
        metric1D_out%data(nr)%aveb2i   = v( 8)
        metric1D_out%data(nr)%avegv    = v( 9)
        metric1D_out%data(nr)%avegv2   = v(10)
-!honda       call aitken(metric1D_out%rho(nr)**2,v(11),metric1Dx%s,metric1Dx%data(1,11),3,metric1Dx%nrmax)
        metric1D_out%data(nr)%avegvr2  = v(11)
-       metric1D_out%data(nr)%avegpp2  = v(12)
-       metric1D_out%data(nr)%rr       = v(13)
-       metric1D_out%data(nr)%rs       = v(14)
-       metric1D_out%data(nr)%elip     = v(15)
-       metric1D_out%data(nr)%trig     = v(16)
+       metric1D_out%data(nr)%avegr    = v(12)
+       metric1D_out%data(nr)%avegr2   = v(13)
+       metric1D_out%data(nr)%avegrr2  = v(14)
+       metric1D_out%data(nr)%avegpp2  = v(15)
+       metric1D_out%data(nr)%rr       = v(16)
+       metric1D_out%data(nr)%rs       = v(17)
+       metric1D_out%data(nr)%elip     = v(18)
+       metric1D_out%data(nr)%trig     = v(19)
     enddo
     ierr = 0
 
@@ -278,12 +289,24 @@ contains
        write(6,*) '---- metric1Dx%aveb2i'
        write(6,'(1P5E12.4)') &
             &        (metric1D_out%data(nr)%aveb2i,nr=1,metric1D_out%nrmax)
+       write(6,*) '---- metric1Dx%avegv'
+       write(6,'(1P5E12.4)') &
+            &        (metric1D_out%data(nr)%avegv,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegv2'
        write(6,'(1P5E12.4)') &
             &        (metric1D_out%data(nr)%avegv2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegvr2'
        write(6,'(1P5E12.4)') &
             &        (metric1D_out%data(nr)%avegvr2,nr=1,metric1D_out%nrmax)
+       write(6,*) '---- metric1Dx%avegr'
+       write(6,'(1P5E12.4)') &
+            &        (metric1D_out%data(nr)%avegr,nr=1,metric1D_out%nrmax)
+       write(6,*) '---- metric1Dx%avegr2'
+       write(6,'(1P5E12.4)') &
+            &        (metric1D_out%data(nr)%avegr2,nr=1,metric1D_out%nrmax)
+       write(6,*) '---- metric1Dx%avegrr2'
+       write(6,'(1P5E12.4)') &
+            &        (metric1D_out%data(nr)%avegrr2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegpp2'
        write(6,'(1P5E12.4)') &
             &        (metric1D_out%data(nr)%avegpp2,nr=1,metric1D_out%nrmax)
