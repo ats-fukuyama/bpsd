@@ -86,7 +86,7 @@
 
       type bpsd_metric1D_data
          real(rkind) :: pvol     ! Plasma volume [m^3] ~2*pi*R*pi*r^2
-         real(rkind) :: psur     ! Plasma surface [m^2] ~pi*r^2
+         real(rkind) :: psur     ! Plasma surface [m^2] ~4*pi*R*pi*r
          real(rkind) :: dvpsit   ! dV/dPsit
          real(rkind) :: dvpsip   ! dV/dPsip
          real(rkind) :: aver2    ! <R^2>
@@ -104,6 +104,7 @@
          real(rkind) :: rs       ! r
          real(rkind) :: elip     ! elipticity
          real(rkind) :: trig     ! triangularity
+         real(rkind) :: aveb     ! <B>
       end type bpsd_metric1D_data
 
       type bpsd_metric1D_type

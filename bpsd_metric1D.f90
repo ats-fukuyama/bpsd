@@ -22,7 +22,7 @@ contains
 
     metric1Dx%status=0
     metric1Dx%dataName='metric1D'
-    metric1Dx%ndmax=19
+    metric1Dx%ndmax=20
 
     allocate(metric1Dx%kid(metric1Dx%ndmax))
     allocate(metric1Dx%kunit(metric1Dx%ndmax))
@@ -45,22 +45,27 @@ contains
     metric1Dx%kid(17)='metric1D%rs'
     metric1Dx%kid(18)='metric1D%elip'
     metric1Dx%kid(19)='metric1D%trig'
+    metric1Dx%kid(20)='metric1D%aveb'
     metric1Dx%kunit( 1)='m^3 '
     metric1Dx%kunit( 2)='m^2 '
     metric1Dx%kunit( 3)=' '
     metric1Dx%kunit( 4)=' '
     metric1Dx%kunit( 5)='m^2 '
     metric1Dx%kunit( 6)='m^-2 '
-    metric1Dx%kunit( 7)='Wb^2 '
-    metric1Dx%kunit( 8)='Wb^-2'
+    metric1Dx%kunit( 7)='T^2 '
+    metric1Dx%kunit( 8)='T^-2'
     metric1Dx%kunit( 9)=' '
     metric1Dx%kunit(10)=' '
     metric1Dx%kunit(11)=' '
     metric1Dx%kunit(12)=' '
-    metric1Dx%kunit(13)='m'
-    metric1Dx%kunit(14)='m'
+    metric1Dx%kunit(13)=' '
+    metric1Dx%kunit(14)=' '
     metric1Dx%kunit(15)=' '
-    metric1Dx%kunit(16)=' '
+    metric1Dx%kunit(16)='m'
+    metric1Dx%kunit(17)='m'
+    metric1Dx%kunit(18)=' '
+    metric1Dx%kunit(19)=' '
+    metric1Dx%kunit(20)='T '
 
     bpsd_metric1Dx_init_flag = .FALSE.
 
@@ -127,6 +132,7 @@ contains
        metric1Dx%data(nr,17) = metric1D_in%data(nr)%rs
        metric1Dx%data(nr,18) = metric1D_in%data(nr)%elip
        metric1Dx%data(nr,19) = metric1D_in%data(nr)%trig
+       metric1Dx%data(nr,20) = metric1D_in%data(nr)%aveb
     enddo
     CALL DATE_AND_TIME(metric1Dx%created_date, &
          &             metric1Dx%created_time, &
@@ -162,7 +168,7 @@ contains
     type(bpsd_metric1D_type),intent(out) :: metric1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
-    real(8), dimension(19) :: v
+    real(8), dimension(20) :: v
 
     if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 
@@ -212,6 +218,7 @@ contains
           metric1D_out%data(nr)%rs       = metric1Dx%data(nr,17)
           metric1D_out%data(nr)%elip     = metric1Dx%data(nr,18)
           metric1D_out%data(nr)%trig     = metric1Dx%data(nr,19)
+          metric1D_out%data(nr)%aveb     = metric1Dx%data(nr,20)
        enddo
        ierr=0
        return
@@ -257,6 +264,7 @@ contains
        metric1D_out%data(nr)%rs       = v(17)
        metric1D_out%data(nr)%elip     = v(18)
        metric1D_out%data(nr)%trig     = v(19)
+       metric1D_out%data(nr)%aveb     = v(20)
     enddo
     ierr = 0
 
@@ -322,6 +330,9 @@ contains
        write(6,*) '---- metric1Dx%trig'
        write(6,'(1P5E12.4)') &
             &        (metric1D_out%data(nr)%trig,nr=1,metric1D_out%nrmax)
+       write(6,*) '---- metric1Dx%aveb'
+       write(6,'(1P5E12.4)') &
+            &        (metric1D_out%data(nr)%aveb,nr=1,metric1D_out%nrmax)
     endif
     return
   end subroutine bpsd_get_metric1D
