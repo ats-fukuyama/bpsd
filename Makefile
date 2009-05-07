@@ -4,8 +4,8 @@ include ../task/make.header
 .SUFFIXES:
 .SUFFIXES: .f90 .f .mod .o .a
 
-#FFLAGS=$(OFLAGS)
-FFLAGS=$(DFLAGS)
+FFLAGS=$(OFLAGS)
+#FFLAGS=$(DFLAGS)
 
 SRCSFIXED = 
 SRCSFREE = bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
