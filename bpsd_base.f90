@@ -38,7 +38,7 @@ contains
 !-----------------------------------------------------------------------
 
     use bpsd_types_internal
-    use libfio
+    use bpsd_libfio
     implicit none
     integer,intent(out):: ierr
     integer:: fid
@@ -75,7 +75,7 @@ contains
 !-----------------------------------------------------------------------
 
     use bpsd_types_internal
-    use libfio
+    use bpsd_libfio
     implicit none
     integer,intent(out):: ierr
     integer:: fid
