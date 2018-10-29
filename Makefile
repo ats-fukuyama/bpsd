@@ -8,7 +8,8 @@ FFLAGS=$(OFLAGS)
 #FFLAGS=$(DFLAGS)
 
 SRCSFIXED = 
-SRCSFREE = bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
+SRCSFREE = libfio.f90 \
+           bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
            bpsd_types.f90 bpsd_types_internal.f90 bpsd_subs.f90 \
            bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 \
            bpsd_equ1D.f90 bpsd_metric1D.f90 bpsd_plasmaf.f90 bpsd_base.f90
@@ -16,19 +17,15 @@ SRCSFREE = bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
 OBJS = $(SRCSFREE:.f90=.o) $(SRCSFIXED:.f=.o) 
 OBJO = $(SRCO:.f=.o) 
 
-LIBS = bpsdlib.a ../task/lib/tasklib.a
+LIBS = bpsdlib.a
+MODINCLUDE=-I $(MOD)
 
 .f.o :
-	$(FCFIXED) $(FFLAGS) -c $< -o $@ $(MODDIR)
+	$(FCFIXED) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
 .f90.o :
-	$(FCFREE) $(FFLAGS) -c $< -o $@ $(MODDIR)
+	$(FCFREE) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
 
 all : bpsdlib.a
-
-libs: ../task/lib/tasklib.a
-
-../task/lib/tasklib.a:
-	(cd ../task/lib; make tasklib.a)
 
 bpsdlib.a: $(OBJS)
 	$(LD) $(LDFLAGS) $@ $(OBJS)
@@ -37,12 +34,6 @@ clean:
 	-rm -f core a.out *.o *.mod ./*~ ./#* *.a $(MOD)/*.mod
 
 veryclean: clean
-
-new:
-	-mkdir ../bpsdnew
-	cp -f Makefile ../bpsdnew
-	cp -f *.f ../bpsdnew
-	cp -f *.f90 ../bpsdnew
 
 BPSD_COMMON = bpsd_subs.f90 bpsd_types_internal.f90 bpsd_types.f90 \
 	      bpsd_flags.f90 bpsd_constants.f90 bpsd_kinds.f90 
