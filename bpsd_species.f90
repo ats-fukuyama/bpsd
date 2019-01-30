@@ -38,7 +38,7 @@ contains
     do nd=0,speciesx%ndmax-1,3
        speciesx%kid(nd+1)='species%pa'
        speciesx%kid(nd+2)='species%pz'
-       speciesx%kid(nd+3)='species%pz0'
+       speciesx%kid(nd+3)='species%npa'
        speciesx%kunit(nd+1)=' '
        speciesx%kunit(nd+2)=' '
        speciesx%kunit(nd+3)=' '
@@ -90,7 +90,7 @@ contains
        nd=3*(ns-1)
        speciesx%data(nd+1)=species_in%data(ns)%pa
        speciesx%data(nd+2)=species_in%data(ns)%pz
-       speciesx%data(nd+3)=species_in%data(ns)%pz0
+       speciesx%data(nd+3)=species_in%data(ns)%npa
     enddo
     CALL DATE_AND_TIME(speciesx%created_date, &
          &             speciesx%created_time, &
@@ -142,7 +142,7 @@ contains
        nd=3*(ns-1)
        species_out%data(ns)%pa =speciesx%data(nd+1)
        species_out%data(ns)%pz =speciesx%data(nd+2)
-       species_out%data(ns)%pz0=speciesx%data(nd+3)
+       species_out%data(ns)%npa=NINT(speciesx%data(nd+3))
     enddo
     speciesx%status=2
     ierr=0

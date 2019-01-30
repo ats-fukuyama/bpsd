@@ -24,7 +24,7 @@
       type bpsd_species_data
          real(rkind) :: pa     ! Mass number (n. of protons + n. of neutrons)
          real(rkind) :: pz     ! Charge number (n. of protons - n. of electrons)
-         real(rkind) :: pz0    ! Atomic number (n. of protons)
+         integer ::     npa    ! Atomic number (n. of protons)
       end type bpsd_species_data
 
       type bpsd_species_type
