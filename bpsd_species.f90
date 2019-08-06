@@ -1,12 +1,12 @@
-!     $Id$
-!=======================================================================
+! bpsd_species.f90
+
 module bpsd_species
 
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_set_species,bpsd_get_species, &
-       & bpsd_save_species,bpsd_load_species
+  public bpsd_put_species,bpsd_get_species, &
+         bpsd_save_species,bpsd_load_species
   private
 
   logical, save :: bpsd_speciesx_init_flag = .TRUE.
@@ -68,7 +68,7 @@ contains
   END SUBROUTINE bpsd_adjust_species_data
 
 !-----------------------------------------------------------------------
-  subroutine bpsd_set_species(species_in,ierr)
+  subroutine bpsd_put_species(species_in,ierr)
 !-----------------------------------------------------------------------
 
     use bpsd_subs
@@ -93,20 +93,20 @@ contains
        speciesx%data(nd+3)=species_in%data(ns)%npa
     enddo
     CALL DATE_AND_TIME(speciesx%created_date, &
-         &             speciesx%created_time, &
-         &             speciesx%created_timezone)
+                       speciesx%created_time, &
+                       speciesx%created_timezone)
     speciesx%status = 2
     ierr = 0
 
     if(bpsd_debug_flag) then
-       write(6,*) '-- bpsd_set_species'
+       write(6,*) '-- bpsd_put_species'
        do nd=1,speciesx%ndmax
           write(6,'(A32,1PE12.4)') &
-               &           speciesx%kid(nd),speciesx%data(nd)
+                           speciesx%kid(nd),speciesx%data(nd)
        enddo
     endif
     return
-  end subroutine bpsd_set_species
+  end subroutine bpsd_put_species
 
 !-----------------------------------------------------------------------
   subroutine bpsd_get_species(species_out,ierr)
@@ -168,7 +168,7 @@ contains
     if(bpsd_speciesx_init_flag) call bpsd_init_speciesx
 
     if(speciesx%status.gt.1) &
-         &     call bpsd_save_data0Dx(fid,speciesx,ierr)
+               call bpsd_save_data0Dx(fid,speciesx,ierr)
     return
 
   end subroutine bpsd_save_species

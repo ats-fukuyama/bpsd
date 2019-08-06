@@ -13,7 +13,9 @@ SRCSFREE = bpsd_libfio.f90 \
            bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
            bpsd_types.f90 bpsd_types_internal.f90 bpsd_subs.f90 \
            bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 \
-           bpsd_equ1D.f90 bpsd_metric1D.f90 bpsd_plasmaf.f90 bpsd_base.f90
+           bpsd_equ1D.f90 bpsd_metric1D.f90 bpsd_plasmaf.f90 \
+           bpsd_trmatrix.f90 bpsd_trsource.f90 \
+           bpsd_base.f90
 
 OBJS = $(SRCSFREE:.f90=.o) $(SRCSFIXED:.f=.o) 
 OBJO = $(SRCO:.f=.o) 
@@ -54,4 +56,6 @@ bpsd_species.o:		bpsd_species.f90 $(BPSD_COMMON)
 bpsd_equ1D.o:		bpsd_equ1D.f90 $(BPSD_COMMON)
 bpsd_metric1D.o:	bpsd_metric1D.f90 $(BPSD_COMMON)
 bpsd_plasmaf.o:		bpsd_plasmaf.f90 $(BPSD_COMMON)
+bpsd_trmatrix.o:	bpsd_trmatrix.f90 $(BPSD_COMMON)
+bpsd_trsource.o:	bpsd_trsource.f90 $(BPSD_COMMON)
 bpsd_base.o:		bpsd_base.f90 bpsd_subs.f90 $(BPSD_TYPES) $(BPSD_COMMON)

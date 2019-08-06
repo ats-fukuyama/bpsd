@@ -67,10 +67,10 @@ CONTAINS
       IF(LEX) THEN
          IF(MODEF.EQ.0) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='OLD',ERR=20, &
-     &           FORM='UNFORMATTED',CONVERT=CONVERT_)
+                 FORM='UNFORMATTED',CONVERT=CONVERT_)
          ELSEIF(MODEF.EQ.1) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='OLD',ERR=20, &
-     &           FORM='FORMATTED',CONVERT=CONVERT_)
+                 FORM='FORMATTED',CONVERT=CONVERT_)
          ELSE
             WRITE(6,*) 'XX FROPEN: UNKNOWN MODEF : MODEF=',MODEF
             GOTO 9005
@@ -172,10 +172,10 @@ CONTAINS
          MODEPII=MOD(MODEPI,4)
          IF(MODEPII.EQ.0) THEN
             WRITE(6,*) '# OLD FILE (',TRIM(KNAM), &
-     &                 ') WILL BE OVERWRITTEN'
+                       ') WILL BE OVERWRITTEN'
          ELSEIF(MODEPII.EQ.1) THEN
     3       WRITE(6,*) '# OLD FILE (',TRIM(KNAM), &
-     &                 ') IS GOING TO BE OVERWRITTEN'
+                       ') IS GOING TO BE OVERWRITTEN'
             WRITE(6,*) '  ARE YOU SURE ? (Y/N)'
             READ(5,'(A1)',ERR=3,END=9001) KID
             CALL GUCPTL(KID)
@@ -193,16 +193,16 @@ CONTAINS
 
          IF(MODEF.EQ.0) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='OLD',ERR=10, &
-     &           FORM='UNFORMATTED')
+                 FORM='UNFORMATTED')
          ELSEIF(MODEF.EQ.1) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='OLD',ERR=10, &
-     &           FORM='FORMATTED')
+                 FORM='FORMATTED')
          ELSE
             WRITE(6,*) 'XX FEOPEN: UNKNOWN MODEF : MODEF=',MODEF
             GOTO 9005
          ENDIF
          WRITE(6,*) '# OLD FILE (',TRIM(KNAM), &
-     &                 ') IS ASSIGNED FOR OUTPUT.'
+                       ') IS ASSIGNED FOR OUTPUT.'
          GOTO 9000
 
    10    WRITE(6,*) 'XX OLD FILE OPEN ERROR : IOSTAT = ',IST
@@ -210,10 +210,10 @@ CONTAINS
       ELSE
          IF(MODEF.EQ.0) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='NEW',ERR=20, &
-     &           FORM='UNFORMATTED')
+                 FORM='UNFORMATTED')
          ELSEIF(MODEF.EQ.1) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='NEW',ERR=20, &
-     &           FORM='FORMATTED')
+                 FORM='FORMATTED')
          ELSE
             WRITE(6,*) 'XX FEOPEN: UNKNOWN MODEF : MODEF=',MODEF
             GOTO 9005

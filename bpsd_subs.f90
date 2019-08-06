@@ -1,5 +1,5 @@
-!     $Id$
-!=======================================================================
+! bpsd_subs.f90
+
 MODULE bpsd_subs
 
 CONTAINS
@@ -82,8 +82,8 @@ CONTAINS
     IF(ASSOCIATED(data)) THEN
        IF(n1.LE.0.OR.n2.LE.0.OR.n2.LE.0) THEN
           DEALLOCATE(data)
-       ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2) &
-            & .OR.n3.NE.SIZE(data,3)) THEN
+       ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2).OR. &
+               n3.NE.SIZE(data,3)) THEN
           DEALLOCATE(data)
           ALLOCATE(data(n1,n2,n3))
        END IF
@@ -106,9 +106,9 @@ CONTAINS
 
     allocate(deriv(data1D%nrmax))
     call spl1D(data1D%s,data1D%data(1,nd),deriv,data1D%spline(1,1,nd), &
-         &     data1D%nrmax,0,ierr)
+               data1D%nrmax,0,ierr)
     if(ierr.ne.0) &
-         &     write(6,*) 'XX bpsd_spl1D : '//data1D%kid(nd)//': ierr=',ierr
+               write(6,*) 'XX bpsd_spl1D : '//data1D%kid(nd)//': ierr=',ierr
     deallocate(deriv)
     return
   end subroutine bpsd_spl1D
@@ -128,7 +128,7 @@ CONTAINS
     if(ierr.ne.0) then
        write(6,*) 'XX bpsd_spl1DF : '//data1D%kid(nd)//': ierr=',ierr
        write(6,'(1P3E12.4)')  &
-            &        pos**2,data1D%s(1),data1D%s(data1D%nrmax)
+                     pos**2,data1D%s(1),data1D%s(data1D%nrmax)
     endif
   end subroutine bpsd_spl1DF
 
@@ -168,8 +168,8 @@ CONTAINS
     write(fid,IOSTAT=ierr,ERR=8) datax%time
     write(fid,IOSTAT=ierr,ERR=8) datax%ndmax
     write(fid,IOSTAT=ierr,ERR=8) datax%created_date, &
-         &                       datax%created_time, &
-         &                       datax%created_timezone
+                                 datax%created_time, &
+                                 datax%created_timezone
     write(fid,IOSTAT=ierr,ERR=8) datax%kid
     write(fid,IOSTAT=ierr,ERR=8) datax%kunit
     write(fid,IOSTAT=ierr,ERR=8) datax%data
@@ -197,8 +197,8 @@ CONTAINS
     write(fid,IOSTAT=ierr,ERR=8) datax%time
     write(fid,IOSTAT=ierr,ERR=8) datax%nrmax,datax%ndmax
     write(fid,IOSTAT=ierr,ERR=8) datax%created_date, &
-         &                       datax%created_time, &
-         &                       datax%created_timezone
+                                 datax%created_time, &
+                                 datax%created_timezone
     write(fid,IOSTAT=ierr,ERR=8) datax%kid
     write(fid,IOSTAT=ierr,ERR=8) datax%kunit
     write(fid,IOSTAT=ierr,ERR=8) datax%rho
@@ -226,8 +226,8 @@ CONTAINS
     write(fid,IOSTAT=ierr,ERR=8) datax%time
     write(fid,IOSTAT=ierr,ERR=8) datax%nrmax,datax%nthmax,datax%ndmax
     write(fid,IOSTAT=ierr,ERR=8) datax%created_date, &
-         &                       datax%created_time, &
-         &                       datax%created_timezone
+                                 datax%created_time, &
+                                 datax%created_timezone
     write(fid,IOSTAT=ierr,ERR=8) datax%kid
     write(fid,IOSTAT=ierr,ERR=8) datax%rho
     write(fid,IOSTAT=ierr,ERR=8) datax%th
@@ -254,10 +254,10 @@ CONTAINS
     write(fid,IOSTAT=ierr,ERR=8) datax%dataName
     write(fid,IOSTAT=ierr,ERR=8) datax%time
     write(fid,IOSTAT=ierr,ERR=8) &
-         &     datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
+               datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
     write(fid,IOSTAT=ierr,ERR=8) datax%created_date, &
-         &                       datax%created_time, &
-         &                       datax%created_timezone
+                                 datax%created_time, &
+                                 datax%created_timezone
     write(fid,IOSTAT=ierr,ERR=8) datax%kid
     write(fid,IOSTAT=ierr,ERR=8) datax%rho
     write(fid,IOSTAT=ierr,ERR=8) datax%th

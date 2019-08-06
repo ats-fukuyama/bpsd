@@ -1,7 +1,7 @@
-!     $Id$
-!=======================================================================
-      module bpsd_flags
+! bpsd_flags.f90
 
-      logical, public, save :: bpsd_debug_flag = .FALSE.
+module bpsd_flags
 
-      end module bpsd_flags
+  logical, public, save :: bpsd_debug_flag = .FALSE.
+
+end module bpsd_flags

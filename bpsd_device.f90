@@ -1,12 +1,12 @@
-!     $Id:
-!=======================================================================
+! bpsd_device.f90
+
 module bpsd_device
 
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_set_device,bpsd_get_device, &
-       & bpsd_save_device,bpsd_load_device
+  public bpsd_put_device,bpsd_get_device, &
+         bpsd_save_device,bpsd_load_device
   private
 
   logical, save :: bpsd_devicex_init_flag = .TRUE.
@@ -48,7 +48,7 @@ contains
   end subroutine bpsd_devicex_init
 
 !-----------------------------------------------------------------------
-  subroutine bpsd_set_device(device_in,ierr)
+  subroutine bpsd_put_device(device_in,ierr)
 !-----------------------------------------------------------------------
 
     use bpsd_subs
@@ -69,19 +69,19 @@ contains
     devicex%data(7) = device_in%elip
     devicex%data(8) = device_in%trig
     CALL DATE_AND_TIME(devicex%created_date, &
-         &             devicex%created_time, &
-         &             devicex%created_timezone)
+                       devicex%created_time, &
+                       devicex%created_timezone)
     devicex%status = 2
     ierr = 0
 
     if(bpsd_debug_flag) then
-       write(6,*) '-- bpsd_set_device'
+       write(6,*) '-- bpsd_put_device'
        do nd=1,devicex%ndmax
           write(6,'(A32,1PE12.4)') devicex%kid(nd),devicex%data(nd)
        enddo
     endif
     return
-  end subroutine bpsd_set_device
+  end subroutine bpsd_put_device
 
 !-----------------------------------------------------------------------
   subroutine bpsd_get_device(device_out,ierr)
@@ -113,7 +113,7 @@ contains
        write(6,*) '-- bpsd_get_device'
        do nd=1,devicex%ndmax
           write(6,'(A32,1PE12.4)') &
-               &           devicex%kid(nd),devicex%data(nd)
+                           devicex%kid(nd),devicex%data(nd)
        enddo
     endif
     return
@@ -131,7 +131,7 @@ contains
     if(bpsd_devicex_init_flag) call bpsd_devicex_init
 
     if(devicex%status.gt.1) &
-         &     call bpsd_save_data0Dx(fid,devicex,ierr)
+               call bpsd_save_data0Dx(fid,devicex,ierr)
     return
 
   end subroutine bpsd_save_device

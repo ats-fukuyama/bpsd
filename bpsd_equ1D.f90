@@ -1,12 +1,12 @@
-!     $Id$
-!=======================================================================
+! bpsd_equ1D.f90
+
 module bpsd_equ1D
 
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_set_equ1D,bpsd_get_equ1D, &
-       & bpsd_save_equ1D,bpsd_load_equ1D
+  public bpsd_put_equ1D,bpsd_get_equ1D, &
+         bpsd_save_equ1D,bpsd_load_equ1D
   private
 
   logical, save :: bpsd_equ1Dx_init_flag = .TRUE.
@@ -66,7 +66,7 @@ contains
   END SUBROUTINE bpsd_adjust_equ1D_data
 
 !-----------------------------------------------------------------------
-  subroutine bpsd_set_equ1D(equ1D_in,ierr)
+  subroutine bpsd_put_equ1D(equ1D_in,ierr)
 !-----------------------------------------------------------------------
 
     use bpsd_subs
@@ -92,8 +92,8 @@ contains
        equ1Dx%data(nr,6) = equ1D_in%data(nr)%pit
     enddo
     CALL DATE_AND_TIME(equ1Dx%created_date, &
-         &             equ1Dx%created_time, &
-         &             equ1Dx%created_timezone)
+                       equ1Dx%created_time, &
+                       equ1Dx%created_timezone)
 
     if(equ1Dx%status.ge.3) then
        equ1Dx%status=3
@@ -103,7 +103,7 @@ contains
     ierr = 0
 
     if(bpsd_debug_flag) then
-       write(6,*) '-- bpsd_set_equ1D'
+       write(6,*) '-- bpsd_put_equ1D'
        write(6,*) '---- equ1Dx%s'
        write(6,'(1P5E12.4)') (equ1Dx%rho(nr),nr=1,equ1Dx%nrmax)
        do nd=1,equ1Dx%ndmax
@@ -112,7 +112,7 @@ contains
        enddo
     endif
     return
-  end subroutine bpsd_set_equ1D
+  end subroutine bpsd_put_equ1D
 
 !-----------------------------------------------------------------------
   subroutine bpsd_get_equ1D(equ1D_out,ierr)
@@ -197,25 +197,25 @@ contains
        write(6,*) '-- bpsd_get_equ1D'
        write(6,*) '---- equ1Dx%rho'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%rho(nr),nr=1,equ1D_out%nrmax)
+                     (equ1D_out%rho(nr),nr=1,equ1D_out%nrmax)
        write(6,*) '---- equ1Dx%psit'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%data(nr)%psit,nr=1,equ1D_out%nrmax)
+                     (equ1D_out%data(nr)%psit,nr=1,equ1D_out%nrmax)
        write(6,*) '---- equ1Dx%psip'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%data(nr)%psip,nr=1,equ1D_out%nrmax)
+                     (equ1D_out%data(nr)%psip,nr=1,equ1D_out%nrmax)
        write(6,*) '---- equ1Dx%ppp'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%data(nr)%ppp,nr=1,equ1D_out%nrmax)
+                     (equ1D_out%data(nr)%ppp,nr=1,equ1D_out%nrmax)
        write(6,*) '---- equ1Dx%piq'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%data(nr)%piq,nr=1,equ1D_out%nrmax)
+                     (equ1D_out%data(nr)%piq,nr=1,equ1D_out%nrmax)
        write(6,*) '---- equ1Dx%pip'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%data(nr)%pip,nr=1,equ1D_out%nrmax)
+                     (equ1D_out%data(nr)%pip,nr=1,equ1D_out%nrmax)
        write(6,*) '---- equ1Dx%pit'
        write(6,'(1P5E12.4)') &
-            &        (equ1D_out%data(nr)%pit,nr=1,equ1D_out%nrmax)
+                     (equ1D_out%data(nr)%pit,nr=1,equ1D_out%nrmax)
     endif
     return
   end subroutine bpsd_get_equ1D

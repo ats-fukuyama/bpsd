@@ -1,12 +1,12 @@
-!     $Id$
-!=======================================================================
+! bpsd_plasma.f90
+
 module bpsd_plasmaf
 
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_set_plasmaf,bpsd_get_plasmaf, &
-       & bpsd_save_plasmaf,bpsd_load_plasmaf
+  public bpsd_put_plasmaf,bpsd_get_plasmaf, &
+         bpsd_save_plasmaf,bpsd_load_plasmaf
   private
 
   logical, save :: bpsd_plasmafx_init_flag = .TRUE.
@@ -74,7 +74,7 @@ contains
   END SUBROUTINE bpsd_setup_plasmaf_kdata
 
 !-----------------------------------------------------------------------
-  subroutine bpsd_set_plasmaf(plasmaf_in,ierr)
+  subroutine bpsd_put_plasmaf(plasmaf_in,ierr)
 !-----------------------------------------------------------------------
 
     use bpsd_subs
@@ -108,8 +108,8 @@ contains
        plasmafx%data(nr,plasmafx%ndmax) = plasmaf_in%qinv(nr)
     enddo
     CALL DATE_AND_TIME(plasmafx%created_date, &
-         &             plasmafx%created_time, &
-         &             plasmafx%created_timezone)
+                       plasmafx%created_time, &
+                       plasmafx%created_timezone)
 
     if(plasmafx%status.ge.3) then
        plasmafx%status=3
@@ -120,18 +120,18 @@ contains
     ierr = 0
 
     if(bpsd_debug_flag) then
-       write(6,*) '-- bpsd_set_plasmaf'
+       write(6,*) '-- bpsd_put_plasmaf'
        write(6,*) '---- plasmafx%rho'
        write(6,'(1P5E12.4)') &
-            &        (plasmafx%rho(nr),nr=1,plasmafx%nrmax)
+                     (plasmafx%rho(nr),nr=1,plasmafx%nrmax)
        do nd=1,plasmafx%ndmax
           write(6,*) '---- ',plasmafx%kid(nd)
           write(6,'(1P5E12.4)') &
-               &           (plasmafx%data(nr,nd),nr=1,plasmafx%nrmax)
+                           (plasmafx%data(nr,nd),nr=1,plasmafx%nrmax)
        enddo
     endif
     return
-  end subroutine bpsd_set_plasmaf
+  end subroutine bpsd_put_plasmaf
 
 !-----------------------------------------------------------------------
   subroutine bpsd_get_plasmaf(plasmaf_out,ierr)
@@ -169,7 +169,7 @@ contains
     CALL bpsd_adjust_array1D(plasmaf_out%rho,plasmaf_out%nrmax)
     CALL bpsd_adjust_array1D(plasmaf_out%qinv,plasmaf_out%nrmax)
     CALL bpsd_adjust_plasmaf_data(plasmaf_out%data,plasmaf_out%nrmax, &
-         &                                         plasmaf_out%nsmax)
+                                                   plasmaf_out%nsmax)
 
     if(mode.eq.0) then
        plasmaf_out%time  = plasmafx%time
@@ -191,7 +191,7 @@ contains
 
     if(plasmafx%status.eq.2) then
        CALL bpsd_adjust_array3D(plasmafx%spline,4,plasmafx%nrmax, &
-            &                                     plasmafx%ndmax)
+                                                  plasmafx%ndmax)
        plasmafx%status=3
     endif
 
@@ -205,11 +205,11 @@ contains
        enddo
        plasmafx%status=4
     endif
-    !
+
     allocate(v(plasmafx%ndmax))
 !    do nr=1,plasmaf_out%nrmax
 !       write(6,'(I5,1P3E12.4)') nr,plasmafx%rho(nr),plasmafx%s(nr), &
-!            & plasmafx%data(nr,1)
+!              plasmafx%data(nr,1)
 !    enddo
 !    pause
     do nr=1,plasmaf_out%nrmax
@@ -233,27 +233,27 @@ contains
        write(6,*) '-- bpsd_get_plasmaf'
        write(6,*) '---- plasmafx%rho'
        write(6,'(1P5E12.4)') &
-            &        (plasmaf_out%rho(nr),nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%rho(nr),nr=1,plasmaf_out%nrmax)
        do ns=1,plasmaf_out%nsmax
           write(6,*) '---- plasmafx%pn(',ns,')'
           write(6,'(1P5E12.4)') &
-               &     (plasmaf_out%data(nr,ns)%pn,nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%data(nr,ns)%pn,nr=1,plasmaf_out%nrmax)
           write(6,*) '---- plasmafx%pt(',ns,')'
           write(6,'(1P5E12.4)') &
-               &     (plasmaf_out%data(nr,ns)%pt,nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%data(nr,ns)%pt,nr=1,plasmaf_out%nrmax)
           write(6,*) '---- plasmafx%ptpr(',ns,')'
           write(6,'(1P5E12.4)') &
-               &     (plasmaf_out%data(nr,ns)%ptpr,nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%data(nr,ns)%ptpr,nr=1,plasmaf_out%nrmax)
           write(6,*) '---- plasmafx%ptpp(',ns,')'
           write(6,'(1P5E12.4)') &
-               &     (plasmaf_out%data(nr,ns)%ptpp,nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%data(nr,ns)%ptpp,nr=1,plasmaf_out%nrmax)
           write(6,*) '---- plasmafx%pu(',ns,')'
           write(6,'(1P5E12.4)') &
-               &     (plasmaf_out%data(nr,ns)%pu,nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%data(nr,ns)%pu,nr=1,plasmaf_out%nrmax)
        enddo
        write(6,*) '---- plasmafx%qinv'
        write(6,'(1P5E12.4)') &
-            &        (plasmaf_out%qinv(nr),nr=1,plasmaf_out%nrmax)
+                     (plasmaf_out%qinv(nr),nr=1,plasmaf_out%nrmax)
     endif
     return
   end subroutine bpsd_get_plasmaf
@@ -294,7 +294,7 @@ contains
     CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
     CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
     CALL bpsd_adjust_array2D(plasmafx%data,plasmafx%nrmax, &
-         &                                 plasmafx%ndmax)
+                                           plasmafx%ndmax)
 
     do nr=1,plasmafx%nrmax
        plasmafx%rho(nr) = datax%rho(nr)

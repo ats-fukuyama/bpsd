@@ -12,23 +12,29 @@ module bpsd
   use bpsd_equ1D
   use bpsd_metric1D
   use bpsd_plasmaf
+  use bpsd_trmatrix
+  use bpsd_trsource
 
-  interface bpsd_set_data
-     module procedure bpsd_set_shot, &
-          &           bpsd_set_device, &
-          &           bpsd_set_species, &
-          &           bpsd_set_equ1D, &
-          &           bpsd_set_metric1D, &
-          &           bpsd_set_plasmaf
+  interface bpsd_put_data
+     module procedure bpsd_put_shot, &
+                      bpsd_put_device, &
+                      bpsd_put_species, &
+                      bpsd_put_equ1D, &
+                      bpsd_put_metric1D, &
+                      bpsd_put_plasmaf, &
+                      bpsd_put_trmatrix, &
+                      bpsd_put_trsource
   end interface
 
   interface bpsd_get_data
      module procedure bpsd_get_shot, &
-          &           bpsd_get_device, &
-          &           bpsd_get_species, &
-          &           bpsd_get_equ1D, &
-          &           bpsd_get_metric1D, &
-          &           bpsd_get_plasmaf
+                      bpsd_get_device, &
+                      bpsd_get_species, &
+                      bpsd_get_equ1D, &
+                      bpsd_get_metric1D, &
+                      bpsd_get_plasmaf, &
+                      bpsd_get_trmatrix, &
+                      bpsd_get_trsource
   end interface
 
 contains
@@ -61,6 +67,10 @@ contains
     call bpsd_save_species(fid,ierr)
     if(ierr.ne.0) return
     call bpsd_save_plasmaf(fid,ierr)
+    if(ierr.ne.0) return
+    call bpsd_save_trmatrix(fid,ierr)
+    if(ierr.ne.0) return
+    call bpsd_save_trsource(fid,ierr)
     if(ierr.ne.0) return
 
     write(fid) 'data:end'
@@ -194,8 +204,8 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%ndmax
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date, &
-         &                            datax%created_time, &
-         &                            datax%created_timezone 
+                                      datax%created_time, &
+                                      datax%created_timezone 
     allocate(datax%kid(datax%ndmax))
     allocate(datax%kunit(datax%ndmax))
     allocate(datax%data(datax%ndmax))
@@ -204,9 +214,9 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
     if(datax%dataName(1:6).eq.'device') &
-         &     call bpsd_load_device(datax,ierr)
+               call bpsd_load_device(datax,ierr)
     if(datax%dataName(1:7).eq.'species') &
-         &     call bpsd_load_species(datax,ierr)
+               call bpsd_load_species(datax,ierr)
 
     deallocate(datax%data)
     deallocate(datax%kid)
@@ -235,8 +245,8 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%nrmax,datax%ndmax
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date, &
-         &                            datax%created_time, &
-         &                            datax%created_timezone
+                                      datax%created_time, &
+                                      datax%created_timezone
     allocate(datax%kid(datax%ndmax))
     allocate(datax%kunit(datax%ndmax))
     allocate(datax%rho(datax%nrmax))
@@ -247,11 +257,11 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
     if(datax%dataName(1:5).eq.'equ1D') &
-         &     call bpsd_load_equ1D(datax,ierr)
+               call bpsd_load_equ1D(datax,ierr)
     if(datax%dataName(1:8).eq.'metric1D') &
-         &     call bpsd_load_metric1D(datax,ierr)
+               call bpsd_load_metric1D(datax,ierr)
     if(datax%dataName(1:7).eq.'plasmaf')  &
-         &     call bpsd_load_plasmaf(datax,ierr)
+               call bpsd_load_plasmaf(datax,ierr)
 
     deallocate(datax%data)
     deallocate(datax%rho)
@@ -280,10 +290,10 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%dataName
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
     read(fid,IOSTAT=ierr,ERR=8,END=9) &
-         &     datax%nrmax,datax%nthmax,datax%ndmax
+               datax%nrmax,datax%nthmax,datax%ndmax
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date, &
-         &                            datax%created_time, &
-         &                            datax%created_timezone
+                                      datax%created_time, &
+                                      datax%created_timezone
     allocate(datax%kid(datax%ndmax))
     allocate(datax%kunit(datax%ndmax))
     allocate(datax%rho(datax%nrmax))
@@ -296,7 +306,7 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
 !      if(datax%dataName(1:7).eq.'plasmaf') &
-!     &     call bpsd_load_plasmaf(datax,ierr)
+!           call bpsd_load_plasmaf(datax,ierr)
 
     deallocate(datax%data)
     deallocate(datax%th)
@@ -326,17 +336,17 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%dataName
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%time
     read(fid,IOSTAT=ierr,ERR=8,END=9) &
-         &     datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
+               datax%nrmax,datax%nthmax,datax%nphmax,datax%ndmax
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%created_date, &
-         &                            datax%created_time, &
-         &                            datax%created_timezone
+                                      datax%created_time, &
+                                      datax%created_timezone
     allocate(datax%kid(datax%ndmax))
     allocate(datax%kunit(datax%ndmax))
     allocate(datax%rho(datax%nrmax))
     allocate(datax%th(datax%nthmax))
     allocate(datax%ph(datax%nphmax))
     allocate(datax%data(datax%nrmax,datax%nthmax,datax%nphmax, &
-         &         datax%ndmax))
+                   datax%ndmax))
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kid
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%kunit
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%rho
@@ -345,7 +355,7 @@ contains
     read(fid,IOSTAT=ierr,ERR=8,END=9) datax%data
 
 !      if(datax%dataName(1:7).eq.'plasmaf') 
-!     &     call bpsd_load_plasmaf(datax,ierr)
+!           call bpsd_load_plasmaf(datax,ierr)
 
     deallocate(datax%data)
     deallocate(datax%ph)

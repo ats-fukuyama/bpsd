@@ -1,12 +1,12 @@
-!     $Id$
-!=======================================================================
+! bpsd_metric1D.f90
+
 module bpsd_metric1D
 
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_set_metric1D,bpsd_get_metric1D, &
-       & bpsd_save_metric1D,bpsd_load_metric1D
+  public bpsd_put_metric1D,bpsd_get_metric1D, &
+         bpsd_save_metric1D,bpsd_load_metric1D
   private
 
   logical, save :: bpsd_metric1Dx_init_flag = .TRUE.
@@ -95,7 +95,7 @@ contains
   END SUBROUTINE bpsd_adjust_metric1D_data
 
 !-----------------------------------------------------------------------
-  subroutine bpsd_set_metric1D(metric1D_in,ierr)
+  subroutine bpsd_put_metric1D(metric1D_in,ierr)
 !-----------------------------------------------------------------------
 
     use bpsd_subs
@@ -135,8 +135,8 @@ contains
        metric1Dx%data(nr,20) = metric1D_in%data(nr)%aveb
     enddo
     CALL DATE_AND_TIME(metric1Dx%created_date, &
-         &             metric1Dx%created_time, &
-         &             metric1Dx%created_timezone)
+                       metric1Dx%created_time, &
+                       metric1Dx%created_timezone)
 
     if(metric1Dx%status.ge.3) then
        metric1Dx%status=3
@@ -146,18 +146,18 @@ contains
     ierr = 0
 
     if(bpsd_debug_flag) then
-       write(6,*) '-- bpsd_set_metric1D'
+       write(6,*) '-- bpsd_put_metric1D'
        write(6,*) '---- metric1Dx%s'
        write(6,'(1P5E12.4)') &
-            &        (metric1Dx%rho(nr),nr=1,metric1Dx%nrmax)
+                     (metric1Dx%rho(nr),nr=1,metric1Dx%nrmax)
        do nd=1,metric1Dx%ndmax
           write(6,*) '---- ',metric1Dx%kid(nd)
           write(6,'(1P5E12.4)') &
-               &           (metric1Dx%data(nr,nd),nr=1,metric1Dx%nrmax)
+                           (metric1Dx%data(nr,nd),nr=1,metric1Dx%nrmax)
        enddo
     endif
     return
-  end subroutine bpsd_set_metric1D
+  end subroutine bpsd_put_metric1D
 
 !-----------------------------------------------------------------------
   subroutine bpsd_get_metric1D(metric1D_out,ierr)
@@ -174,7 +174,7 @@ contains
 
     if(metric1Dx%status.eq.0) then
        write(6,*) &
-            & 'XX bpsd_get_metric1D: no space allocated to metric1Dx%data'
+              'XX bpsd_get_metric1D: no space allocated to metric1Dx%data'
        ierr=1
        return
     endif
@@ -226,7 +226,7 @@ contains
 
     if(metric1Dx%status.eq.2) then
        CALL bpsd_adjust_array3D(metric1Dx%spline,4,metric1Dx%nrmax, &
-            &                                      metric1Dx%ndmax)
+                                                   metric1Dx%ndmax)
        metric1Dx%status=3
     endif
 
@@ -272,67 +272,67 @@ contains
        write(6,*) '-- bpsd_get_metric1D'
        write(6,*) '---- metric1Dx%rho'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%rho(nr),nr=1,metric1D_out%nrmax)
+                     (metric1D_out%rho(nr),nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%pvol'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%pvol,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%pvol,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%psur'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%psur,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%psur,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%dvpssit'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%dvpsit,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%dvpsit,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%dvpssit'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%dvpsit,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%dvpsit,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%aver2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%aver2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%aver2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%aver2i'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%aver2i,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%aver2i,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%aveb2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%aveb2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%aveb2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%aveb2i'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%aveb2i,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%aveb2i,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegv'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegv,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegv,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegv2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegv2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegv2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegvr2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegvr2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegvr2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegr'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegr,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegr,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegr2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegr2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegr2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegrr2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegrr2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegrr2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%avegpp2'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%avegpp2,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%avegpp2,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%rr'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%rr,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%rr,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%rs'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%rs,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%rs,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%elip'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%elip,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%elip,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%trig'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%trig,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%trig,nr=1,metric1D_out%nrmax)
        write(6,*) '---- metric1Dx%aveb'
        write(6,'(1P5E12.4)') &
-            &        (metric1D_out%data(nr)%aveb,nr=1,metric1D_out%nrmax)
+                     (metric1D_out%data(nr)%aveb,nr=1,metric1D_out%nrmax)
     endif
     return
   end subroutine bpsd_get_metric1D
@@ -373,7 +373,7 @@ contains
     CALL bpsd_adjust_karray(metric1Dx%kunit,metric1Dx%ndmax)
     CALL bpsd_adjust_array1D(metric1Dx%rho,metric1Dx%nrmax)
     CALL bpsd_adjust_array2D(metric1Dx%data,metric1Dx%nrmax, &
-         &                                  metric1Dx%ndmax)
+                                            metric1Dx%ndmax)
 
     do nr=1,metric1Dx%nrmax
        metric1Dx%rho(nr) = datax%rho(nr)

@@ -1,12 +1,12 @@
-!     $Id$
-!=======================================================================
+! bpsd_shot.f90
+
 module bpsd_shot
 
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_set_shot,bpsd_get_shot, &
-       & bpsd_save_shot,bpsd_load_shot
+  public bpsd_put_shot,bpsd_get_shot, &
+         bpsd_save_shot,bpsd_load_shot
   private
 
   logical, save :: bpsd_shotx_init_flag = .TRUE.
@@ -28,7 +28,7 @@ contains
   end subroutine bpsd_shotx_init
 
 !-----------------------------------------------------------------------
-  subroutine bpsd_set_shot(shot_in,ierr)
+  subroutine bpsd_put_shot(shot_in,ierr)
 !-----------------------------------------------------------------------
 
     use bpsd_subs
@@ -42,20 +42,20 @@ contains
     shotx%shotID = shot_in%shotID
     shotx%modelID = shot_in%modelID
     CALL DATE_AND_TIME(shotx%created_date, &
-         &             shotx%created_time, &
-         &             shotx%created_timezone)
+                       shotx%created_time, &
+                       shotx%created_timezone)
     shotx%status = 2
     ierr = 0
 
     if(bpsd_debug_flag) then
        write(6,'(A/A32,A32/A32,I12/A32,I12)') &
-            &        '-- bpsd_set_shot', &
-            &        'shot%deviceID: ',shotx%deviceID, &
-            &        'shot%shotID  : ',shotx%shotID, &
-            &        'shot%modelID : ',shotx%modelID
+                     '-- bpsd_put_shot', &
+                     'shot%deviceID: ',shotx%deviceID, &
+                     'shot%shotID  : ',shotx%shotID, &
+                     'shot%modelID : ',shotx%modelID
     endif
     return
-  end subroutine bpsd_set_shot
+  end subroutine bpsd_put_shot
 
 !-----------------------------------------------------------------------
   subroutine bpsd_get_shot(shot_out,ierr)
@@ -81,10 +81,10 @@ contains
 
     if(bpsd_debug_flag) then
        write(6,'(A/A32,A32/A32,I12/A32,I12)') &
-            &        '-- bpsd_get_shot', &
-            &        'shot%deviceID: ',shotx%deviceID, &
-            &        'shot%shotID  : ',shotx%shotID, &
-            &        'shot%modelID : ',shotx%modelID
+                     '-- bpsd_get_shot', &
+                     'shot%deviceID: ',shotx%deviceID, &
+                     'shot%shotID  : ',shotx%shotID, &
+                     'shot%modelID : ',shotx%modelID
     endif
     return
   end subroutine bpsd_get_shot

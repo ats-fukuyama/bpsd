@@ -1,3 +1,5 @@
+! bpsd_kinds.f90
+
 module bpsd_kinds
   implicit none
   integer, parameter :: rkind=selected_real_kind(12,100)
