@@ -20,7 +20,7 @@ SRCSFREE = bpsd_libfio.f90 \
 OBJS = $(SRCSFREE:.f90=.o) $(SRCSFIXED:.f=.o) 
 OBJO = $(SRCO:.f=.o) 
 
-LIBS = bpsdlib.a
+LIBS = libbpsd.a
 MODINCLUDE=-I $(MOD)
 
 .f.o :
@@ -28,9 +28,9 @@ MODINCLUDE=-I $(MOD)
 .f90.o :
 	$(FCFREE) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
 
-all : bpsdlib.a
+all : libbpsd.a
 
-bpsdlib.a: $(OBJS)
+libbpsd.a: $(OBJS)
 	$(LD) $(LDFLAGS) $@ $(OBJS)
 
 clean:
