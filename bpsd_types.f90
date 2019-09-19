@@ -117,119 +117,124 @@ module bpsd_types
   end type bpsd_metric1D_type
 
   type bpsd_plasmaf_data
-     real(rkind) :: pn     ! Number density [m^-3]
-     real(rkind) :: pt     ! Temperature [eV]
-         real(rkind) :: ptpr   ! Parallel temperature [eV]
-         real(rkind) :: ptpp   ! Perpendicular temperature [eV]
-         real(rkind) :: pu     ! Parallel flow velocity [m/s]
-      end type bpsd_plasmaf_data
+     real(rkind) :: density          ! Number density [m^-3]
+     real(rkind) :: temperature      ! Temperature [eV]
+     real(rkind) :: temperature_para ! Parallel temperature [eV]
+     real(rkind) :: temperature_perp ! Perpendicular temperature [eV]
+     real(rkind) :: velocity_tor     ! Toroidal velocity (toroidal flow) [m/s]
+     real(rkind) :: velocity_pol     ! Poloidal velocity (toroidal flow) [m/s]
+     real(rkind) :: velocity_para    ! Parallel velocity (parallel flow) [m/s]
+     real(rkind) :: velocity_perp    ! Perpendicular velocity (ring velocity) 
+                                     ! [m/s]
+  end type bpsd_plasmaf_data
 
-      type bpsd_plasmaf_type
-         integer :: nrmax     ! Number of radial points
-         integer :: nsmax     ! Number of particle species
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: rho
-                              ! normalized minor radius
-         real(rkind), dimension(:), pointer :: qinv 
-                              ! 1/q : inverse of safety factor
-         type(bpsd_plasmaf_data), dimension(:,:), pointer :: data
-      end type bpsd_plasmaf_type
+  type bpsd_plasmaf_type
+     integer :: nrmax     ! Number of radial points
+     integer :: nsmax     ! Number of particle species
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: rho
+                          ! normalized minor radius
+     real(rkind), dimension(:), pointer :: qinv 
+                          ! 1/q : inverse of safety factor
+     type(bpsd_plasmaf_data), dimension(:,:), pointer :: data
+  end type bpsd_plasmaf_type
 
-      type bpsd_trmatrix_data
-         real(rkind) :: Dn    ! Particle diffusivity [m^2/s]
-         real(rkind) :: Dp    ! Momentum diffusivity [m^2/s]
-         real(rkind) :: DT    ! Heat     diffusivity [m^2/s]
-         real(rkind) :: un    ! Particle pinch velocity [m/s]
-         real(rkind) :: up    ! Momentum pinch velocity [m/s]
-         real(rkind) :: uT    ! Heat     pinch velocity [m/s]
-      end type bpsd_trmatrix_data
+  type bpsd_trmatrix_data
+     real(rkind) :: Dn    ! Particle diffusivity [m^2/s]
+     real(rkind) :: Dp    ! Momentum diffusivity [m^2/s]
+     real(rkind) :: DT    ! Heat     diffusivity [m^2/s]
+     real(rkind) :: un    ! Particle radial flow velocity [m/s]
+     real(rkind) :: up    ! Momentum radial flow velocity [m/s]
+     real(rkind) :: uT    ! Heat     radial flow velocity [m/s]
+  end type bpsd_trmatrix_data
 
-      type bpsd_trmatrix_type
-         integer :: nrmax     ! Number of radial points
-         integer :: nsmax     ! Number of particle species
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: rho
-                              ! normalized minor radius
-         type(bpsd_trmatrix_data), dimension(:,:), pointer :: data
-      end type bpsd_trmatrix_type
+  type bpsd_trmatrix_type
+     integer :: nrmax     ! Number of radial points
+     integer :: nsmax     ! Number of particle species
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: rho
+                          ! normalized minor radius
+     type(bpsd_trmatrix_data), dimension(:,:), pointer :: data
+  end type bpsd_trmatrix_type
 
-      type bpsd_trsource_data ! power density
-         real(rkind) :: nip   ! Ionization rate[1/(m^3 s)]
-         real(rkind) :: nim   ! Recombination rate [1/(m^3 s)]
-         real(rkind) :: ncx   ! Charge exchange loss rate [1/(m^3 s)]
-         real(rkind) :: Pec   ! Electron cyclotron heating [W/m^3]
-         real(rkind) :: Plh   ! Lower hybrid heating [W/m^3]
-         real(rkind) :: Pic   ! Ion cyclotron heating [W/m^3]
-         real(rkind) :: Pbr   ! Bremsstrahlung radiation loss [W/m^3]
-         real(rkind) :: Pcy   ! Cyclotron radiation loss [W/m^3]
-         real(rkind) :: Plr   ! Line radiation loss [W/m^3]
-      end type bpsd_trsource_data
+  type bpsd_trsource_data ! power density
+     real(rkind) :: nip   ! Ionization rate[1/(m^3 s)]
+     real(rkind) :: nim   ! Recombination rate [1/(m^3 s)]
+     real(rkind) :: ncx   ! Charge exchange loss rate [1/(m^3 s)]
+     real(rkind) :: Pec   ! Electron cyclotron heating [W/m^3]
+     real(rkind) :: Plh   ! Lower hybrid heating [W/m^3]
+     real(rkind) :: Pic   ! Ion cyclotron heating [W/m^3]
+     real(rkind) :: Pbr   ! Bremsstrahlung radiation loss [W/m^3]
+     real(rkind) :: Pcy   ! Cyclotron radiation loss [W/m^3]
+     real(rkind) :: Plr   ! Line radiation loss [W/m^3]
+  end type bpsd_trsource_data
 
-      type bpsd_trsource_type
-         integer :: nrmax     ! Number of radial points
-         integer :: nsmax     ! Number of particle species
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: rho
-                              ! normalized minor radius
-         type(bpsd_trsource_data), dimension(:,:), pointer :: data
-      end type bpsd_trsource_type
+  type bpsd_trsource_type
+     integer :: nrmax     ! Number of radial points
+     integer :: nsmax     ! Number of particle species
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: rho
+                          ! normalized minor radius
+     type(bpsd_trsource_data), dimension(:,:), pointer :: data
+  end type bpsd_trsource_type
 
-      type bpsd_dielectric_data
-         complex(rkind),dimension(3,3) :: tensor     ! permeability
-      end type bpsd_dielectric_data
-      type bpsd_dielectric_type
-         integer :: nrmax     ! Number of radial points
-         integer :: nsmax     ! Number of particle species
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: rho
-                              ! normalized minor radius
-         type(bpsd_dielectric_data), dimension(:,:), pointer :: data
-      end type bpsd_dielectric_type
+  type bpsd_dielectric_data
+     complex(rkind),dimension(3,3) :: tensor     ! permeability
+  end type bpsd_dielectric_data
 
-      type bpsd_data0D_type
-         integer :: ndmax     ! Number of data
-         integer :: idum      ! Dummy
-         character(len=32) :: dataName
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: data
-         character(len=32), dimension(:), pointer :: kid
-      end type bpsd_data0D_type
+  type bpsd_dielectric_type
+     integer :: nrmax     ! Number of radial points
+     integer :: nsmax     ! Number of particle species
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: rho
+                          ! normalized minor radius
+     type(bpsd_dielectric_data), dimension(:,:), pointer :: data
+  end type bpsd_dielectric_type
 
-      type bpsd_data1D_type
-         integer :: nrmax     ! Number of radial points
-         integer :: ndmax     ! Number of data
-         character(len=32) :: dataName
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: s 
-         real(rkind), dimension(:,:), pointer :: data
-         character(len=32), dimension(:), pointer :: kid
-      end type bpsd_data1D_type
+  type bpsd_data0D_type
+     integer :: ndmax     ! Number of data
+     integer :: idum      ! Dummy
+     character(len=32) :: dataName
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: data
+     character(len=32), dimension(:), pointer :: kid
+  end type bpsd_data0D_type
 
-      type bpsd_data2D_type
-         integer :: nthmax    ! Number of poloidal points
-         integer :: nrmax     ! Number of radial points
-         integer :: ndmax     ! Number of data
-         integer :: idum      ! Dummy
-         character(len=32) :: dataName
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: th
-         real(rkind), dimension(:), pointer :: s 
-         real(rkind), dimension(:,:,:), pointer :: data
-         character(len=32), dimension(:), pointer :: kid
-      end type bpsd_data2D_type
+  type bpsd_data1D_type
+     integer :: nrmax     ! Number of radial points
+     integer :: ndmax     ! Number of data
+     character(len=32) :: dataName
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: s 
+     real(rkind), dimension(:,:), pointer :: data
+     character(len=32), dimension(:), pointer :: kid
+  end type bpsd_data1D_type
 
-      type bpsd_data3D_type
-         integer :: nphmax    ! Number of toroidal points
-         integer :: nthmax    ! Number of poloidal points
-         integer :: nrmax     ! Number of radial points
-         integer :: ndmax     ! Number of data
-         character(len=32) :: dataName
-         real(rkind) :: time
-         real(rkind), dimension(:), pointer :: ph
-         real(rkind), dimension(:), pointer :: th
-         real(rkind), dimension(:), pointer :: s 
-         real(rkind), dimension(:,:,:,:), pointer :: data
-         character(len=32), dimension(:), pointer :: kid
-      end type bpsd_data3D_type
+  type bpsd_data2D_type
+     integer :: nthmax    ! Number of poloidal points
+     integer :: nrmax     ! Number of radial points
+     integer :: ndmax     ! Number of data
+     integer :: idum      ! Dummy
+     character(len=32) :: dataName
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: th
+     real(rkind), dimension(:), pointer :: s 
+     real(rkind), dimension(:,:,:), pointer :: data
+     character(len=32), dimension(:), pointer :: kid
+  end type bpsd_data2D_type
 
-      end module bpsd_types
+  type bpsd_data3D_type
+     integer :: nphmax    ! Number of toroidal points
+     integer :: nthmax    ! Number of poloidal points
+     integer :: nrmax     ! Number of radial points
+     integer :: ndmax     ! Number of data
+     character(len=32) :: dataName
+     real(rkind) :: time
+     real(rkind), dimension(:), pointer :: ph
+     real(rkind), dimension(:), pointer :: th
+     real(rkind), dimension(:), pointer :: s 
+     real(rkind), dimension(:,:,:,:), pointer :: data
+     character(len=32), dimension(:), pointer :: kid
+  end type bpsd_data3D_type
+
+end module bpsd_types
