@@ -145,7 +145,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_trmatrix_type),intent(out) :: trmatrix_out
+    type(bpsd_trmatrix_type),intent(inout) :: trmatrix_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
     real(8), dimension(:), pointer :: v

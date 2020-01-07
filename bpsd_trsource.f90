@@ -148,7 +148,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_trsource_type),intent(out) :: trsource_out
+    type(bpsd_trsource_type),intent(inout) :: trsource_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
     real(8), dimension(:), pointer :: v

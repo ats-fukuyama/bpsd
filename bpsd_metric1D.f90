@@ -165,7 +165,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_metric1D_type),intent(out) :: metric1D_out
+    type(bpsd_metric1D_type),intent(inout) :: metric1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
     real(8), dimension(20) :: v
