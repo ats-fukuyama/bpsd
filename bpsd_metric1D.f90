@@ -2,6 +2,7 @@
 
 module bpsd_metric1D
 
+  use bpsd_kinds
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
@@ -168,7 +169,7 @@ contains
     type(bpsd_metric1D_type),intent(inout) :: metric1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
-    real(8), dimension(20) :: v
+    real(dp), dimension(20) :: v
 
     if(bpsd_metric1Dx_init_flag) call bpsd_init_metric1Dx
 

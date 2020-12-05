@@ -112,13 +112,14 @@ contains
   subroutine bpsd_get_species(species_out,ierr)
 !-----------------------------------------------------------------------
 
+    use bpsd_kinds
     use bpsd_subs
     implicit none
     type(bpsd_species_type),intent(out) :: species_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns
-    real(8) :: s
-    real(8), dimension(:), pointer :: v
+    real(dp) :: s
+    real(dp), dimension(:), pointer :: v
 
     if(bpsd_speciesx_init_flag) call bpsd_init_speciesx
 

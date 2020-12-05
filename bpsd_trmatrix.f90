@@ -2,6 +2,7 @@
 
 module bpsd_trmatrix
 
+  use bpsd_kinds
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
@@ -148,7 +149,7 @@ contains
     type(bpsd_trmatrix_type),intent(inout) :: trmatrix_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
-    real(8), dimension(:), pointer :: v
+    real(dp), dimension(:), pointer :: v
 
     if(bpsd_trmatrixx_init_flag) call bpsd_init_trmatrixx
 

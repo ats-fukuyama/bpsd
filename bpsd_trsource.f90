@@ -2,6 +2,7 @@
 
 module bpsd_trsource
 
+  use bpsd_kinds
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
@@ -151,7 +152,7 @@ contains
     type(bpsd_trsource_type),intent(inout) :: trsource_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
-    real(8), dimension(:), pointer :: v
+    real(dp), dimension(:), pointer :: v
 
     if(bpsd_trsourcex_init_flag) call bpsd_init_trsourcex
 

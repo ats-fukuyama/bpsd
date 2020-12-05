@@ -35,13 +35,13 @@ CONTAINS
 
       IMPLICIT NONE
 
-      INTEGER(4),       INTENT(IN)   :: NFL, MODEF, MODEP
-      INTEGER(4),       INTENT(OUT)  :: IERR
+      INTEGER,          INTENT(IN)   :: NFL, MODEF, MODEP
+      INTEGER,          INTENT(OUT)  :: IERR
       CHARACTER(LEN=*), INTENT(IN)   :: KNAMFL
       CHARACTER(LEN=*), INTENT(IN)   :: KPR
       CHARACTER(LEN=*), INTENT(IN),OPTIONAL :: CONVERT
       CHARACTER(LEN=256):: CONVERT_
-      INTEGER(4)        :: IST
+      INTEGER           :: IST
       CHARACTER(LEN=80) :: KNAM
       LOGICAL           :: LEX
 
@@ -70,7 +70,7 @@ CONTAINS
                  FORM='UNFORMATTED',CONVERT=CONVERT_)
          ELSEIF(MODEF.EQ.1) THEN
             OPEN(NFL,FILE=KNAM,IOSTAT=IST,STATUS='OLD',ERR=20, &
-                 FORM='FORMATTED',CONVERT=CONVERT_)
+                 FORM='FORMATTED')
          ELSE
             WRITE(6,*) 'XX FROPEN: UNKNOWN MODEF : MODEF=',MODEF
             GOTO 9005
@@ -145,11 +145,11 @@ CONTAINS
 
       IMPLICIT NONE
 
-      INTEGER(4),       INTENT(IN)   :: NFL, MODEF, MODEP
-      INTEGER(4),       INTENT(OUT)  :: IERR
+      INTEGER,          INTENT(IN)   :: NFL, MODEF, MODEP
+      INTEGER,          INTENT(OUT)  :: IERR
       CHARACTER(LEN=*), INTENT(IN)   :: KNAMFL
       CHARACTER(LEN=*), INTENT(IN)   :: KPR
-      INTEGER(4)        :: MODEPI, MODEPII, IST
+      INTEGER           :: MODEPI, MODEPII, IST
       CHARACTER(LEN=80) :: KNAM
       CHARACTER(LEN=1)  :: KID
       LOGICAL           :: LEX

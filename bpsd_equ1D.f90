@@ -2,6 +2,7 @@
 
 module bpsd_equ1D
 
+  use bpsd_kinds
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
@@ -123,7 +124,7 @@ contains
     type(bpsd_equ1D_type),intent(inout) :: equ1D_out
     integer,intent(out) :: ierr
     integer :: nr, nd, mode
-    real(8), dimension(6) :: v
+    real(dp), dimension(6) :: v
 
     if(bpsd_equ1Dx_init_flag) call bpsd_init_equ1Dx
 
