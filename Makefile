@@ -9,7 +9,7 @@ FFLAGS=$(OFLAGS)
 #FFLAGS=$(DFLAGS)
 
 SRCSFIXED = 
-SRCSFREE = bpsd_libfio.f90 \
+SRCSFREE = bpsd_libfio.f90 bpsd_libspl.f90 \
            bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
            bpsd_types.f90 bpsd_types_internal.f90 bpsd_subs.f90 \
            bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 \
@@ -44,6 +44,7 @@ BPSD_TYPES  = bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 bpsd_equ1D.f90 \
 	      bpsd_metric1D.f90 bpsd_plasmaf.f90
 
 bpsd_libfio.o:		bpsd_libfio.f90
+bpsd_libspl.o:		bpsd_libspl.f90
 bpsd_kinds.o:		bpsd_kinds.f90
 bpsd_constants.o: 	bpsd_constants.f90 bpsd_kinds.f90
 bpsd_flags.o:		bpsd_flags.f90

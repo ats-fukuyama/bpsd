@@ -98,6 +98,7 @@ CONTAINS
   SUBROUTINE bpsd_spl1D(data1D,nd,ierr)
 !-----------------------------------------------------------------------
     USE bpsd_types_internal
+    USE bpsd_libspl
     IMPLICIT NONE
     TYPE(bpsd_data1Dx_type) :: data1D
     INTEGER(ikind) :: nd      ! position of dependent variable
@@ -105,7 +106,7 @@ CONTAINS
     REAL(rkind), DIMENSION(:), POINTER :: deriv
 
     allocate(deriv(data1D%nrmax))
-    call spl1D(data1D%s,data1D%data(1,nd),deriv,data1D%spline(1,1,nd), &
+    call spl1D(data1D%s,data1D%data(:,nd),deriv,data1D%spline(:,:,nd), &
                data1D%nrmax,0,ierr)
     if(ierr.ne.0) &
                write(6,*) 'XX bpsd_spl1D : '//data1D%kid(nd)//': ierr=',ierr
@@ -117,6 +118,7 @@ CONTAINS
   subroutine bpsd_spl1DF(pos,val,data1D,nd,ierr)
 !-----------------------------------------------------------------------
     use bpsd_types_internal
+    USE bpsd_libspl
     implicit none
     real(rkind) :: pos     ! value of independent variable
     real(rkind) :: val     ! value of dependent variable
@@ -124,7 +126,7 @@ CONTAINS
     integer :: nd      ! position of dependent variable
     integer :: ierr    ! error indicator
 
-    call spl1DF(pos**2,val,data1D%s,data1D%spline(1,1,nd),data1D%nrmax,ierr)
+    call spl1DF(pos**2,val,data1D%s,data1D%spline(:,:,nd),data1D%nrmax,ierr)
     if(ierr.ne.0) then
        write(6,*) 'XX bpsd_spl1DF : '//data1D%kid(nd)//': ierr=',ierr
        write(6,'(1P3E12.4)')  &
