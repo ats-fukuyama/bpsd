@@ -33,6 +33,7 @@ CONTAINS
 !                 7 : OLD FILE NOT FOUND
 !                 8 : EMPTY FILE NAME
 
+      USE bpsd_libchar
       IMPLICIT NONE
 
       INTEGER,          INTENT(IN)   :: NFL, MODEF, MODEP
@@ -178,7 +179,7 @@ CONTAINS
                        ') IS GOING TO BE OVERWRITTEN'
             WRITE(6,*) '  ARE YOU SURE ? (Y/N)'
             READ(5,'(A1)',ERR=3,END=9001) KID
-            CALL GUCPTL(KID)
+            CALL toupper(KID)
             IF(KID.EQ.'N') GOTO 9007
          ELSEIF(MODEPII.EQ.2) THEN
             MODEPI=1
