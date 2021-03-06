@@ -253,4 +253,28 @@ CONTAINS
  9008 IERR=8
       RETURN
     END SUBROUTINE FWOPEN
-  END MODULE bpsd_libfio
+    
+!***************************************************************
+!
+!   Convert Strings to Upper Case
+!
+!***************************************************************
+
+    SUBROUTINE TOUPPER(KTEXT)
+
+      IMPLICIT NONE
+      CHARACTER(LEN=*), INTENT(INOUT) ::  KTEXT
+
+      INTEGER :: NCHAR, I, ID
+
+      NCHAR = LEN(KTEXT)
+      DO I = 1, NCHAR
+         ID=IACHAR(KTEXT(I:I))
+         IF(ID >= 97 .AND. ID <= 122) ID = ID - 32
+         KTEXT(I:I)=ACHAR(ID)
+      END DO
+
+      RETURN
+    END SUBROUTINE TOUPPER
+
+END MODULE bpsd_libfio
