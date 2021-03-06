@@ -211,13 +211,9 @@ contains
        enddo
        trmatrixx%status=4
     endif
-    !
+
     allocate(v(trmatrixx%ndmax))
-!    do nr=1,trmatrix_out%nrmax
-!       write(6,'(I5,1P3E12.4)') nr,trmatrixx%rho(nr),trmatrixx%s(nr), &
-!              trmatrixx%data(nr,1)
-!    enddo
-!    pause
+
     do nr=1,trmatrix_out%nrmax
        do nd=1,trmatrixx%ndmax
           call bpsd_spl1DF(trmatrix_out%rho(nr),v(nd),trmatrixx,nd,ierr)

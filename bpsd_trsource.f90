@@ -217,13 +217,9 @@ contains
        enddo
        trsourcex%status=4
     endif
-    !
+
     allocate(v(trsourcex%ndmax))
-!    do nr=1,trsource_out%nrmax
-!       write(6,'(I5,1P3E12.4)') nr,trsourcex%rho(nr),trsourcex%s(nr), &
-!              trsourcex%data(nr,1)
-!    enddo
-!    pause
+
     do nr=1,trsource_out%nrmax
        do nd=1,trsourcex%ndmax
           call bpsd_spl1DF(trsource_out%rho(nr),v(nd),trsourcex,nd,ierr)

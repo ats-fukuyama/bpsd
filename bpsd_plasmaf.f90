@@ -220,11 +220,7 @@ contains
     endif
 
     allocate(v(plasmafx%ndmax))
-!    do nr=1,plasmaf_out%nrmax
-!       write(6,'(I5,1P3E12.4)') nr,plasmafx%rho(nr),plasmafx%s(nr), &
-!              plasmafx%data(nr,1)
-!    enddo
-!    pause
+
     do nr=1,plasmaf_out%nrmax
        do nd=1,plasmafx%ndmax
           call bpsd_spl1DF(plasmaf_out%rho(nr),v(nd),plasmafx,nd,ierr)
