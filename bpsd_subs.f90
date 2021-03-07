@@ -8,10 +8,10 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    CHARACTER(LEN=*),DIMENSION(:),POINTER:: data
+    CHARACTER(LEN=*),DIMENSION(:),ALLOCATABLE:: data
     INTEGER(ikind),INTENT(IN):: n1
 
-    IF(ASSOCIATED(data)) THEN
+    IF(ALLOCATED(data)) THEN
        IF(n1.LE.0) THEN
           DEALLOCATE(data)
        ELSE IF(n1.NE.SIZE(data,1)) THEN
@@ -31,10 +31,10 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    REAL(rkind),DIMENSION(:),POINTER:: data
+    REAL(rkind),DIMENSION(:),ALLOCATABLE:: data
     INTEGER(ikind),INTENT(IN):: n1
 
-    IF(ASSOCIATED(data)) THEN
+    IF(ALLOCATED(data)) THEN
        IF(n1.LE.0) THEN
           DEALLOCATE(data)
        ELSE IF(n1.NE.SIZE(data,1)) THEN
@@ -54,10 +54,10 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    REAL(rkind),DIMENSION(:,:),POINTER:: data
+    REAL(rkind),DIMENSION(:,:),ALLOCATABLE:: data
     INTEGER(ikind),INTENT(IN):: n1,n2
 
-    IF(ASSOCIATED(data)) THEN
+    IF(ALLOCATED(data)) THEN
        IF(n1.LE.0.or.n2.LE.0) THEN
           DEALLOCATE(data)
        ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2)) THEN
@@ -76,10 +76,10 @@ CONTAINS
 !-----------------------------------------------------------------------
     USE bpsd_kinds
     IMPLICIT NONE
-    REAL(rkind),DIMENSION(:,:,:),POINTER:: data
+    REAL(rkind),DIMENSION(:,:,:),ALLOCATABLE:: data
     INTEGER(ikind),INTENT(IN):: n1,n2,n3
 
-    IF(ASSOCIATED(data)) THEN
+    IF(ALLOCATED(data)) THEN
        IF(n1.LE.0.OR.n2.LE.0.OR.n2.LE.0) THEN
           DEALLOCATE(data)
        ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2).OR. &
@@ -103,7 +103,7 @@ CONTAINS
     TYPE(bpsd_data1Dx_type) :: data1D
     INTEGER(ikind) :: nd      ! position of dependent variable
     INTEGER(ikind) :: ierr    ! error indicator
-    REAL(rkind), DIMENSION(:), POINTER :: deriv
+    REAL(rkind), DIMENSION(:), ALLOCATABLE :: deriv
 
     allocate(deriv(data1D%nrmax))
     call spl1D(data1D%s,data1D%data(:,nd),deriv,data1D%spline(:,:,nd), &

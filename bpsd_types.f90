@@ -30,7 +30,7 @@ module bpsd_types
   type bpsd_species_type
      integer :: nsmax     ! Number of particle species
      integer :: idum      ! Dummy
-     type(bpsd_species_data), dimension(:), pointer :: data
+     type(bpsd_species_data), dimension(:), ALLOCATABLE :: data
   end type bpsd_species_type
 
   type bpsd_equ1D_data
@@ -45,9 +45,9 @@ module bpsd_types
      integer :: nrmax     ! Number of radial points
      integer :: idum      ! Dummy
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rho
+     real(rkind), dimension(:), ALLOCATABLE :: rho
                           ! normalized minor radius
-     type(bpsd_equ1D_data), dimension(:), pointer :: data
+     type(bpsd_equ1D_data), dimension(:), ALLOCATABLE :: data
   end type bpsd_equ1D_type
 
   type bpsd_equ2D_data
@@ -57,12 +57,12 @@ module bpsd_types
      integer :: nrrmax      ! Number of major radius points
      integer :: nzzmax      ! Number of vertical points
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rr
+     real(rkind), dimension(:), ALLOCATABLE :: rr
      ! Major radius
-     real(rkind), dimension(:), pointer :: zz
+     real(rkind), dimension(:), ALLOCATABLE :: zz
      ! Vertical position
      real(rkind) :: psip_axis,psip_boundary
-     type(bpsd_equ2D_data), dimension(:,:), pointer :: data
+     type(bpsd_equ2D_data), dimension(:,:), ALLOCATABLE :: data
   end type bpsd_equ2D_type
 
   type bpsd_equ3D_data
@@ -75,13 +75,13 @@ module bpsd_types
      integer :: idum      ! Dummy
      real(rkind) :: time
      real(rkind) :: psip_axis,psip_boundary
-     real(rkind), dimension(:), pointer :: rho
+     real(rkind), dimension(:), ALLOCATABLE :: rho
      ! normalized minor radius
-     real(rkind), dimension(:), pointer :: theta
+     real(rkind), dimension(:), ALLOCATABLE :: theta
      ! poloidal angle
-     real(rkind), dimension(:), pointer :: phi
+     real(rkind), dimension(:), ALLOCATABLE :: phi
      ! toroidal angle
-     type(bpsd_equ3D_data), dimension(:,:,:), pointer :: data
+     type(bpsd_equ3D_data), dimension(:,:,:), ALLOCATABLE :: data
   end type bpsd_equ3D_type
 
   type bpsd_metric1D_data
@@ -111,9 +111,9 @@ module bpsd_types
      integer :: nrmax        ! Number of radial points
      integer :: idum         ! Dummy
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rho 
+     real(rkind), dimension(:), ALLOCATABLE :: rho 
                              ! normailized minor radius
-     type(bpsd_metric1D_data), dimension(:), pointer :: data
+     type(bpsd_metric1D_data), dimension(:), ALLOCATABLE :: data
   end type bpsd_metric1D_type
 
   type bpsd_plasmaf_data
@@ -132,11 +132,11 @@ module bpsd_types
      integer :: nrmax     ! Number of radial points
      integer :: nsmax     ! Number of particle species
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rho
+     real(rkind), dimension(:), ALLOCATABLE :: rho
                           ! normalized minor radius
-     real(rkind), dimension(:), pointer :: qinv 
+     real(rkind), dimension(:), ALLOCATABLE :: qinv 
                           ! 1/q : inverse of safety factor
-     type(bpsd_plasmaf_data), dimension(:,:), pointer :: data
+     type(bpsd_plasmaf_data), dimension(:,:), ALLOCATABLE :: data
   end type bpsd_plasmaf_type
 
   type bpsd_trmatrix_data
@@ -152,9 +152,9 @@ module bpsd_types
      integer :: nrmax     ! Number of radial points
      integer :: nsmax     ! Number of particle species
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rho
+     real(rkind), dimension(:), ALLOCATABLE :: rho
                           ! normalized minor radius
-     type(bpsd_trmatrix_data), dimension(:,:), pointer :: data
+     type(bpsd_trmatrix_data), dimension(:,:), ALLOCATABLE :: data
   end type bpsd_trmatrix_type
 
   type bpsd_trsource_data ! power density
@@ -173,9 +173,9 @@ module bpsd_types
      integer :: nrmax     ! Number of radial points
      integer :: nsmax     ! Number of particle species
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rho
+     real(rkind), dimension(:), ALLOCATABLE :: rho
                           ! normalized minor radius
-     type(bpsd_trsource_data), dimension(:,:), pointer :: data
+     type(bpsd_trsource_data), dimension(:,:), ALLOCATABLE :: data
   end type bpsd_trsource_type
 
   type bpsd_dielectric_data
@@ -186,9 +186,9 @@ module bpsd_types
      integer :: nrmax     ! Number of radial points
      integer :: nsmax     ! Number of particle species
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: rho
+     real(rkind), dimension(:), ALLOCATABLE :: rho
                           ! normalized minor radius
-     type(bpsd_dielectric_data), dimension(:,:), pointer :: data
+     type(bpsd_dielectric_data), dimension(:,:), ALLOCATABLE :: data
   end type bpsd_dielectric_type
 
   type bpsd_data0D_type
@@ -196,8 +196,8 @@ module bpsd_types
      integer :: idum      ! Dummy
      character(len=32) :: dataName
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: data
-     character(len=32), dimension(:), pointer :: kid
+     real(rkind), dimension(:), ALLOCATABLE :: data
+     character(len=32), dimension(:), ALLOCATABLE :: kid
   end type bpsd_data0D_type
 
   type bpsd_data1D_type
@@ -205,9 +205,9 @@ module bpsd_types
      integer :: ndmax     ! Number of data
      character(len=32) :: dataName
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: s 
-     real(rkind), dimension(:,:), pointer :: data
-     character(len=32), dimension(:), pointer :: kid
+     real(rkind), dimension(:), ALLOCATABLE :: s 
+     real(rkind), dimension(:,:), ALLOCATABLE :: data
+     character(len=32), dimension(:), ALLOCATABLE :: kid
   end type bpsd_data1D_type
 
   type bpsd_data2D_type
@@ -217,10 +217,10 @@ module bpsd_types
      integer :: idum      ! Dummy
      character(len=32) :: dataName
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: th
-     real(rkind), dimension(:), pointer :: s 
-     real(rkind), dimension(:,:,:), pointer :: data
-     character(len=32), dimension(:), pointer :: kid
+     real(rkind), dimension(:), ALLOCATABLE :: th
+     real(rkind), dimension(:), ALLOCATABLE :: s 
+     real(rkind), dimension(:,:,:), ALLOCATABLE :: data
+     character(len=32), dimension(:), ALLOCATABLE :: kid
   end type bpsd_data2D_type
 
   type bpsd_data3D_type
@@ -230,11 +230,11 @@ module bpsd_types
      integer :: ndmax     ! Number of data
      character(len=32) :: dataName
      real(rkind) :: time
-     real(rkind), dimension(:), pointer :: ph
-     real(rkind), dimension(:), pointer :: th
-     real(rkind), dimension(:), pointer :: s 
-     real(rkind), dimension(:,:,:,:), pointer :: data
-     character(len=32), dimension(:), pointer :: kid
+     real(rkind), dimension(:), ALLOCATABLE :: ph
+     real(rkind), dimension(:), ALLOCATABLE :: th
+     real(rkind), dimension(:), ALLOCATABLE :: s 
+     real(rkind), dimension(:,:,:,:), ALLOCATABLE :: data
+     character(len=32), dimension(:), ALLOCATABLE :: kid
   end type bpsd_data3D_type
 
 end module bpsd_types

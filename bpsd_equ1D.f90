@@ -49,10 +49,10 @@ contains
   SUBROUTINE bpsd_adjust_equ1D_data(data,n1)
 !-----------------------------------------------------------------------
     IMPLICIT NONE
-    TYPE(bpsd_equ1D_data),DIMENSION(:),POINTER:: data
+    TYPE(bpsd_equ1D_data),DIMENSION(:),ALLOCATABLE:: data
     INTEGER(ikind),INTENT(IN):: n1
 
-    IF(ASSOCIATED(data)) THEN
+    IF(ALLOCATED(data)) THEN
        IF(n1.LE.0) THEN
           DEALLOCATE(data)
        ELSE IF(n1.NE.SIZE(data,1)) THEN

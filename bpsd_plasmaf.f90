@@ -34,10 +34,10 @@ contains
   SUBROUTINE bpsd_adjust_plasmaf_data(data,n1,n2)
 !-----------------------------------------------------------------------
     IMPLICIT NONE
-    TYPE(bpsd_plasmaf_data),DIMENSION(:,:),POINTER:: data
+    TYPE(bpsd_plasmaf_data),DIMENSION(:,:),ALLOCATABLE:: data
     INTEGER(ikind),INTENT(IN):: n1,n2
 
-    IF(ASSOCIATED(data)) THEN
+    IF(ALLOCATED(data)) THEN
        IF(n1.LE.0.or.n2.LE.0) THEN
           DEALLOCATE(data)
        ELSE IF(n1.NE.SIZE(data,1).OR.n2.NE.SIZE(data,2)) THEN
@@ -152,7 +152,7 @@ contains
     type(bpsd_plasmaf_type),intent(inout) :: plasmaf_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
-    real(dp), dimension(:), pointer :: v
+    real(dp), dimension(:), ALLOCATABLE :: v
 
     if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 
