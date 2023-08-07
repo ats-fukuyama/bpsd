@@ -24,6 +24,7 @@ contains
     devicex%dataName='device'
     devicex%ndmax=8
     allocate(devicex%kid(8))
+    allocate(devicex%kunit(8))
     allocate(devicex%data(8))
     devicex%kid(1)='device%rr'
     devicex%kid(2)='device%zz'
@@ -33,14 +34,14 @@ contains
     devicex%kid(6)='device%ip'
     devicex%kid(7)='device%elip'
     devicex%kid(8)='device%trig'
-    devicex%kid(1)='m'
-    devicex%kid(2)='m'
-    devicex%kid(3)='m'
-    devicex%kid(4)='m'
-    devicex%kid(5)='T'
-    devicex%kid(6)='A'
-    devicex%kid(7)=' '
-    devicex%kid(8)=' '
+    devicex%kunit(1)='m'
+    devicex%kunit(2)='m'
+    devicex%kunit(3)='m'
+    devicex%kunit(4)='m'
+    devicex%kunit(5)='T'
+    devicex%kunit(6)='A'
+    devicex%kunit(7)=' '
+    devicex%kunit(8)=' '
 
     bpsd_devicex_init_flag = .FALSE.
 
@@ -77,7 +78,7 @@ contains
     if(bpsd_debug_flag) then
        write(6,*) '-- bpsd_put_device'
        do nd=1,devicex%ndmax
-          write(6,'(A32,1PE12.4)') devicex%kid(nd),devicex%data(nd)
+          write(6,'(A32,1PE12.4,A)') devicex%kid(nd),devicex%data(nd),TRIM(devicex%kunit(nd))
        enddo
     endif
     return

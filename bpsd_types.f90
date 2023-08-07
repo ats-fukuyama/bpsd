@@ -198,6 +198,7 @@ module bpsd_types
      real(rkind) :: time
      real(rkind), dimension(:), ALLOCATABLE :: data
      character(len=32), dimension(:), ALLOCATABLE :: kid
+     character(len=32), dimension(:), ALLOCATABLE :: kunit
   end type bpsd_data0D_type
 
   type bpsd_data1D_type
@@ -208,6 +209,7 @@ module bpsd_types
      real(rkind), dimension(:), ALLOCATABLE :: s 
      real(rkind), dimension(:,:), ALLOCATABLE :: data
      character(len=32), dimension(:), ALLOCATABLE :: kid
+     character(len=32), dimension(:), ALLOCATABLE :: kunit
   end type bpsd_data1D_type
 
   type bpsd_data2D_type
@@ -221,6 +223,7 @@ module bpsd_types
      real(rkind), dimension(:), ALLOCATABLE :: s 
      real(rkind), dimension(:,:,:), ALLOCATABLE :: data
      character(len=32), dimension(:), ALLOCATABLE :: kid
+     character(len=32), dimension(:), ALLOCATABLE :: kunit
   end type bpsd_data2D_type
 
   type bpsd_data3D_type
@@ -235,6 +238,7 @@ module bpsd_types
      real(rkind), dimension(:), ALLOCATABLE :: s 
      real(rkind), dimension(:,:,:,:), ALLOCATABLE :: data
      character(len=32), dimension(:), ALLOCATABLE :: kid
+     character(len=32), dimension(:), ALLOCATABLE :: kunit
   end type bpsd_data3D_type
 
 end module bpsd_types
