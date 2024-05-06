@@ -8,25 +8,24 @@ include ../task/make.header
 FFLAGS=$(OFLAGS)
 #FFLAGS=$(DFLAGS)
 
-SRCSFIXED = 
-SRCSFREE = bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
-           bpsd_libchar.f90 bpsd_libfio.f90 bpsd_libspl.f90 \
-           bpsd_types.f90 bpsd_types_internal.f90 bpsd_subs.f90 \
-           bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 \
-           bpsd_equ1D.f90 bpsd_metric1D.f90 bpsd_plasmaf.f90 \
-           bpsd_trmatrix.f90 bpsd_trsource.f90 \
-           bpsd_base.f90
+OBJDIR=./obj
 
-OBJS = $(SRCSFREE:.f90=.o) $(SRCSFIXED:.f=.o) 
-OBJO = $(SRCO:.f=.o) 
+MODINCLUDE= -I./$(MOD)
 
-LIBS = libbpsd.a
-MODINCLUDE=-I $(MOD)
-
-.f.o :
-	$(FCFIXED) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
-.f90.o :
+${OBJDIR}/%.o:%.f90
 	$(FCFREE) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
+
+SRCS = bpsd_kinds.f90 bpsd_constants.f90 bpsd_flags.f90 \
+       bpsd_libchar.f90 bpsd_libfio.f90 bpsd_libspl.f90 \
+       bpsd_types.f90 bpsd_types_internal.f90 bpsd_subs.f90 \
+       bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 \
+       bpsd_equ1D.f90 bpsd_metric1D.f90 bpsd_plasmaf.f90 \
+       bpsd_trmatrix.f90 bpsd_trsource.f90 \
+       bpsd_base.f90
+
+OBJS=$(addprefix $(OBJDIR)/, $(SRCS:.f90=.o))
+
+LIBS=libbpsd.a
 
 all : libbpsd.a
 
@@ -43,21 +42,21 @@ BPSD_COMMON = bpsd_subs.f90 bpsd_types_internal.f90 bpsd_types.f90 \
 BPSD_TYPES  = bpsd_shot.f90 bpsd_device.f90 bpsd_species.f90 bpsd_equ1D.f90 \
 	      bpsd_metric1D.f90 bpsd_plasmaf.f90
 
-bpsd_kinds.o:		bpsd_kinds.f90
-bpsd_constants.o: 	bpsd_constants.f90 bpsd_kinds.f90
-bpsd_flags.o:		bpsd_flags.f90
-bpsd_libchar.o:		bpsd_libchar.f90
-bpsd_libfio.o:		bpsd_libfio.f90
-bpsd_libspl.o:		bpsd_libspl.f90
-bpsd_types.o:		bpsd_types.f90 bpsd_kinds.f90
-bpsd_types_internal.o:	bpsd_types_internal.f90 bpsd_kinds.f90
-bpsd_subs.o:		bpsd_subs.f90 bpsd_types_internal.f90 bpsd_kinds.f90
-bpsd_shot.o:		bpsd_shot.f90 $(BPSD_COMMON)
-bpsd_device.o:		bpsd_device.f90 $(BPSD_COMMON)
-bpsd_species.o:		bpsd_species.f90 $(BPSD_COMMON)
-bpsd_equ1D.o:		bpsd_equ1D.f90 $(BPSD_COMMON)
-bpsd_metric1D.o:	bpsd_metric1D.f90 $(BPSD_COMMON)
-bpsd_plasmaf.o:		bpsd_plasmaf.f90 $(BPSD_COMMON)
-bpsd_trmatrix.o:	bpsd_trmatrix.f90 $(BPSD_COMMON)
-bpsd_trsource.o:	bpsd_trsource.f90 $(BPSD_COMMON)
-bpsd_base.o:		bpsd_base.f90 bpsd_subs.f90 $(BPSD_TYPES) $(BPSD_COMMON)
+$(OBJDIR)/bpsd_kinds.o:		bpsd_kinds.f90
+$(OBJDIR)/bpsd_constants.o: 	bpsd_constants.f90 bpsd_kinds.f90
+$(OBJDIR)/bpsd_flags.o:		bpsd_flags.f90
+$(OBJDIR)/bpsd_libchar.o:	bpsd_libchar.f90
+$(OBJDIR)/bpsd_libfio.o:	bpsd_libfio.f90
+$(OBJDIR)/bpsd_libspl.o:	bpsd_libspl.f90
+$(OBJDIR)/bpsd_types.o:		bpsd_types.f90 bpsd_kinds.f90
+$(OBJDIR)/bpsd_types_internal.o:bpsd_types_internal.f90 bpsd_kinds.f90
+$(OBJDIR)/$(OBJDIR)/bpsd_subs.o:bpsd_subs.f90 bpsd_types_internal.f90 bpsd_kinds.f90
+$(OBJDIR)/bpsd_shot.o:		bpsd_shot.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_device.o:	bpsd_device.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_species.o:	bpsd_species.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_equ1D.o:		bpsd_equ1D.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_metric1D.o:	bpsd_metric1D.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_plasmaf.o:	bpsd_plasmaf.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_trmatrix.o:	bpsd_trmatrix.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_trsource.o:	bpsd_trsource.f90 $(BPSD_COMMON)
+$(OBJDIR)/bpsd_base.o:		bpsd_base.f90 bpsd_subs.f90 $(BPSD_TYPES) $(BPSD_COMMON)
