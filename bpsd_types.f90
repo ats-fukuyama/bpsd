@@ -126,6 +126,10 @@ module bpsd_types
      real(rkind) :: velocity_para    ! Parallel velocity (parallel flow) [m/s]
      real(rkind) :: velocity_perp    ! Perpendicular velocity (ring velocity) 
                                      ! [m/s]
+     real(rkind) :: zave             ! Averaged charge
+     real(rkind) :: z2ave            ! Averaged charge^2
+     real(rkind) :: density_fastion  ! fast ion density [m^-3]
+     real(rkind) :: energy_fastion   ! fast ion energy [eV]
   end type bpsd_plasmaf_data
 
   type bpsd_plasmaf_type
@@ -167,6 +171,7 @@ module bpsd_types
      real(rkind) :: Pbr   ! Bremsstrahlung radiation loss [W/m^3]
      real(rkind) :: Pcy   ! Cyclotron radiation loss [W/m^3]
      real(rkind) :: Plr   ! Line radiation loss [W/m^3]
+     real(rkind) :: Poh   ! Ohmic heating power [W/m^3]
   end type bpsd_trsource_data
 
   type bpsd_trsource_type

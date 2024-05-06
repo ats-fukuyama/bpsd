@@ -57,7 +57,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,trsourcex%ndmax-2,9
+    do nd=0,trsourcex%ndmax-2,10
        trsourcex%kid(nd+1)='trsource%nip'
        trsourcex%kid(nd+2)='trsource%nim'
        trsourcex%kid(nd+3)='trsource%ncx'
@@ -67,15 +67,17 @@ contains
        trsourcex%kid(nd+7)='trsource%Pbr'
        trsourcex%kid(nd+8)='trsource%Pcy'
        trsourcex%kid(nd+9)='trsource%Plr'
+       trsourcex%kid(nd+10)='trsource%Poh'
        trsourcex%kunit(nd+1)='1/(m^3 s)'
        trsourcex%kunit(nd+2)='1/(m^3 s)'
        trsourcex%kunit(nd+3)='1/(m^3 s)'
-       trsourcex%kunit(nd+4)='W1/m^3'
-       trsourcex%kunit(nd+5)='W1/m^3'
-       trsourcex%kunit(nd+6)='W1/m^3'
-       trsourcex%kunit(nd+7)='W1/m^3'
-       trsourcex%kunit(nd+8)='W1/m^3'
-       trsourcex%kunit(nd+9)='W1/m^3'
+       trsourcex%kunit(nd+4)='W/m^3'
+       trsourcex%kunit(nd+5)='W/m^3'
+       trsourcex%kunit(nd+6)='W/m^3'
+       trsourcex%kunit(nd+7)='W/m^3'
+       trsourcex%kunit(nd+8)='W/m^3'
+       trsourcex%kunit(nd+9)='W/m^3'
+       trsourcex%kunit(nd+10)='W/m^3'
     enddo
     RETURN
   END SUBROUTINE bpsd_setup_trsource_kdata
@@ -93,7 +95,7 @@ contains
     if(bpsd_trsourcex_init_flag) call bpsd_init_trsourcex
 
     trsourcex%nrmax=trsource_in%nrmax
-    trsourcex%ndmax=trsource_in%nsmax*9
+    trsourcex%ndmax=trsource_in%nsmax*10
     CALL bpsd_adjust_karray(trsourcex%kid,trsourcex%ndmax)
     CALL bpsd_adjust_karray(trsourcex%kunit,trsourcex%ndmax)
     CALL bpsd_adjust_array1D(trsourcex%rho,trsourcex%nrmax)
@@ -105,7 +107,7 @@ contains
     do nr=1,trsource_in%nrmax
        trsourcex%rho(nr) = trsource_in%rho(nr)
        do ns=1,trsource_in%nsmax
-          nd=9*(ns-1)
+          nd=10*(ns-1)
           trsourcex%data(nr,nd+1) = trsource_in%data(nr,ns)%nip
           trsourcex%data(nr,nd+2) = trsource_in%data(nr,ns)%nim
           trsourcex%data(nr,nd+3) = trsource_in%data(nr,ns)%ncx
@@ -114,7 +116,8 @@ contains
           trsourcex%data(nr,nd+6) = trsource_in%data(nr,ns)%Pic
           trsourcex%data(nr,nd+7) = trsource_in%data(nr,ns)%Pbr
           trsourcex%data(nr,nd+8) = trsource_in%data(nr,ns)%Pcy
-          trsourcex%data(nr,nd+9) = trsource_in%data(nr,ns)%Plh
+          trsourcex%data(nr,nd+9) = trsource_in%data(nr,ns)%Plr
+          trsourcex%data(nr,nd+10)= trsource_in%data(nr,ns)%Poh
        enddo
     enddo
     CALL DATE_AND_TIME(trsourcex%created_date, &
@@ -149,7 +152,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_trsource_type),intent(inout) :: trsource_out
+    type(bpsd_trsource_type),intent(out) :: trsource_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
     real(dp), dimension(:), ALLOCATABLE :: v
@@ -174,7 +177,7 @@ contains
     else
        mode=1
     endif
-    trsource_out%nsmax = (trsourcex%ndmax-1)/9
+    trsource_out%nsmax = trsourcex%ndmax/10
 
     CALL bpsd_adjust_array1D(trsource_out%rho,trsource_out%nrmax)
     CALL bpsd_adjust_trsource_data(trsource_out%data,trsource_out%nrmax, &
@@ -185,7 +188,7 @@ contains
        do nr=1,trsourcex%nrmax
           trsource_out%rho(nr)=trsourcex%rho(nr)
           do ns=1,trsource_out%nsmax
-             nd=9*(ns-1)
+             nd=10*(ns-1)
              trsource_out%data(nr,ns)%nip =trsourcex%data(nr,nd+1)
              trsource_out%data(nr,ns)%nim =trsourcex%data(nr,nd+2)
              trsource_out%data(nr,ns)%ncx =trsourcex%data(nr,nd+3)
@@ -194,7 +197,8 @@ contains
              trsource_out%data(nr,ns)%Pic =trsourcex%data(nr,nd+6)
              trsource_out%data(nr,ns)%Pbr =trsourcex%data(nr,nd+7)
              trsource_out%data(nr,ns)%Pcy =trsourcex%data(nr,nd+8)
-             trsource_out%data(nr,ns)%Pcy =trsourcex%data(nr,nd+9)
+             trsource_out%data(nr,ns)%Plr =trsourcex%data(nr,nd+9)
+             trsource_out%data(nr,ns)%Poh =trsourcex%data(nr,nd+10)
           enddo
        enddo
        ierr=0
@@ -202,8 +206,8 @@ contains
     endif
 
     if(trsourcex%status.eq.2) then
-       CALL bpsd_adjust_array3D(trsourcex%spline,9,trsourcex%nrmax, &
-                                                   trsourcex%ndmax)
+       CALL bpsd_adjust_array3D(trsourcex%spline,10,trsourcex%nrmax, &
+                                                    trsourcex%ndmax)
        trsourcex%status=3
     endif
 
@@ -225,7 +229,7 @@ contains
           call bpsd_spl1DF(trsource_out%rho(nr),v(nd),trsourcex,nd,ierr)
        enddo
        do ns=1,trsource_out%nsmax
-          nd=9*(ns-1)
+          nd=10*(ns-1)
           trsource_out%data(nr,ns)%nip  = v(nd+1)
           trsource_out%data(nr,ns)%nim  = v(nd+2)
           trsource_out%data(nr,ns)%ncx  = v(nd+3)
@@ -235,6 +239,7 @@ contains
           trsource_out%data(nr,ns)%Pbr  = v(nd+7)
           trsource_out%data(nr,ns)%Pcy  = v(nd+8)
           trsource_out%data(nr,ns)%Plr  = v(nd+9)
+          trsource_out%data(nr,ns)%Poh  = v(nd+10)
        enddo
     enddo
     deallocate(v)
@@ -273,6 +278,9 @@ contains
           write(6,*) '---- trsourcex%Plr(',ns,')'
           write(6,'(1P5E12.4)') &
                      (trsource_out%data(nr,ns)%Plr,nr=1,trsource_out%nrmax)
+          write(6,*) '---- trsourcex%Poh(',ns,')'
+          write(6,'(1P5E12.4)') &
+                     (trsource_out%data(nr,ns)%Poh,nr=1,trsource_out%nrmax)
        enddo
     endif
     return

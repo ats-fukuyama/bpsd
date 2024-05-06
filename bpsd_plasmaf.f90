@@ -6,9 +6,12 @@ module bpsd_plasmaf
   use bpsd_flags
   use bpsd_types
   use bpsd_types_internal
-  public bpsd_put_plasmaf,bpsd_get_plasmaf, &
-         bpsd_save_plasmaf,bpsd_load_plasmaf
-  private
+
+  PRIVATE
+  PUBLIC bpsd_put_plasmaf
+  PUBLIC bpsd_get_plasmaf
+  PUBLIC bpsd_save_plasmaf
+  PUBLIC bpsd_load_plasmaf
 
   logical, save :: bpsd_plasmafx_init_flag = .TRUE.
   type(bpsd_data1Dx_type), save :: plasmafx
@@ -57,7 +60,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,plasmafx%ndmax-2,8
+    do nd=0,plasmafx%ndmax-2,12
        plasmafx%kid(nd+1)='plasmaf%density'
        plasmafx%kid(nd+2)='plasmaf%temperature'
        plasmafx%kid(nd+3)='plasmaf%temperature_para'
@@ -66,6 +69,10 @@ contains
        plasmafx%kid(nd+6)='plasmaf%velocity_pol'
        plasmafx%kid(nd+7)='plasmaf%velocity_para'
        plasmafx%kid(nd+8)='plasmaf%velocity_perp'
+       plasmafx%kid(nd+9)='plasmaf%zave'
+       plasmafx%kid(nd+10)='plasmaf%z2ave'
+       plasmafx%kid(nd+11)='plasmaf%density_fastion'
+       plasmafx%kid(nd+12)='plasmaf%energy_fastion'
        plasmafx%kunit(nd+1)='10^20/m^3'
        plasmafx%kunit(nd+2)='eV'
        plasmafx%kunit(nd+3)='eV'
@@ -74,6 +81,10 @@ contains
        plasmafx%kunit(nd+6)='m/s'
        plasmafx%kunit(nd+7)='m/s'
        plasmafx%kunit(nd+8)='m/s'
+       plasmafx%kunit(nd+9)=' '
+       plasmafx%kunit(nd+10)=' '
+       plasmafx%kunit(nd+11)='10^20/m^3'
+       plasmafx%kunit(nd+12)='eV'
     enddo
     plasmafx%kid(plasmafx%ndmax)='plasmaf%qinv'
     plasmafx%kunit(plasmafx%ndmax)=' '
@@ -93,7 +104,7 @@ contains
     if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 
     plasmafx%nrmax=plasmaf_in%nrmax
-    plasmafx%ndmax=plasmaf_in%nsmax*8+1
+    plasmafx%ndmax=plasmaf_in%nsmax*12+1
     CALL bpsd_adjust_karray(plasmafx%kid,plasmafx%ndmax)
     CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
     CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
@@ -105,7 +116,7 @@ contains
     do nr=1,plasmaf_in%nrmax
        plasmafx%rho(nr) = plasmaf_in%rho(nr)
        do ns=1,plasmaf_in%nsmax
-          nd=8*(ns-1)
+          nd=12*(ns-1)
           plasmafx%data(nr,nd+1) = plasmaf_in%data(nr,ns)%density
           plasmafx%data(nr,nd+2) = plasmaf_in%data(nr,ns)%temperature
           plasmafx%data(nr,nd+3) = plasmaf_in%data(nr,ns)%temperature_para
@@ -114,6 +125,10 @@ contains
           plasmafx%data(nr,nd+6) = plasmaf_in%data(nr,ns)%velocity_pol
           plasmafx%data(nr,nd+7) = plasmaf_in%data(nr,ns)%velocity_para
           plasmafx%data(nr,nd+8) = plasmaf_in%data(nr,ns)%velocity_perp
+          plasmafx%data(nr,nd+9) = plasmaf_in%data(nr,ns)%zave
+          plasmafx%data(nr,nd+10)= plasmaf_in%data(nr,ns)%z2ave
+          plasmafx%data(nr,nd+11)= plasmaf_in%data(nr,ns)%density_fastion
+          plasmafx%data(nr,nd+12)= plasmaf_in%data(nr,ns)%energy_fastion
        enddo
        plasmafx%data(nr,plasmafx%ndmax) = plasmaf_in%qinv(nr)
     enddo
@@ -149,7 +164,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_plasmaf_type),intent(inout) :: plasmaf_out
+    type(bpsd_plasmaf_type),intent(out) :: plasmaf_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
     real(dp), dimension(:), ALLOCATABLE :: v
@@ -174,19 +189,19 @@ contains
     else
        mode=1
     endif
-    plasmaf_out%nsmax = (plasmafx%ndmax-1)/8
+    plasmaf_out%nsmax = (plasmafx%ndmax-1)/12
 
     CALL bpsd_adjust_array1D(plasmaf_out%rho,plasmaf_out%nrmax)
     CALL bpsd_adjust_array1D(plasmaf_out%qinv,plasmaf_out%nrmax)
     CALL bpsd_adjust_plasmaf_data(plasmaf_out%data,plasmaf_out%nrmax, &
                                                    plasmaf_out%nsmax)
 
-    if(mode.eq.0) then
+!    if(mode.eq.0) then
        plasmaf_out%time  = plasmafx%time
        do nr=1,plasmafx%nrmax
           plasmaf_out%rho(nr)=plasmafx%rho(nr)
           do ns=1,plasmaf_out%nsmax
-             nd=8*(ns-1)
+             nd=12*(ns-1)
              plasmaf_out%data(nr,ns)%density         =plasmafx%data(nr,nd+1)
              plasmaf_out%data(nr,ns)%temperature     =plasmafx%data(nr,nd+2)
              plasmaf_out%data(nr,ns)%temperature_para=plasmafx%data(nr,nd+3)
@@ -195,12 +210,16 @@ contains
              plasmaf_out%data(nr,ns)%velocity_pol    =plasmafx%data(nr,nd+6)
              plasmaf_out%data(nr,ns)%velocity_para   =plasmafx%data(nr,nd+7)
              plasmaf_out%data(nr,ns)%velocity_perp   =plasmafx%data(nr,nd+8)
+             plasmaf_out%data(nr,ns)%zave            =plasmafx%data(nr,nd+9)
+             plasmaf_out%data(nr,ns)%z2ave           =plasmafx%data(nr,nd+10)
+             plasmaf_out%data(nr,ns)%density_fastion =plasmafx%data(nr,nd+11)
+             plasmaf_out%data(nr,ns)%energy_fastion  =plasmafx%data(nr,nd+12)
           enddo
           plasmaf_out%qinv(nr)=plasmafx%data(nr,plasmafx%ndmax)
        enddo
        ierr=0
        return
-    endif
+!    endif
 
     if(plasmafx%status.eq.2) then
        CALL bpsd_adjust_array3D(plasmafx%spline,4,plasmafx%nrmax, &
@@ -226,7 +245,7 @@ contains
           call bpsd_spl1DF(plasmaf_out%rho(nr),v(nd),plasmafx,nd,ierr)
        enddo
        do ns=1,plasmaf_out%nsmax
-          nd=8*(ns-1)
+          nd=12*(ns-1)
           plasmaf_out%data(nr,ns)%density          = v(nd+1)
           plasmaf_out%data(nr,ns)%temperature      = v(nd+2)
           plasmaf_out%data(nr,ns)%temperature_para = v(nd+3)
@@ -235,6 +254,10 @@ contains
           plasmaf_out%data(nr,ns)%velocity_pol     = v(nd+6)
           plasmaf_out%data(nr,ns)%velocity_para    = v(nd+7)
           plasmaf_out%data(nr,ns)%velocity_perp    = v(nd+8)
+          plasmaf_out%data(nr,ns)%zave             = v(nd+9)
+          plasmaf_out%data(nr,ns)%z2ave            = v(nd+10)
+          plasmaf_out%data(nr,ns)%density_fastion  = v(nd+11)
+          plasmaf_out%data(nr,ns)%energy_fastion   = v(nd+12)
        enddo
        plasmaf_out%qinv(nr)  = v(plasmafx%ndmax)
     enddo
@@ -279,6 +302,20 @@ contains
           write(6,*) '---- plasmafx%velocity_perp(',ns,')'
           write(6,'(1P5E12.4)') &
                      (plasmaf_out%data(nr,ns)%velocity_perp, &
+                     nr=1,plasmaf_out%nrmax)
+          write(6,*) '---- plasmafx%zave(',ns,')'
+          write(6,'(1P5E12.4)') &
+                     (plasmaf_out%data(nr,ns)%zave, &
+                     nr=1,plasmaf_out%nrmax)
+          write(6,*) '---- plasmafx%z2ave(',ns,')'
+          write(6,'(1P5E12.4)') &
+                     (plasmaf_out%data(nr,ns)%z2ave, &
+                     nr=1,plasmaf_out%nrmax)
+          write(6,'(1P5E12.4)') &
+                     (plasmaf_out%data(nr,ns)%density_fastion, &
+                     nr=1,plasmaf_out%nrmax)
+          write(6,'(1P5E12.4)') &
+                     (plasmaf_out%data(nr,ns)%energy_fastion, &
                      nr=1,plasmaf_out%nrmax)
        enddo
        write(6,*) '---- plasmafx%qinv'
