@@ -33,7 +33,7 @@ libbpsd.a: $(OBJS)
 	$(LD) $(LDFLAGS) $@ $(OBJS)
 
 clean:
-	-rm -f core a.out *.o *.mod ./*~ ./#* *.a $(MOD)/*.mod
+	-rm -f core a.out *.o *.mod ./*~ ./#* *.a $(OBJDIR)/*.o $(MOD)/*.mod
 
 veryclean: clean
 
