@@ -21,7 +21,13 @@ MODINCLUDE= -I./$(MOD) \
             -I../wrx/$(MOD) \
             -I../lib/$(MOD) -I../mtxp/$(MOD) -I../../bpsd/$(MOD)
 
-LIB_AL=`pkg-config --libs --cflags al-fortran`
+#LIB_AL=`pkg-config --libs --cflags al-fortran`
+#-Wl,--defsym,DD_VER_3.41.0=0
+#-Wl,--defsym,AL_VER_5.2.4=0
+
+LIB_AL=-I/Users/fukuyama/imas/al-install/lib/pkgconfig/../../include/fortran -I/Users/fukuyama/imas/al-install/lib/pkgconfig/../../include -L/Users/fukuyama/imas/al-install/lib/pkgconfig/../../lib -lal-fortran-3.41.0  -Wl,-rpath,/Users/fukuyama/imas/al-install/lib/pkgconfig/../../lib -lal -Wl,-rpath,/Users/fukuyama/imas/al-install/lib/pkgconfig/../../lib
+
+
 F90INCMOD=$(LIB_AL) $(MODINCLUDE)
 
 OBJDIR=./obj
@@ -32,7 +38,7 @@ ${OBJDIR}/%.o:%.f90
 SRCS = task_ids_equilibrium.f90 \
        task_ids_core_profiles.f90 \
        task_ids_ec_launchers.f90 \
-#       task_ids_waves.f90 
+#       task_ids_waves.f90
 
 OBJS=$(addprefix $(OBJDIR)/, $(SRCS:.f90=.o))
 
@@ -51,6 +57,11 @@ libs: libids.a
 # test ids
 
 testids: libs $(OBJDIR)/testids.o
+	echo $(FLINKER)
+	echo $(LIBS)
+	echo $(FFLAGS)
+	echo $(FLIBS)
+	echo $(LIBX_MTX)
 	$(FLINKER) $(OBJDIR)/testids.o $(LIBS) -o $@ $(FFLAGS) $(FLIBS) $(LIBX_MTX)
 
 
