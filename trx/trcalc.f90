@@ -128,11 +128,11 @@
                           +SNB_NSNR(NS_e,NR)+SEX(NR,NS_e)+SPSC(NR,NS_e)
                   ELSE IF(NS.EQ.NS_D) THEN
                      SSIN(NR,NS_D)= PN(NS_D)*SIE(NR)/(PN(NS_D)+PN(NS_T)) &
-                          -SNF_NSNR(NS_D,NR)+SNB_NSNR(NS_D,NR) &
+                          +SNF_NSNR(NS_D,NR)+SNB_NSNR(NS_D,NR) &
                           +SEX(NR,NS_D)+SPSC(NR,NS_D)
                   ELSE IF(NS.EQ.NS_T) THEN
                      SSIN(NR,NS_T)= PN(NS_T)*SIE(NR)/(PN(NS_D)+PN(NS_T)) &
-                          -SNF_NSNR(NS_T,NR)+SNB_NSNR(NS_T,NR) &
+                          +SNF_NSNR(NS_T,NR)+SNB_NSNR(NS_T,NR) &
                           +SEX(NR,NS_T)+SPSC(NR,NS_T)
                   ELSE IF(NS.EQ.NS_A) THEN
                      SSIN(NR,NS_A)= SNF_NSNR(NS_A,NR)+SNB_NSNR(NS_A,NR) &

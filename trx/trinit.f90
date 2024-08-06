@@ -530,9 +530,9 @@ CONTAINS
       !       53:ON He4 (DHe3) with NB beam component without particle source
       !       54:ON He4 (DHe3) with NB beam component particle source
 
-      nnfmax=0
+      nnfmax=1
       DO nnf=1,nnfm
-         model_nnf(nnf)  = 1
+         model_nnf(nnf)  = 0
       END DO
 
       !     ==== RADIATION ====
@@ -575,9 +575,9 @@ CONTAINS
       !  ns_nnb(nnbm)  : Particle species number
       !  nrmax_nnb(nnbm): number of division of NB profile      
 
-      NNBMAX=0
+      NNBMAX=1
       DO NNB=1,NNBM
-         model_nnb(nnb) = 1    ! 
+         model_nnb(nnb) = 0
          ns_nnb(nnb)    = 2
          nrmax_nnb(nnb) = 10
          PNBIN(NNB)  = 0.D0

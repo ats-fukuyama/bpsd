@@ -28,11 +28,21 @@ CONTAINS
            rs_prof(:),rn_prof(:),rdn_prof(:),uprof(:,:)
       INTEGER:: nrmax_prof,ierr,i
       REAL(rkind):: R1,RN1
+
+      ! *** number of radial mesh ***
       
       IF(RHOA.NE.1.D0) NRMAX=NROMAX
+      
+      ! *** set radial mesh: RG: grid, RM: center  *** 
+      
       DO NR=1,NRMAX
          RG(NR) = DBLE(NR)*DR
          RM(NR) =(DBLE(NR)-0.5D0)*DR
+      END DO
+
+      ! *** initialize radial variables ***
+
+      DO NR=1,NRMAX
          VTOR(NR)=0.D0
          VPAR(NR)=0.D0
          VPRP(NR)=0.D0
@@ -50,6 +60,8 @@ CONTAINS
          END DO
       END DO
 
+      ! *** read intial profile data from knam_prof ***
+      
       SELECT CASE(model_prof)
       CASE(11)
          CALL FROPEN(21,knam_prof,1,0,'PN',ierr)
@@ -58,6 +70,9 @@ CONTAINS
                  'XX file open error: knam_prof: ierr=',ierr
             STOP
          END IF
+
+         ! --- count number of data ---
+         
          I=0
          READ(21,'(A)')
 100      CONTINUE
@@ -70,6 +85,9 @@ CONTAINS
          nrmax_prof=I-1
          ALLOCATE(rs_prof(nrmax_prof),rn_prof(nrmax_prof))
          REWIND(21)
+
+         ! --- read electron density profile data ---
+         
          READ(21,'(A)')
 300      CONTINUE
          DO I=1,nrmax_prof
@@ -81,6 +99,8 @@ CONTAINS
 390      WRITE(6,*) 'XX prof data error'
          STOP
                
+         ! --- set spline data for electron density profile ---
+         
 400      CONTINUE
          WRITE(6,*) nrmax_prof,rs_prof(1),rs_prof(nrmax_prof)
          ALLOCATE(rdn_prof(nrmax_prof))
@@ -97,20 +117,21 @@ CONTAINS
       DO nr=1,nrmax
          SELECT CASE(model_prof)
          CASE(11)
+            ! --- set interpolated electron density profile ---
             CALL SPL1DF(RM(nr),RN(nr,1),rs_prof,uprof,nrmax_prof,ierr)
             IF(ierr.NE.0) THEN
                WRITE(6,*) nr,RM(nr),rs_prof(1),rs_prof(nrmax_prof)
                WRITE(6,*) 'XX prof splinef error !',ierr
                STOP
             END IF
+            ! --- set non-electron density profile ---
             DO ns=2,nsmax
                RN(nr,ns)=PN(ns)/PN(1)*RN(nr,1)
             END DO
             WRITE(6,'(A,I6,5ES12.4)') &
                  'prof: ',nr,RM(nr),RN(nr,1),RN(nr,2),RN(nr,3),RN(nr,4)
+            ! --- set temperature and rotation profile ---
             DO ns=1,nsmax
-               PROF   = (1.D0-(ALP(1)*RM(NR))**PROFN1(NS))**PROFN2(NS)
-               RN(NR,NS) = (PN(NS)-PNS(NS))*PROF+PNS(NS)
                PROF   = (1.D0-(ALP(1)*RM(NR))**PROFT1(NS))**PROFT2(NS)
                RT(NR,NS) = (PT(NS)-PTS(NS))*PROF+PTS(NS)
                PROF   = (1.D0-(ALP(1)*RM(NR))**PROFU1(NS))**PROFU2(NS)
@@ -118,7 +139,8 @@ CONTAINS
             END DO
             
          CASE default
-            
+            ! --- set default profiles ---
+
             DO ns=1,nsmax
                PROF   = (1.D0-(ALP(1)*RM(NR))**PROFN1(NS))**PROFN2(NS)
                RN(NR,NS) = (PN(NS)-PNS(NS))*PROF+PNS(NS)
@@ -128,7 +150,7 @@ CONTAINS
                RU(NR,NS) = (PU(NS)-PUS(NS))*PROF+PUS(NS)
             END DO
          END SELECT
-
+         
          PEX(NR,1:NSM) = 0.D0
          SEX(NR,1:NSM) = 0.D0
          PRF(NR,1:NSM) = 0.D0
