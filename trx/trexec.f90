@@ -560,6 +560,7 @@ CONTAINS
                  +PNB_NNBNR(NNB,NR)*DT/(RKEV*1.D20)
             AY(NNB,NR)=1.D0+ADV/TAUB(NNB,NR)
          END DO
+         
          DO NNF=1,NNFMAX
             Y(NNBMAX+NNF,NR)=(1.D0-PRV/TAUF(NNF,NR))*YV(NNBMAX+NNF,NR) &
                  +PNF_NSNNFNR(NS_NNF(NNF),NNF,NR)*DT/(RKEV*1.D20)
