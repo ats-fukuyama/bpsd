@@ -20,12 +20,12 @@ CONTAINS
 
     NFMAX=NNBMAX+NNFMAX
     DO NNF=1,NNFMAX
-       IF(model_nnf(nnf).GE. 1.AND.model_nnf(nnf).LT.10) ns_nnf(nnf)=NS_A
-       IF(model_nnf(nnf).GE.11.AND.model_nnf(nnf).LT.20) ns_nnf(nnf)=NS_T
-       IF(model_nnf(nnf).GE.21.AND.model_nnf(nnf).LT.30) ns_nnf(nnf)=NS_D
-       IF(model_nnf(nnf).GE.31.AND.model_nnf(nnf).LT.40) ns_nnf(nnf)=NS_He3
-       IF(model_nnf(nnf).GE.41.AND.model_nnf(nnf).LT.50) ns_nnf(nnf)=NS_H
-       IF(model_nnf(nnf).GE.51.AND.model_nnf(nnf).LT.60) ns_nnf(nnf)=NS_A
+       IF(model_nnf(nnf).GE. 0.AND.model_nnf(nnf).LT.10) ns_nnf(nnf)=NS_A
+       IF(model_nnf(nnf).GE.10.AND.model_nnf(nnf).LT.20) ns_nnf(nnf)=NS_T
+       IF(model_nnf(nnf).GE.20.AND.model_nnf(nnf).LT.30) ns_nnf(nnf)=NS_D
+       IF(model_nnf(nnf).GE.30.AND.model_nnf(nnf).LT.40) ns_nnf(nnf)=NS_He3
+       IF(model_nnf(nnf).GE.40.AND.model_nnf(nnf).LT.50) ns_nnf(nnf)=NS_H
+       IF(model_nnf(nnf).GE.50.AND.model_nnf(nnf).LT.60) ns_nnf(nnf)=NS_A
     END DO
 
     CALL allocate_trcomm(ierr)

@@ -144,6 +144,8 @@ MODULE trcomm_parm
   INTEGER:: NPSCMAX,MDLPSC(npscm),NSPSC(npscm)
   REAL(rkind), DIMENSION(npscm) :: &
        PSCIN,PSCR0,PSCRW
+  REAL(rkind), DIMENSION(npscm) :: &
+       PSCIN_MAX
 
   INTEGER:: NNFMAX,model_nnf(nnfm),ns_nnf(nnfm)
 

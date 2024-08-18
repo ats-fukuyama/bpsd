@@ -813,12 +813,12 @@
 
       IF(NNFMAX.GT.0) THEN
          DO NR=1,NRMAX
-            DO NNF=1,NNFMAX
-               GYR(NR,NNF) = GUCLIP(SNF_NNFNR(NNF,NR))
+            DO NS=1,NSMAX
+               GYR(NR,NS) = GUCLIP(SNF_NSNR(NS,NR))
             END DO
          ENDDO
-         CALL TRGR1D(15.5,24.5, 2.0, 8.0,GRG,GYR,NRMP,NRMAX,NNFMAX, &
-              '@SNF_NNF vs r@',2+INQ)
+         CALL TRGR1D(15.5,24.5, 2.0, 8.0,GRG,GYR,NRMP,NRMAX,NSMAX, &
+              '@SNF_NS vs r@',2+INQ)
       END IF
 
       CALL TRGRTM

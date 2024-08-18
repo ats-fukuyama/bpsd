@@ -28,7 +28,7 @@ MODULE trparm
        PELIN,PELR0,PELRW,PELRAD,PELVEL,PELTIM, &
        pellet_time_start,pellet_time_interval,PELPAT, &
        number_of_pellet_repeat, &
-       PSCIN,PSCR0,PSCRW,NSPSC, &
+       PSCIN,PSCR0,PSCRW,NSPSC,PSCIN_MAX, &
        MDLCD,PBSCD, &
        MDLPR,SYNCABS,SYNCSELF, &
        MDLEDGE,CSPRS, &
@@ -144,7 +144,7 @@ CONTAINS
              ' ',8X,'MDLEQE,MDLEOI,NSMAX,NSZMAX,NSNMAX,KUFDIR,KUFDEV,KUFDCG'/ &
              ' ',8X,'TIME_INT,MODEP,MDNI,MDLJQ,MDLTC,MDLPCK'/ &
              ' ',8X,'KNAMEQ,KNAMEQ2,KNAMTR,KFNLOG,KFNTXT,KFNCVS,'/ &
-             ' ',8X,'MDLPSC,NPSCMAX,PSCIN,PSCR0,PSCRW,NSPSC'/ &
+             ' ',8X,'MDLPSC,NPSCMAX,PSCIN,PSCR0,PSCRW,NSPSC,PSCIN_MAX,'/ &
              ' ',8X,'knam_nfixed,knam_tfixed'/ &
              ' ',8X,'model_nfixed,model_tfixed')
     END SUBROUTINE trplst
