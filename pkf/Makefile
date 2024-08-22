@@ -26,7 +26,8 @@ MODINCLUDE= -I./$(MOD) -I../lib/$(MOD) -I../mtxp/$(MOD) \
             -I../../bpsd/$(MOD)
 
 SRCS = libpgkf.f90 \
-       libpdkf.f90
+       libpdkf.f90 \
+       libpdkf2.f90 \
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.f90=.o))
 
@@ -66,5 +67,6 @@ veryclean: clean
 
 $(OBJDIR)/plotpkf.o: plotpkf.f90 libpdkf.f90 libpgkf.f90
 $(OBJDIR)/libpdkf.o: libpdkf.f90
+$(OBJDIR)/libpdkf2.o: libpdkf2.f90
 $(OBJDIR)/libpgkf.o: libpgkf.f90
 

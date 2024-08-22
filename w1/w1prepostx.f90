@@ -127,11 +127,6 @@ CONTAINS
 
     RW=2.D6*PI*RF
 
-!    DX=2.D0*RB/(NXMAX-1)
-!    DO NX=1,NXMAX
-!       XA(NX)=DX*(NX-1)-RB
-!    END DO
-
     NSACM=0
     DO NS=1,NSMAX
        FWC=AEE*PZ(NS)*BB/(AMP*PA(NS))
@@ -144,9 +139,13 @@ CONTAINS
     END DO
 
     IF(NSACM.EQ.0.OR.DXFACT.LT.1.D-6) THEN
-       DX=2.D0*RB/DBLE(NXMAX-1)
+!       DX=2.D0*RB/DBLE(NXMAX-1)
+!       DO NX=1,NXMAX
+!          XA(NX)=DBLE(NX-1)*DX-RB
+!       END DO
+       DX=RB/DBLE(NXMAX-1)
        DO NX=1,NXMAX
-          XA(NX)=DBLE(NX-1)*DX-RB
+          XA(NX)=DBLE(NX-1)*DX
        END DO
     ELSE
        FVT=AEE*1.D3/(AMP*PA(NSACM))

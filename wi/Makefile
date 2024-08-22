@@ -7,7 +7,7 @@ include ../make.header
 FFLAGS=$(OFLAGS)
 #FFLAGS=$(DFLAGS)
 
-MODINCLUDE=-I $(MOD) -I../../bpsd/$(MOD) -I../lib/$(MOD)
+MODINCLUDE=-I $(MOD) -I../pkf/$(MOD) -I../../bpsd/$(MOD) -I../lib/$(MOD) 
 
 .f.o :
 	$(FCFIXED) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
@@ -22,7 +22,8 @@ SRCSFREE = wicomm.f90 wiparm.f90 wiprep.f90 \
 
 OBJS = $(SRCSFIXED:.f=.o) $(SRCSFREE:.f90=.o) 
 
-LIBS = libwi.a ../lib/libtask.a ../lib/libgrf.a ../../bpsd/libbpsd.a
+LIBS = libwi.a ../pkf/libpkf.a \
+       ../lib/libtask.a ../lib/libgrf.a ../../bpsd/libbpsd.a
 
 all : libs wi plotwi plotwi2
 
@@ -32,6 +33,8 @@ all : libs wi plotwi plotwi2
 	(cd ../lib; make libtask.a)
 ../lib/libgrf.a:
 	(cd ../lib; make libgrf.a)
+../lib/libpkf.a:
+	(cd ../pkf; make libpkf.a)
 
 libwi.a: $(OBJS)
 	$(LD) $(LDFLAGS) libwi.a $(OBJS)
@@ -40,6 +43,7 @@ libs:
 	(cd ../../bpsd; make libbpsd.a)
 	(cd ../lib; make libtask.a)
 	(cd ../lib; make libgrf.a)
+	(cd ../pkf; make libpkf.a)
 
 wi : $(LIBS) wimain.o
 	$(FCFREE) wimain.o $(LIBS) -o $@ $(FFLAGS) $(FLIBS) \

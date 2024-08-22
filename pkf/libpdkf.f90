@@ -43,11 +43,11 @@ CONTAINS
       REAL(rkind):: H0,EPS,SR1,SI1,SR,SI,ESR,ESI,SR2,SI2,PARITY,SKR,SKI
 
       G2=HP
-      G3=X/BETA
+      G3=X/ALPHA
       G4=0.5D0*ALPHA*BETA
-      G5=RKY*BETA
+      G5=RKY*ALPHA
       H0=0.5D0
-      EPS=1.D-5
+      EPS=1.D-10
       ILST=0
 
       SR1=0.D0

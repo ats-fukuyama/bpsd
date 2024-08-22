@@ -1,3 +1,5 @@
+! dptnsr0.f90
+
 MODULE DPTNSR0
 
 CONTAINS
@@ -154,7 +156,7 @@ CONTAINS
          CALL DPTNFK2(CW,CKPR,CKPP,NS,mag,plfw,CLDISP)
       CASE(21) ! old WM drift kinetic model
          CALL DPTNDK0(CW,CKPR,CKPP,NS,mag,plfw,grd,CLDISP)
-      CASE(31) ! old WM drift kinetic model
+      CASE(31) ! kinetic with cold ring beam plasma model
          CALL dp_tnsb1(CW,CKPR,CKPP,NS,mag,plfw,CLDISP)
       CASE DEFAULT
          WRITE(6,*) 'XX WRONG MODELP IN DPTENS: ID1=',ID1

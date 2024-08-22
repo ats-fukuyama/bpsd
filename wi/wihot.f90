@@ -59,22 +59,50 @@ CONTAINS
 
       USE wicomm
       USE wigcom
+      USE libgrf
+      USE libpdkf
       IMPLICIT NONE
       REAL(rkind):: dx,rky,x
       COMPLEX(rkind):: CS
       INTEGER(ikind):: J,L,NW
+      REAL(rkind):: XU(-nwmax:nwmax),YU(-nwmax:nwmax,2,4)
+      COMPLEX(rkind):: CVL,CV(2,-nwmax:nwmax)
 
+      WRITE(6,'(A,2ES12.4,I6)') '@@xmin,xmax,  nxmax=',xmin,xmax,nxmax
+      WRITE(6,'(A,2ES12.4,I6)') '@@xgmin,xgmax,nwmax=',xgrid(0),xgrid(nxmax),nwmax
       DX=(XMAX-XMIN)/NXMAX
       RKY=ANY
       DO J=1,2
          N1=J
          DO NW=0,NWMAX
             X=NW*DX
-            CALL EUL(X,RKY,CS,5,L)
-            CU(J, NW)=CS
-            CU(J,-NW)=CS
+!            CALL EUL(X,RKY,CS,5,L)
+            CVL=pdkf(x,beta,alfa,any,10,J)
+!            CU(J, NW)=CS
+!            CU(J,-NW)=CS
+            CU(J, NW)=CVL
+            CU(J,-NW)=CVL
          END DO
       END DO
+      DO NW=-NWMAX,NWMAX
+         XU( NW)= NW*DX
+         YU(NW,1,1)= REAL(CU(1,NW))
+         YU(NW,1,2)= AIMAG(CU(1,NW))
+         YU(NW,1,3)= REAL(CU(2,NW))
+         YU(NW,1,4)= AIMAG(CU(2,NW))
+!         YU(NW,2,1)= REAL(CV(1,NW))
+!         YU(NW,2,2)= AIMAG(CV(1,NW))
+!         YU(NW,2,3)= REAL(CV(2,NW))
+!         YU(NW,2,4)= AIMAG(CV(2,NW))
+      END DO
+      
+      CALL pages
+      CALL grd1d(1,xu,yu(:,:,1),2*NWMAX+1,2*NWMAX+1,1,'@UR@',0)
+      CALL grd1d(2,xu,yu(:,:,2),2*NWMAX+1,2*NWMAX+1,1,'@UI@',0)
+      CALL grd1d(3,xu,yu(:,:,3),2*NWMAX+1,2*NWMAX+1,1,'@VR@',0)
+      CALL grd1d(4,xu,yu(:,:,4),2*NWMAX+1,2*NWMAX+1,1,'@VI@',0)
+      CALL pagee
+      
       RETURN
     END SUBROUTINE SUBFW
 
@@ -376,6 +404,7 @@ CONTAINS
       INTEGER(ikind):: ILST,K
       REAL(rkind):: H0,SR1,SI1,SR,SI,ESR,ESI,SR2,SI2,PARITY,SKR,SKI,BETA0
 
+      EPS_KF=1.D-10
       BETA0=BETA
       IF(XMAX.GE.500.D0.AND.ALFA*XMAX.LT.10.D0) THEN
          IF(XMAX-X.LT.Bwidth) THEN

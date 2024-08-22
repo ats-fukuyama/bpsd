@@ -196,8 +196,7 @@ CONTAINS
     IND=0
     DO NS=1,NSMAX
        IF(MODELV(NS).EQ.2.OR. &
-          MODELV(NS).EQ.4.OR. &
-          MODELV(NS).EQ.9) IND=1
+          MODELV(NS).EQ.4) IND=1
     END DO
     IF(IND.EQ.1) THEN ! load Fokker-Planck data
        CALL DPLDFP(IERR)

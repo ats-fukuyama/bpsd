@@ -48,7 +48,7 @@ SRCS = $(SRC0)
 
 OBJS = $(SRCFIXED:.f=.o) $(SRCFREE:.f90=.o)
 
-LIBS = libwm.a ../dp/libdp.a ../eq/libeq.a ../pl/libpl.a ../dp/libdp.a \
+LIBS = libwm.a ../dp/libdp.a ../eq/libeq.a ../pl/libpl.a \
        $(LIBMTXP) ../lib/libgrf.a ../lib/libtask.a ../../bpsd/libbpsd.a 
 
 .f.o :
