@@ -54,6 +54,7 @@ PROGRAM testpkf
      CASE(0)
         WRITE(6,'(A)') '## point:'
 21      CONTINUE
+        WRITE(6,'(A)') '## n1,m,x,alpha,beta,rky'
         WRITE(6,'(A,2I4,4ES12.4)') '##', n1,m,x,alpha,beta,rky
         READ(5,*,ERR=21,END=11) n1,m,x,alpha,beta,rky
         IF(n1.EQ.1.OR.n1.EQ.2) THEN
@@ -73,7 +74,7 @@ PROGRAM testpkf
           '## ', n1,m,alpha,beta,rky,xmin,xmax,nxmax
         READ(5,*,ERR=31,END=11) n1,m,alpha,beta,rky,xmin,xmax,nxmax
 
-        IF(nxmax.LT.1) GO TO 11
+        IF(nxmax.LT.1) GO TO 31
      
         IF(n1.EQ.1.OR.n1.EQ.2) THEN
            ALLOCATE(xa(nxmax),fa(nxmax,2))
@@ -94,6 +95,7 @@ PROGRAM testpkf
         ELSE
            WRITE(6,*) 'XX n1 must be 1 or 2.'
         END IF
+        GO TO 31
         
      CASE(2)
         WRITE(6,'(A)') '## 1D multi alpha scan:'
@@ -141,7 +143,7 @@ PROGRAM testpkf
      CASE DEFAULT
         WRITE(6,'(A,I4)') 'XX undefined mode=',mode
      END SELECT
-     GO TO 11
+     GO TO 41
            
   CASE(9)
      GO TO 9000
