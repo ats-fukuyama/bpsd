@@ -43,9 +43,9 @@ CONTAINS
       REAL(rkind):: H0,EPS,SR1,SI1,SR,SI,ESR,ESI,SR2,SI2,PARITY,SKR,SKI
 
       G2=HP
-      G3=X/ALPHA
+      G3=X/BETA
       G4=0.5D0*ALPHA*BETA
-      G5=RKY*ALPHA
+      G5=RKY*BETA
       H0=0.5D0
       EPS=1.D-10
       ILST=0
@@ -56,6 +56,7 @@ CONTAINS
          DO K=M-1,0,-1
             G1=DBLE(K)
             CALL DEFTC2(SR,SI,ESR,ESI,H0,EPS,ILST)
+            WRITE(21,'(A,I4,6es12.4)') 'K: ',K,X,G3,SR,SI
             SR1=SR1+SR
             SI1=SI1+SI
          END DO
@@ -63,6 +64,7 @@ CONTAINS
 
       G1=DBLE(M)
       CALL DEFTC2(SR,SI,ESR,ESI,H0,EPS,ILST)
+      WRITE(21,'(A,I4,6es12.4)') 'M: ',M,X,G3,SR,SI
       A(1)=SR
       SR2=0.5D0*SR
       B(1)=SI
@@ -75,6 +77,7 @@ CONTAINS
       IF(L.GE.LMAX) GOTO 9000
       G1=DBLE(M+L)
       CALL DEFTC2(SR,SI,ESR,ESI,H0,EPS,ILST)
+      WRITE(21,'(A,I4,6es12.4)') 'ML:',M+L,X,G3,SR,SI
       A(L+1)=SR*PARITY
       B(L+1)=SI*PARITY
       DO K=L,1,-1    
@@ -113,7 +116,8 @@ CONTAINS
          T=0.5D0*G2*XP
          T2=T*T
          YY=-0.5D0*(G3*G3/T2+(G4*G4+G5*G5)*T2)
-         IF(ABS(YY).LT.352.D0.AND.ABS(T).LT.1.D4) THEN
+!         IF(ABS(YY).LT.352.D0.AND.ABS(T).LT.1.D4) THEN
+         IF(ABS(YY).LT.352.D0) THEN
             SELECT CASE(N1)
             CASE(1)
                AN2=1.D0
@@ -126,7 +130,8 @@ CONTAINS
             FUNR=AN2*0.5*G2*DEXP(YY)*DCOS(T)
          ELSE
             FUNR=0.D0
-         ENDIF 
+         ENDIF
+         WRITE(21,'(A,4ES12.4)') 'XP,T,YY,FUNR=',XP,T,YY,FUNR
       ELSE
          T=G2*(X+2.D0*G1)
          T2=T*T

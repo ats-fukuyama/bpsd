@@ -24,10 +24,14 @@ PROGRAM plotpkf
   nymax=101
   xmin=0.001D0
   xmax=1000.D0
+  nxmax=2
+  xmax=0.006D0
+  xmax=0.007D0
   alpha=0.1D0
   alpha_min=0.1D0
   alpha_max=1000.D0
-  beta=1.0D0
+!  beta=1.0D0
+  beta=300.0D0
   beta_min=0.001D0
   beta_max=1000.D0
   rky=0.D0
@@ -65,6 +69,7 @@ PROGRAM plotpkf
      DO nx=1,nxmax
         xa(nx)=xmin+dx*(nx-1)
         cf_=pdkf(xa(nx),alpha,beta,rky,5,n1)
+        WRITE(21,'(A,3ES12.4)') 'x,cf        =',xa(nx),cf_
         fa(nx,1)=REAL(cf_)
         fa(nx,2)=AIMAG(cf_)
      END DO
