@@ -105,6 +105,9 @@ distclean: clean
 	cd ../eq && make clean
 	cd ../lib && make clean
 
+testsigma: $(OBJDIR)/testsigma.o
+	$(FLINKER) $(OBJDIR)/testsigma.o $(LIBS2) -o $@ $(FFLAGS) $(FLIBS) $(LIBX_MTX)
+
 $(OBJDIR)/trcomm.o : trcomm.f90 ../pl/plcomm.f90 
 $(OBJDIR)/trmain.o : trmain.f90 trcomm.f90  
 $(OBJDIR)/trmenu.o : trmenu.f90 trcomm.f90

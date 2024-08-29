@@ -104,9 +104,11 @@ CONTAINS
          '       MODELG,MODELB,MODELN,MODELQ,MODEL_PROF,MODEL_NPROF,', &
          '       RHOGMN,RHOGMX,MODEFR,MODEFW,IDEBUG,', &
          '       KNAMEQ,KNAMWR,KNAMWM,KNAMFP,KNAMFO,KNAMPF,', &
-         '       MODELP,MODELV,NCMIN,NCMAX,PMAX,EMAX,', &
-         '       NPMAX,NTHMAX,NRMAX,NSAMAX,RHON_MIN,RHON_MAX,', &
-         '       NHHMAX,NPPMAX,factor_nth,factor_nhh,factor_nph,', &
+         '       MODELP,MODELV,NCMIN,NCMAX,PMAX_DP,EMAX_DP,', &
+         '       NRMAX,NTHMAX,NHHMAX,NPPMAX,', &
+         '       factor_nth,factor_nhh,factor_nph,', &
+         '       NRMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_DP,RHON_MIN,RHON_MAX,', &
+         '       NS_NSA_SP,EPSRT,LMAXRT,', &
          '       NSUMAX,NSWMAX,B0_FACT,', &
          '       RF,RFI,RD,PRFIN,BETAJ,NTH0,NPH0,NHC,', &
          '       NAMAX,AJ,AEWGT,AEWGZ,APH,THJ1,THJ2,PHJ1,PHJ2,ANTANG,', &
