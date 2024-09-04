@@ -105,11 +105,7 @@
 
       IF(MODELD.EQ.1) CALL FP_CALR
 
-      WRITE(70,*) '@@@ point drr 3'
-      CALL fp_debug_drr
       IF(MODELD.EQ.2) CALL FP_CALRD_EM
-      WRITE(70,*) '@@@ point drr 4'
-      CALL fp_debug_drr
 
 !     ----- Particle source term -----
 

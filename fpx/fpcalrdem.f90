@@ -19,7 +19,6 @@ CONTAINS
       REAL(rkind):: factor_c,rhon,ql,rs,factor_r,pfpl,vfpl,factor_t
       REAL(rkind):: sinml,cosml,raml,rk,factor_th
 
-      WRITE(70,*) '@@@ point drr 5'
       CALL fp_debug_drr
 
 !---- Calculation of EM diffusion coefficient ----
@@ -57,10 +56,9 @@ CONTAINS
                   END IF
 !                  WRITE(61,'(4I4,5ES12.4)') NTH,NP,NR,NSA, &
 !                       SINML,RAML,RK,ELLFC(RK,IERR),factor_th
-1                  DRR(NTH,NP,NR,NSA)=factor_c*factor_r**2*factor_t*factor_th
-                  WRITE(61,'(16x,5ES12.4)') &
-                       factor_c,factor_r,factor_t,factor_th,DRR(NTH,NP,NR,NSA)
-                  WRITE(61,'(4I4,5ES12.4)') NTH,NP,NR,NSA
+                  DRR(NTH,NP,NR,NSA)=factor_c*factor_r**2*factor_t*factor_th
+!                  WRITE(61,'(16X,5ES12.4)') &
+!                       factor_c,factor_r,factor_t,factor_th,DRR(NTH,NP,NR,NSA)
                   FRR(NTH,NP,NR,NSA)=0.D0
                   IF(NTH.EQ.3.AND.NP.EQ.3) &
                      WRITE(6,*) 'DRR: NR,NSA:',NR,NSA,factor_c,factor_r,factor_t,factor_th
@@ -69,7 +67,6 @@ CONTAINS
          END DO ! NR
       END DO ! NSA
 
-      WRITE(70,*) '@@@ point drr 6'
       CALL fp_debug_drr
       RETURN
     END SUBROUTINE fp_calrd_em

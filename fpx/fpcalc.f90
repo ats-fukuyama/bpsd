@@ -168,16 +168,10 @@ contains
                ENDIF
             ENDIF
 
-            write(70,*) '@@@ point drr 1'
-            call fp_debug_drr
-
 !     ----- bounce average -----
             IF(MODELA.EQ.1) THEN
                CALL FPCALC_LAV(NR,NSA)
             ENDIF
-
-            WRITE(70,*) '@@@ point drr 2'
-            CALL fp_debug_drr
 
             !     sum up coefficients by species
             DO NSB=1,NSBMAX
