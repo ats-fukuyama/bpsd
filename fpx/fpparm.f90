@@ -121,7 +121,8 @@ contains
            OUTPUT_TXT_F1,OUTPUT_TXT_DELTA_F,OUTPUT_TXT_HEAT_PROF, &
            OUTPUT_TXT_BEAM_WIDTH,OUTPUT_TXT_BEAM_DENS,NI_RATIO, &
            nthpmax, max_stp, model_obload, model_mkcsv, &
-           dir_text_data,dir_binary_data
+           dir_text_data,dir_binary_data, &
+           rd_em_amp,rd_em_k_ratio
       READ(nid,FP,IOSTAT=ist,ERR=9800,END=9900)
 
       ierr=0
@@ -195,7 +196,7 @@ contains
       WRITE(6,*) '      OUTPUT_TXT_HEAT_PROF,OUTPUT_TXT_BEAM_WIDTH'
       WRITE(6,*) '      OUTPUT_TXT_BEAM_DENS,NI_RATIO'
       WRITE(6,*) '      nthpmax,max_stp,model_obload,model_mkcsv'
-
+      WRITE(6,*) '      rd_em_amp,rd_em_k_ratio'
       RETURN
   END SUBROUTINE fp_plst
 
@@ -236,9 +237,8 @@ contains
       idata( 6)=MODEFR
       idata( 7)=MODEFW
       idata( 8)=MODEL_PROF
-      idata( 9)=MODEL_PROF
 
-      CALL mtx_broadcast_integer(idata,7)
+      CALL mtx_broadcast_integer(idata,8)
       NSMAX =idata( 1)
       MODELG=idata( 2)
       MODELN=idata( 3)
@@ -246,6 +246,7 @@ contains
       IDEBUG=idata( 5)
       MODEFR=idata( 6)
       MODEFW=idata( 7)
+      MODEL_PROF=idata( 8)
 
       rdata( 1)=RR
       rdata( 2)=RA
@@ -884,6 +885,8 @@ contains
       WRITE(6,604) 'target_zeff     ',target_zeff     , &
                    'SPITOT          ',SPITOT
       WRITE(6,606) 'MODEL_FOW       ',MODEL_FOW
+      WRITE(6,604) 'rd_em_amp       ',rd_em_amp
+      WRITE(6,604) 'rd_em_k_ratio   ',rd_em_k_ratio
 
       WRITE(6,*) "-------- PLASMA MODELS --------"
 

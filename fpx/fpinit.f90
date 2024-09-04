@@ -202,7 +202,8 @@ contains
       MODEL_CX_LOSS=0
       RN_NEU0 = 1.D-6
       RN_NEUS = 1.D-5
-!-----RADIAL DIFFUSION--------------------------------------------------
+
+      !-----RADIAL DIFFUSION--------------------------------------------------
 !     DRR0  : radial diffusion coefficient at magnetic axis [m^2/s]
 !     DRRS  : radial diffusion coefficient at plasma surface [m^2/s]
 !     FACTOR_CDBM : Multiplication factor for CDBM model
@@ -219,6 +220,11 @@ contains
       RHO_EDGE   = 0.95D0
       FACTOR_DRR_EDGE=0.1D0
       FACTOR_PINCH=1.0D0
+
+      ! --- EM diffusion --- model_rd=2
+
+      rd_em_amp=0.0D0      ! delta B / B
+      rd_em_k_ratio=1.D0   ! k_perp/k_para
 
 !-----LOSS--------------------------------------------------------------
 !     TLOSS(ns): loss time [s] (0.D0 for no loss)
@@ -290,7 +296,8 @@ contains
 !                 3 for given wave E field model
 !                 4 for wave E field calculated by WM
 !     MODELD: 0 : without radial transport
-!             1 : with radial transport
+!             1 : with radial transport (amp given)
+!             2 : with radial transport (EM diffusion model)
 !     MODELD_RDEP : 0 : fixed:    (DRR0-DRRS)*(1.D0-RHON**2)+DRRS 
 !                   1 : magnetic: QLM(NR)*deltaB_B**2 
 !                   2 : CDBM with FACTOR_CDBM

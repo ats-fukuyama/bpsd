@@ -946,7 +946,8 @@
 ! ***********************************************************
 
       SUBROUTINE FPGRACA(STRING,FGA,MODE,NSA)
-       
+
+      USE fpcomm,ONLY: DRR
       IMPLICIT NONE
       REAL(rkind),DIMENSION(:,:,:,:):: FGA
       REAL(rkind),dimension(NTHMAX+1,NPMAX+1,NRMAX+1):: TEMP
@@ -991,6 +992,7 @@
       ENDIF
       WRITE(STRING1,'(A,A1,I2,A1)') STRING,'(',NSA,')'
       CALL FPGRAC(TRIM(STRING1),TEMP,MODE,NSA)
+      
       RETURN
       END SUBROUTINE FPGRACA
 !---------------------------------------------------

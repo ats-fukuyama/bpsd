@@ -90,6 +90,7 @@
          ENDIF
          TS0(NS) = FCTR(RM(1),RM(2),RT(1,NS),RT(2,NS))
          WST(NS) = 1.5D0*RTSUM*DR*RKEV*1.D14
+         pntot_ns(ns)=RNSUM
       ENDDO
 
 !     +++ for fast particles +++
@@ -237,7 +238,7 @@
             ENDIF
          ENDDO
          IF(NSVN.EQ.1) THEN
-            SLT(NSSN)=SUML*RKEV*1.D14
+            SLT(NSSN)=SUML
          ELSEIF(NSVN.EQ.2) THEN
             PLT(NSSN)=SUML*RKEV*1.D14
          ENDIF
@@ -245,7 +246,6 @@
 
 !     *** Ionization, fusion and NBI fuelling ***
 
-      SIET = SUM(SIE(1:NRMAX)*DVRHO(1:NRMAX))*DR
       SNBT=0.D0
       SNFT=0.D0
       DO NS=1,NSMAX
@@ -269,27 +269,40 @@
       PLST  =SUM(PLT(1:NSMAX))
       SLST  =SUM(SLT(1:NSMAX))
       WTAILT=SUM(WFT(1:NFMAX))
+      pntot =SUM(pntot_ns(1:nsmax))
 
       WPT =WBULKT+WTAILT
       PINT=POHT+PNBT+PRFST+PNFT+PEXST
       POUT=PLST+PCXT+PIET+PRBT+PRCT+PRLT
-      SINT=SIET+SNBT
+      DO ns=1,nsmax
+         SSINT_ns(ns)=SUM(SSIN(nr=1:nrmax,ns))
+      END DO
+      SSINT=SUM(SSINT_ns(ns=2:nsmax)
       SOUT=SLST
 
-!     *** Energy confinement times ***
+!     *** Confinement times ***
 !        TAUE1: steady state
 !        TAUE2: transient
+!        taup1: particle transient (ns=1)
+!        taup2: particle transient (ns=2..nsmax)
 
+      pntot=SUM(pntot_ns(ns=2:nsmax))
       IF(ABS(T-TPRE).LE.1.D-70) THEN
          WPDOT=0.D0
+         PNDOT=0.D0
       ELSE
          WPDOT=(WPT-WPPRE)/(T-TPRE)
+         PNDOT=(pntot-pntot_pre)/(T-TPRE)
       ENDIF
       WPPRE=WPT
+      pntot_pre=pn_tot
       TPRE=T
 
       TAUE1=WPT/PINT
       TAUE2=WPT/(PINT-WPDOT)
+      taup1=pntot/pntot
+
+      
 
 !     *** Inductance and one-turn voltage ***
 

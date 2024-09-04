@@ -67,6 +67,8 @@ MODULE fpcomm_parm
       real(rkind):: NI_RATIO(NSM)
       real(rkind):: FACT_NRAY(NRAYM)
 
+      REAL(rkind):: rd_em_amp,rd_em_k_ratio
+
 !     for read experiment data
       CHARACTER(len=80):: EG_NAME_TMS, EG_NAME_CX, EG_NAME_HA3
       real(rkind),dimension(:,:),pointer:: read_tms_double, read_cx_double !!    containers of profile data
