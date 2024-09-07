@@ -41,11 +41,18 @@ CONTAINS
       REAL(rkind),DIMENSION(LMAX)::  A,B
       INTEGER:: ILST,K
       REAL(rkind):: H0,EPS,SR1,SI1,SR,SI,ESR,ESI,SR2,SI2,PARITY,SKR,SKI
+      REAL(rkind):: TMIN,YMIN,EYMAX
 
       G2=HP
       G3=X/BETA
       G4=0.5D0*ALPHA*BETA
       G5=RKY*BETA
+
+      TMIN=(G3*G3/(G4*G4+G5*G5))**0.25D0
+      YMIN=0.5D0*(G3*G3/TMIN**2+(G4*G4+G5*G5)*TMIN**2)
+      EYMAX=EXP(-YMIN)
+      WRITE(21,'(A,3ES12.4)') 'G3,G4,G5       =',G3,G4,G5
+      WRITE(21,'(A,3ES12.4)') 'TMIN,YMIN,EYMAX=',TMIN,YMIN,EYMAX
       H0=0.5D0
       EPS=1.D-10
       ILST=0
@@ -55,7 +62,9 @@ CONTAINS
       IF(M.NE.0) THEN 
          DO K=M-1,0,-1
             G1=DBLE(K)
+            WRITE(21,*) '@@@ 1:',K
             CALL DEFTC2(SR,SI,ESR,ESI,H0,EPS,ILST)
+            WRITE(21,*) '@@@ 2:',K
             WRITE(21,'(A,I4,6es12.4)') 'K: ',K,X,G3,SR,SI
             SR1=SR1+SR
             SI1=SI1+SI
@@ -63,6 +72,7 @@ CONTAINS
       ENDIF
 
       G1=DBLE(M)
+      WRITE(21,*) '@@@ 3:',M
       CALL DEFTC2(SR,SI,ESR,ESI,H0,EPS,ILST)
       WRITE(21,'(A,I4,6es12.4)') 'M: ',M,X,G3,SR,SI
       A(1)=SR
@@ -150,6 +160,7 @@ CONTAINS
          ELSE
             FUNR=0.D0
          ENDIF
+         WRITE(21,'(A,4ES12.4)') 'X, T,YY,FUNR=',X,T,YY,FUNR
       ENDIF
       RETURN
     END FUNCTION FUNR
@@ -205,6 +216,7 @@ CONTAINS
       REAL(rkind):: HN,HC,HS,CC,XM,XP,CTR,CTI,ATR,ATI
       INTEGER:: N,NP,NM,NMIN,IND,ND
 
+      WRITE(21,*) '@@@ 11:'
       EPS1=EPS**0.75
       H=H0
       X=0.D0
@@ -225,8 +237,10 @@ CONTAINS
       ND=2
       EPSI=MAX(EPS1*H,2.D-17)
       IF(N.EQ.0) ND=1
+      WRITE(21,*) '@@@ 12:',N
 
    10 N=N+ND
+      WRITE(21,*) '@@@ 13:',N
       HN=DBLE(N)*H
       HC=HP*H*COSH(HN)
       IF(IND.NE.1) THEN
@@ -279,6 +293,7 @@ CONTAINS
       GO TO 10
 
   100 CONTINUE
+      WRITE(21,*) '@@@ 13:',H,H0
       ESR=ABS(CSR-CSRP)
       CSRP=CSR
       ESI=ABS(CSI-CSIP)

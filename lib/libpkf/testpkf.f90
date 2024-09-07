@@ -31,9 +31,9 @@ PROGRAM testpkf
   rky=0.D0
   x=0.005
   xmin=0.001D0
-  xmax=1000.D0
+  xmax=0.01D0
   nxmax=101
-  alpha_min=0.001D0
+  alpha_min=100.D0
   alpha_max=1000.D0
   nymax=101
   
@@ -57,6 +57,7 @@ PROGRAM testpkf
         WRITE(6,'(A)') '## n1,m,x,alpha,beta,rky'
         WRITE(6,'(A,2I4,4ES12.4)') '##', n1,m,x,alpha,beta,rky
         READ(5,*,ERR=21,END=11) n1,m,x,alpha,beta,rky
+        IF(n1.EQ.0) GO TO 11
         IF(n1.EQ.1.OR.n1.EQ.2) THEN
            cf_=pdkf(x,alpha,beta,rky,m,n1)
            WRITE(6,'(A,3ES12.4)') 'xa,cf       =',x,cf_
@@ -112,7 +113,7 @@ PROGRAM testpkf
         IF(nxmax.LT.1.OR.nymax.LT.1) GO TO 41
      
         IF(n1.EQ.1.OR.n1.EQ.2) THEN
-           ALLOCATE(xa(nxmax),f2d(nxmax,nymax,2))
+           ALLOCATE(xa(nxmax),ya(nymax),f2d(nxmax,nymax,2))
 
            dx=(log10(xmax)-log10(xmin))/(nxmax-1)
            dy=(log10(alpha_max)-log10(alpha_min))/(nymax-1)
@@ -140,6 +141,8 @@ PROGRAM testpkf
         ELSE
            WRITE(6,*) 'XX n1 must be 1 or 2.'
         END IF
+     CASE(9)
+        GOTO 21
      CASE DEFAULT
         WRITE(6,'(A,I4)') 'XX undefined mode=',mode
      END SELECT
@@ -153,6 +156,7 @@ PROGRAM testpkf
   GO TO 1
 
 9000 CONTINUE
+  CLOSE(21)
   CALL GSCLOS
 END PROGRAM
      

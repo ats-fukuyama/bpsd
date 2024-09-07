@@ -24,8 +24,8 @@ ${OBJDIR}/%.o:%.f
 ${OBJDIR}/%.o:%.f90
 	$(FCFREE) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
 
-SRCM=trcomm.f90 trbpsd.f90
-SRCS=trinit.f90 trparm.f90 trview.f90 \
+SRCS=trcomm.f90 trbpsd.f90 libsigma.f90 \
+     trinit.f90 trparm.f90 trview.f90 \
      trmetric.f90 trfixed.f90 trprof.f90 trprep.f90 \
      trncls.f90 trcytran.f90 trcoll.f90 \
      trfile.f90 trhelp.f90 \
@@ -40,12 +40,9 @@ SRCS=trinit.f90 trparm.f90 trview.f90 \
 SRC2D=trg2d.f90
 SRC3D=trg3d.f90
 
-OBJM=$(addprefix $(OBJDIR)/, $(SRCM:.f90=.o))
 OBJS=$(addprefix $(OBJDIR)/, $(SRCS:.f90=.o))
 OBJ2D=$(addprefix $(OBJDIR)/, $(SRC2D:.f90=.o))
 OBJ3D=$(addprefix $(OBJDIR)/, $(SRC3D:.f90=.o))
-
-OBJTR=$(OBJM) $(OBJS)
 
 LIBS=../trlib/libtrm.a ../eq/libeq.a ../pl/libpl.a ../lib/libmds.a \
      ../lib/libtask.a ../lib/libgrf.a  ../../bpsd/libbpsd.a
@@ -55,11 +52,11 @@ LIBS3=libtr3.a $(LIBS)
 #all: libs tr2 tr3
 all: libs tr2
 
-libtr2.a: $(OBJTR) $(OBJ2D)
-	$(LD) $(LDFLAGS) libtr2.a $(OBJTR) $(OBJ2D)
+libtr2.a: $(OBJS) $(OBJ2D)
+	$(LD) $(LDFLAGS) libtr2.a $(OBJS) $(OBJ2D)
 
-libtr3.a: $(OBJTR) $(OBJ3D)
-	$(LD) $(LDFLAGS) libtr3.a $(OBJTR) $(OBJ3D)
+libtr3.a: $(OBJ) $(OBJ3D)
+	$(LD) $(LDFLAGS) libtr3.a $(OBJS) $(OBJ3D)
 
 ../lib/libgrf.a:
 	(cd ../lib; make libgrf.a)
@@ -131,7 +128,8 @@ $(OBJDIR)/trcoef.o : trcoef.f90 trcomm.f90
 $(OBJDIR)/trajbs.o : trajbs.f90 trcomm.f90
 $(OBJDIR)/trpnb.o  : trpnb.f90  trcomm.f90 
 $(OBJDIR)/trprf.o  : trprf.f90  trcomm.f90 
-$(OBJDIR)/trpnf.o  : trpnf.f90  trcomm.f90 
+$(OBJDIR)/libsigma.o  : libsigma.f90 trcomm.f90 
+$(OBJDIR)/trpnf.o  : trpnf.f90  libsigma.f90 trcomm.f90 
 $(OBJDIR)/trpel.o  : trpel.f90  trcomm.f90 
 $(OBJDIR)/trpsc.o  : trpsc.f90  trcomm.f90 
 

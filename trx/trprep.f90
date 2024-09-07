@@ -14,6 +14,7 @@ CONTAINS
     USE trbpsd
     USE trmetric
     USE trfixed
+    USE libsigma
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: ierr
     INTEGER:: nr,ns,nnf
@@ -48,6 +49,8 @@ CONTAINS
     RIP   = RIPS
 
     icount_of_pellet=0
+
+    CALL set_usigmavmal_dt
 
 !     *** set initial profile ***
 

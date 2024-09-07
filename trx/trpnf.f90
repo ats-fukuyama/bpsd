@@ -187,6 +187,12 @@ CONTAINS
                PTNT= PNB_NNBNR(nnb,NR)*TAUS &
                     /(RN(NR,NS_beam)*1.D20*PNBENG(NNB)*RKEV)
                ! fusion reaction rate
+
+               ! IF (NS_beam.EQ.NS_D) THEN
+               !    TI = TT
+               ! else 
+               !    TI = TD
+
                SSB = SSB+PNB_NNBNR(NNB,NR)*SIGMAB(PNBENG(NNB),EC,TT,PTNT)
                PB  = PB +PNB_NNBNR(NNB,NR)
 !               WRITE(26,'(A,6ES12.4)') 'SSB:',SSB,PNB_NNBNR(NNB,NR), &
@@ -280,23 +286,18 @@ CONTAINS
 !     ***********************************************************
 
       FUNCTION SIGMAM(TD,TT)
+         USE bpsd_kinds
+         USE libsigma
+         IMPLICIT NONE
+         REAL(rkind),INTENT(IN)::  TD,TT
+         REAL(rkind):: TI,SIGMAM
 
-      USE trcomm,ONLY: rkind
-      IMPLICIT NONE
-      REAL(rkind) TD,TT,SIGMAM
-      REAL(rkind) TI,H,ARG
+         TI = (3.D0*ABS(TD)+2.D0*ABS(TT))/5.D0
 
-      TI = (3.D0*ABS(TD)+2.D0*ABS(TT))/5.D0
-      H  = TI/37.D0 + 5.45D0/(3.D0+TI*(1.D0+(TI/37.5D0)**2.8D0))
-      ARG= -20.D0/TI**(1.D0/3.D0)
-      IF(ARG.GE.-100.D0)  THEN
-         SIGMAM = 3.7D-18*TI**(-2.D0/3.D0)*EXP(ARG)/H
-      ELSE
-         SIGMAM = 0.D0
-      ENDIF
-
-      RETURN
-      END FUNCTION SIGMAM
+         SIGMAM=sigmavm_dt(TI)
+         
+         RETURN
+         END FUNCTION SIGMAM
 
 !     ***********************************************************
 
@@ -348,7 +349,7 @@ CONTAINS
                    ! weight factor in SIGMAB 
                    PTNT= PNB_NNBNR(nnb,NR)*TAUS &
                         /(RN(NR,NS_beam)*1.D20*PNBENG(NNB)*RKEV)
-                   ! fusion reaction rate
+                   ! fusion reaction rate 要確認！
                    SSB = SSB+PNB_NNBNR(NNB,NR)*SIGMAB(PNBENG(NNB),EC,TD,PTNT)
                    PB  = PB +PNB_NNBNR(NNB,NR)
                 END DO
@@ -360,10 +361,12 @@ CONTAINS
              ELSE
                 SSB=0.D0
              ENDIF
-             !    粒子数計算　T生成
-             SNF_NSNNFNR(NS_T,NNF,NR) = 0.5*(SS+SSB)*RN(NR,2)*RN(NR,2)*1.D20
-             PNF_NSNNFNR(NS_T,NNF,NR) = SNF_NSNNFNR(NS_T,NNF,NR)*1.01D3*RKEV*1.D20
+             !    粒子数計算　T生成はDD反応の半分であるとして計算。 DHe3の粒子ソースとしての計算は行っていない。
+             SNF_NSNNFNR(NS_T,NNF,NR) = 0.5*0.5*(SS+SSB)*RN(NR,2)*RN(NR,2)*1.D20
+             !パワーバランスではHe3生成、p生成との足し合わせとするため、反応数はSNFの2倍
+             PNF_NSNNFNR(NS_T,NNF,NR) = 2*SNF_NSNNFNR(NS_T,NNF,NR)*((1.01D3+3.03D3+0.82D3)/2)*RKEV*1.D20
              IF(MOD(model_nnf(nnf),2).EQ.1) SNF_NSNNFNR(NS_A,NNF,NR)=0.D0
+            !  本来はDは二つ消失。Hを考慮しない場合はSNFD=-SNFT
              SNF_NSNNFNR(NS_D,NNF,NR) =-SNF_NSNNFNR(NS_T,NNF,NR)
           ENDDO
  
