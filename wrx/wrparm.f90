@@ -78,7 +78,7 @@ CONTAINS
                   NRAYMAX,NSTPMAX,NRSMAX,NRLMAX,LMAXNW, &
                   NPMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_WR,NS_NSA_WR,nsa_grf, &
                   MDLWRI,MDLWRG,MDLWRP,MDLWRQ,MDLWRW,nres_max,nres_type, &
-                  model_fdrv,model_fdrv_ds, &
+                  model_fdrv,model_fdrv_ds,mode_wline,mode_fig, &
                   SMAX,DELS,UUMIN,EPSRAY,DELRAY,DELDER,DELKR,EPSNW,EPSD0, &
                   mode_beam,pne_threshold,bdr_threshold, &
                   Rmax_wr,Rmin_wr,Zmax_wr,Zmin_wr,ra_wr,idebug_wr,KNAMWRW
@@ -128,7 +128,7 @@ CONTAINS
              9X,'NRAYMAX,NSTPMAX,NRSMAX,NRLMAX,LMAXNW,'/ &
              9X,'NPMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_WR,NS_NSA_WR,nsa_grf'/ &
              9X,'MDLWRI,MDLWRG,MDLWRP,MDLWRQ,MDLWRW,nres_max,nres_type,'/ &
-             9X,'model_fdrv,model_fdrv_ds,'/ &
+             9X,'model_fdrv,model_fdrv_ds,mode_wline,mode_fig,'/ &
              9X,'SMAX,DELS,UUMIN,EPSRAY,DELRAY,DELDER,DELKR,EPSNW,EPSD0,'/ &
              9X,'mode_beam,pne_threshold,bdr_thershold'/ &
              9X,'Rmax_wr,Rmin_wr,Zmax_wr,Zmin_wr,ra_wr,idebug_wr'/ &

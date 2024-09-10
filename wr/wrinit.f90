@@ -126,6 +126,9 @@ CONTAINS
 !              4 : Write data every 1000 step
 !              5 : Write data every 10000 step
 
+!     mode_wline: 0: write len,pos,kr,w,pabs
+!                 1: write len,pos,rs,w,pabs 
+
 !     nres_type : plot type of resonance curves
 !              0 : power abs density (max, 50% for nres_max=3)
 !              1 : power flux        (25%, 50%, 75% for nres_max=3)
@@ -154,6 +157,8 @@ CONTAINS
       MDLWRP = 1
       MDLWRQ = 1
       MDLWRW = 0
+
+      model_wline = 0
 
       nres_type = 0
       nres_max = 3

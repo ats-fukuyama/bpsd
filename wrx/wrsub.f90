@@ -829,29 +829,36 @@ CONTAINS
   
   SUBROUTINE wr_write_line(NSTP,X,Y,PABS)
     USE wrcomm
+    USE plprof
+    USE plprofw
     IMPLICIT NONE
     INTEGER,INTENT(IN):: NSTP
     REAL(rkind),INTENT(IN):: X,Y(NEQ),PABS
-    REAL(rkind):: RL,PHIL,ZL,RKRL
+    TYPE(pl_mag_type):: mag
+    REAL(rkind):: RL,PHIL,ZL,RKRL,RS
     INTEGER:: ID
     INTEGER,SAVE:: NSTP_SAVE=-1
 
     IF(MDLWRW.EQ.0) RETURN
 
     IF(NSTP.EQ.0) THEN
-       IF(MODELG.EQ.0.OR.MODELG.EQ.1) THEN
-          WRITE(6,'(A,A)') &
-               '      S          X        ANG          Z    ', &
-               '     RX          W       PABS'
-       ELSE IF(MODELG.EQ.11) THEN
+       SELECT CASE(MODELG)
+       CASE(0,11)
           WRITE(6,'(A,A)') &
                '      S          X          Y          Z    ', &
-               '     RX          W       PABS'
-       ELSE
-          WRITE(6,'(A,A)') &
-               '      S          R        PHI          Z    ', &
-               '    RKR          W       PABS'
-       ENDIF
+               '    RKX          W       PABS'
+       CASE DEFAULT
+          SELECT CASE(mode_wline)
+          CASE(0)
+             WRITE(6,'(A,A)') &
+                  '      S          R        PHI          Z    ', &
+                  '    RKR          W       PABS'
+          CASE(1)
+             WRITE(6,'(A,A)') &
+                  '      S          R        PHI          Z    ', &
+                  '     RS          W       PABS'
+          END SELECT
+       END SELECT
     END IF
 
     IF(NSTP.EQ.0) THEN
@@ -874,23 +881,23 @@ CONTAINS
     END IF
     
     IF(ID.EQ.1) THEN
-       IF(MODELG.EQ.0.OR.MODELG.EQ.1) THEN
-          RL  =Y(1)
-          PHIL=ASIN(Y(2)/(2.D0*PI*RR))
-          ZL  =Y(3)
-          RKRL=Y(4)
-       ELSE IF(MODELG.EQ.11) THEN
-          RL  =Y(1)
-          PHIL=Y(2)
-          ZL  =Y(3)
-          RKRL=Y(4)
-       ELSE
+       SELECT CASE(MODELG)
+       CASE(0,11)
+          WRITE(6,'(7ES11.3)') X,Y(1),Y(2),Y(3),Y(4),Y(7),PABS
+       CASE DEFAULT
           RL  =SQRT(Y(1)**2+Y(2)**2)
           PHIL=ATAN2(Y(2),Y(1))
           ZL  =Y(3)
+          CALL pl_mag(Y(1),Y(2),Y(3),mag)
+          RS=mag%rhon
           RKRL=(Y(4)*Y(1)+Y(5)*Y(2))/RL
-       ENDIF
-       WRITE(6,'(7ES11.3)') X,RL,PHIL,ZL,RKRL,Y(7),PABS
+          SELECT CASE(mode_wline)
+          CASE(0)
+             WRITE(6,'(7ES11.3)') X,RL,PHIL,ZL,RKRL,Y(7),PABS
+          CASE(1)
+             WRITE(6,'(7ES11.3)') X,RL,PHIL,ZL,RS,Y(7),PABS
+          END SELECT
+       END SELECT
        IF(idebug_wr(10).NE.0) &
             WRITE(6,'(11X,6ES11.3)') Y(1),Y(2),Y(3),Y(4),Y(5),Y(6)
        NSTP_SAVE=NSTP

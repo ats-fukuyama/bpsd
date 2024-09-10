@@ -124,6 +124,11 @@ CONTAINS
 !              4 : Write data every 1000 step
 !              5 : Write data every 10000 step
 
+!     mode_wline: 0: len,POS,rkr,w,pabs
+!                 1: len,POS,rs, w,pabs
+!     mode_fig: 0: fig.1: RZ,p_rho    fig.2: XY,p_R      :: not yet implemented
+!               1: fig.1: RZ,p_R      fig.2: XY,p_rho 
+
       !     model_fdrv: type of driver to calculate del D/del r, del D/del k
       !        1 : original driver
       !        2 : new driver on 2023/09/03
@@ -162,6 +167,9 @@ CONTAINS
       MDLWRP = 1
       MDLWRQ = 1
       MDLWRW = 0
+
+      mode_wline=0
+      mode_fig=0
 
       model_fdrv = 3
       model_fdrv_ds = 0

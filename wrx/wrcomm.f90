@@ -14,7 +14,7 @@ MODULE wrcomm_parm
 
   INTEGER:: model_fdrv,model_fdrv_ds
   INTEGER:: NRAYMAX,NSTPMAX,NRSMAX,NRLMAX,LMAXNW
-  INTEGER:: mode_beam
+  INTEGER:: mode_beam,mode_wline,mode_fig
   INTEGER:: MDLWRI,MDLWRG,MDLWRP,MDLWRQ,MDLWRW
   REAL(rkind):: SMAX,DELS,UUMIN,EPSRAY,DELRAY,DELDER,DELKR,EPSNW,EPSD0
   REAL(rkind):: pne_threshold,bdr_threshold

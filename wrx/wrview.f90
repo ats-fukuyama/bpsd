@@ -29,6 +29,7 @@ CONTAINS
     WRITE(6,601) 'MDLWRI',MDLWRI,'MDLWRG',MDLWRG, &
                  'MDLWRP',MDLWRP
     WRITE(6,601) 'MDLWRQ',MDLWRQ,'MDLWRW',MDLWRW
+    WRITE(6,603) 'mode_wline  ',mode_wline
     WRITE(6,605) 'model_fdrv      ',model_fdrv, &
                  'model_fdrv_ds   ',model_fdrv_ds
     WRITE(6,603) 'nres_max    ',nres_max, &
