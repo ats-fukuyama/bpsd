@@ -45,7 +45,7 @@ CONTAINS
     CALL EQCHEK(IERR)
     CALL DP_CHEK(IERR)
     IF(MODE.EQ.0.AND.IERR.NE.0) GOTO 1
-    CALL DPPREP_LOCAL(IERR)
+    CALL DPPREP(IERR)
     RETURN
   END SUBROUTINE DP_PARM
 
@@ -80,7 +80,7 @@ CONTAINS
            MODELP,MODELV,NCMIN,NCMAX, &
            RF0,RFI0,RKX0,RKY0,RKZ0,RX0,RY0,RZ0,RK0,RKANG0, &
            MODEL_ES,EPSRT,LMAXRT, &
-           NS_NSA_DP,PMAX_dp,EMAX_dp,RHON_MIN,RHON_MAX, &
+           PMAX_dp,EMAX_dp,RHON_MIN,RHON_MAX, &
            NPMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_DP, &
            RF1,RFI1,RKX1,RKY1,RKZ1,RX1,RY1,RZ1,RK1, &
            RF2,RFI2,RKX2,RKY2,RKZ2,RX2,RY2,RZ2,RK2, &
@@ -135,7 +135,7 @@ CONTAINS
              9X,'MODELP,MODELV,NCMIN,NCMAX,'/ &
              9X,'RF0,RFI0,RKX0,RKY0,RKZ0,RX0,RY0,RZ0,RK0,RKANG0,'/ &
              9X,'MODEL_ES,EPSRT,LMAXRT,'/ &
-             9X,'NS_NSA_DP,PMAX_dp,EMAX_dp,ROHN_MIN,ROHN_MAX,'/ &
+             9X,'PMAX_dp,EMAX_dp,ROHN_MIN,ROHN_MAX,'/ &
              9X,'NPMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_DP,'/ &
              9X,'RF1,RFI1,RKX1,RKY1,RKZ1,RX1,RY1,RZ1,RK1,'/ &
              9X,'RF2,RFI2,RKX2,RKY2,RKZ2,RX2,RY2,RZ2,RK2,'/ &
@@ -164,57 +164,63 @@ CONTAINS
 
 !     ***** Setup velocity distribution function *****
 
-  SUBROUTINE DPPREP(NTHMAX_DP_1,NRMAX_DP_1,RMIN_1,RMAX_1,IERR)
-
-    USE dpcomm
-    IMPLICIT NONE
-    INTEGER,INTENT(IN):: NTHMAX_DP_1,NRMAX_DP_1
-    REAL(rkind),INTENT(IN):: RMIN_1,RMAX_1
-    INTEGER,INTENT(OUT):: IERR
-    INTEGER:: NS
-
-    NTHMAX_DP=NTHMAX_DP_1
-    NRMAX_DP=NRMAX_DP_1
-    DO NS=1,NSMAX
-       RHON_MIN(NS)=RMIN_1
-       RHON_MAX(NS)=RMAX_1
-    END DO
-    CALL DPPREP_LOCAL(IERR)
-    RETURN
-  END SUBROUTINE DPPREP
-
-  SUBROUTINE DPPREP_LOCAL(IERR)
+  SUBROUTINE DPPREP(IERR)
 
     USE dpcomm
     USE dpfpin
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
-    INTEGER:: NS,IND
+    INTEGER:: nsamax_fp,nsamax_fm,ns,nsa
 
     IERR=0
-    
-    IND=0
-    DO NS=1,NSMAX
-       IF(MODELV(NS).EQ.2.OR. &
-          MODELV(NS).EQ.4) IND=1
+
+    nsamax_fp=0
+    nsamax_fm=0
+    DO ns=1,nsmax
+       IF(modelv(ns).EQ.2.OR.modelv(ns).EQ.4) nsamax_fp=nsamax_fp+1
+       IF(modelv(ns).EQ.1.OR.modelv(ns).EQ.3) nsamax_fm=nsamax_fm+1
     END DO
-    IF(IND.EQ.1) THEN ! load Fokker-Planck data
+
+    IF(nsamax_fp.GT.0.AND.nsamax_fm.GT.0) THEN
+       WRITE(6,'(A,2I4)') &
+            'XX dpprep: Either fp or fm: nsamax_fp,nsamax_fm=', &
+            nsamax_fp,nsamax_fm
+       STOP
+    END IF
+
+    IF(nsamax_fp.GT.0) THEN
        CALL DPLDFP(IERR)
        IF(IERR.NE.0) RETURN
     END IF
 
-    DO NS=1,NSMAX
-       IF(MODELV(NS).EQ.1) THEN ! non-relativistic
-          CALL DPLDFM(NS,0,IERR)
-          IF(IERR.NE.0) RETURN
+    IF(nsamax_fm.GT.0) THEN
+       nsamax_dp=nsamax_fm
+       CALL dpfp_allocate
+       nsa=0
+       DO ns=1,nsmax
+          IF(modelv(ns).EQ.1) THEN ! non-relativistic
+             nsa=nsa+1
+             ns_nsa_dp(nsa)=ns
+             nsa_ns_dp(ns)=nsa
+             CALL DPLDFM(ns,0,ierr)
+             IF(ierr.NE.0) RETURN
+          END IF
+          IF(modelv(ns).EQ.3) THEN ! relativistic
+             nsa=nsa+1
+             ns_nsa_dp(nsa)=ns
+             nsa_ns_dp(ns)=nsa
+             CALL DPLDFM(ns,1,ierr)
+             IF(ierr.NE.0) RETURN
+          END IF
+       END DO
+       IF(nsa.NE.nsamax_fm) THEN
+          WRITE(6,'(A,2I4)') &
+               'XX dpprep: inconsistency: nsa,nsamax_fm=',nsa,nsamax_fm
+          STOP
        END IF
-       IF(MODELV(NS).EQ.3) THEN ! relativistic 
-          CALL DPLDFM(NS,1,IERR)
-          IF(IERR.NE.0) RETURN
-       END IF
-    END DO
+    END IF
     RETURN
-  END SUBROUTINE DPPREP_LOCAL
+  END SUBROUTINE DPPREP
 
 !     ****** SHOW PARAMETERS ******
 
@@ -290,7 +296,6 @@ CONTAINS
 
     EPSRT=rdata(1)
     
-    CALL mtx_broadcast_integer(NS_NSA_DP,NSAMAX_DP)
     CALL mtx_broadcast_integer(MODELP,NSAMAX_DP)
     CALL mtx_broadcast_integer(MODELV,NSAMAX_DP)
     CALL mtx_broadcast_integer(NCMIN,NSAMAX_DP)

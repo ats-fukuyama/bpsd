@@ -12,7 +12,7 @@ CONTAINS
   SUBROUTINE wr_prep(IERR)
 
     USE wrcomm_parm
-    USE dpparm,ONLY: dpprep_local
+    USE dpparm,ONLY: dpprep
     USE equnit
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
@@ -116,7 +116,7 @@ CONTAINS
  !            WRITE(6,'(A,2ES12.4)') '_ax:',raxis_eq,zaxis_eq
  !            WRITE(6,'(A,4ES12.4)') '_wr:',rmin_wr,rmax_wr,zmin_wr,zmax_wr
 
-    CALL DPPREP_LOCAL(IERR)
+    CALL DPPREP(IERR)
 
     RETURN
   END SUBROUTINE wr_prep

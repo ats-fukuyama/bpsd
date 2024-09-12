@@ -1201,7 +1201,7 @@ CONTAINS
     INTEGER,INTENT(IN):: ns,nmax
     REAL(rkind),INTENT(IN):: rhona(nmax)
     TYPE(pl_mag_type):: mag
-    CHARACTER(LEN=20):: title
+    CHARACTER(LEN=40):: title
     INTEGER,parameter:: nang_max=50
     INTEGER:: n,ngid,nray,i,nstp,nc,line_pat,nang,ierr
     REAL(rkind):: dang,rhon,pt0,vt0c,omega,xl,yl,zl,omegac
@@ -1236,7 +1236,28 @@ CONTAINS
 
        rhon=rhona(n)
        CALL setup_nray(rhon,nstp_nray,ierr)
-       WRITE(title,'(A,F8.4,A)') '@Res: rhon=',rhon,'@'
+
+       ! --- to calculate omega/omegac ---
+
+       nray=1
+       omega=2*PI*RAYIN(1,nray)*1.D6
+       i=1
+       nstp=nstp_nray(i,nray)
+       IF(nstp.NE.0) THEN
+          xl=rays(1,nstp,nray)
+          yl=rays(2,nstp,nray)
+          zl=rays(3,nstp,nray)
+          CALL pl_mag(xl,yl,zl,mag)
+          omegac=PZ(ns)*AEE*mag%babs/(PA(ns)*AMP)
+          omega=omega/omegac
+       ELSE
+          omega=0.D0
+       END IF
+
+       ! --- set figure title ---
+       
+       WRITE(title,'(A,F8.4,A,F8.4,A)') &
+            '@Res: rhon=',rhon,'  omega=',omega,'@'
        
        CALL grd2d_frame_start(ngid,-pmax_dp(ns),pmax_dp(ns),0.D0,pmax_dp(ns), &
                               title,ASPECT=0.5D0,NOINFO=1)
@@ -1248,6 +1269,12 @@ CONTAINS
           CALL SETLIN(0,2,7-MOD(nray-1,5))
           omega=2*PI*RAYIN(1,nray)*1.D6
           DO i=1,2
+             SELECT CASE(i)
+             CASE(1)
+                CALL SETRGB(1.0,0.0,0.0)
+             CASE(2)
+                CALL SETRGB(0.0,0.0,1.0)
+             END SELECT
              nstp=nstp_nray(i,nray)
              IF(nstp.NE.0) THEN
                 xl=rays(1,nstp,nray)
@@ -1312,7 +1339,7 @@ CONTAINS
     INTEGER,INTENT(IN):: ns,nmax
     REAL(rkind),INTENT(IN):: rhona(nmax)
     TYPE(pl_mag_type):: mag
-    CHARACTER(LEN=20):: title
+    CHARACTER(LEN=80):: title
     INTEGER,parameter:: nang_max=50
     INTEGER:: n,ngid,nray,i,nstp,nc,line_pat,nang,ierr
     REAL(rkind):: dang,rhon,pt0,vt0c,omega,xl,yl,zl,omegac
@@ -1345,9 +1372,32 @@ CONTAINS
           ngid=n+29 ! ngid=46:54 (30:54)
        END SELECT
 
+       ! --- fine nstp for given rhon ---
+       
        rhon=rhona(n)
        CALL setup_nray(rhon,nstp_nray,ierr)
-       WRITE(title,'(A,F8.4,A)') '@Res: rhon=',rhon,'@'
+
+       ! --- to calculate omega/omegac ---
+
+       nray=1
+       omega=2*PI*RAYIN(1,nray)*1.D6
+       i=1
+       nstp=nstp_nray(i,nray)
+       IF(nstp.NE.0) THEN
+          xl=rays(1,nstp,nray)
+          yl=rays(2,nstp,nray)
+          zl=rays(3,nstp,nray)
+          CALL pl_mag(xl,yl,zl,mag)
+          omegac=PZ(ns)*AEE*mag%babs/(PA(ns)*AMP)
+          omega=omega/omegac
+       ELSE
+          omega=0.D0
+       END IF
+
+       ! --- set figure title ---
+       
+       WRITE(title,'(A,F8.4,A,F8.4,A)') &
+            '@Res: rhon=',rhon,'  omega=',omega,'@'
        
 !     CALL grd2d_frame_start(ngid,-pmax_dp(ns),pmax_dp(ns),0.D0,pmax_dp(ns), &
 !                              title,ASPECT=0.5D0,NOINFO=1)
@@ -1363,6 +1413,12 @@ CONTAINS
           CALL SETLIN(0,2,7-MOD(nray-1,5))
           omega=2*PI*RAYIN(1,nray)*1.D6
           DO i=1,2
+             SELECT CASE(i)
+             CASE(1)
+                CALL SETRGB(1.0,0.0,0.0)
+             CASE(2)
+                CALL SETRGB(0.0,0.0,1.0)
+             END SELECT
              nstp=nstp_nray(i,nray)
              IF(nstp.NE.0) THEN
                 xl=rays(1,nstp,nray)
@@ -1755,7 +1811,8 @@ CONTAINS
                       mode=1
                    END IF
                 END IF
-             CASE(1,2)
+!             CASE(1,2)  ! first and last
+             CASE(1)     ! first and second
                 IF(rhon2.GT.rhon) THEN
                    IF(rhon2-rhon.GT.rhon-rhon1) THEN
                       nstp_nray(2,nray)=nstp-1

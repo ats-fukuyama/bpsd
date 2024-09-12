@@ -25,7 +25,7 @@ CONTAINS
 !     IERR=7 : unknown MODE
 !     IERR=10X : input parameter out of range
 
-    USE dpparm,ONLY: dp_chek
+    USE dpparm,ONLY: dp_chek,dpprep
     USE dpcomm,ONLY: nsamax_dp
 !    USE wrcomm,ONLY: nsamax_wr,nsmax
     USE wrcomm
@@ -46,6 +46,7 @@ CONTAINS
     NSAMAX_DP=NSAMAX_WR
     CALl DP_CHEK(IERR)
     IF(MODE.EQ.0.AND.IERR.NE.0) GOTO 1
+    CALL DPPREP(IERR)
 
     RETURN
   END SUBROUTINE WR_PARM
@@ -72,7 +73,7 @@ CONTAINS
                   RHOGMN,RHOGMX, &
                   KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2, &
                   MODEFW,MODEFR,IDEBUG, &
-                  MODELP,MODELV,NCMIN,NCMAX,NS_NSA_DP,PMAX_DP,EMAX_DP, &
+                  MODELP,MODELV,NCMIN,NCMAX,PMAX_DP,EMAX_DP, &
                   RFIN,RPIN,ZPIN,PHIIN,RNPHIN,MODEWIN,RNKIN,UUIN, &
                   ANGTIN,ANGPIN,RCURVAIN,RCURVBIN,RBRADAIN,RBRADBIN, &
                   NRAYMAX,NSTPMAX,NRSMAX,NRLMAX,LMAXNW, &
@@ -122,7 +123,7 @@ CONTAINS
              9X,'RHOGMN,RHOGMX,'/ &
              9X,'KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2'/ &
              9X,'MODEFW,MODEFR,IDEBUG'/ &
-             9X,'MODELP,MODELV,NCMIN,NCMAX,NS_NSA_DP,PMAX_DP,EMAX_DP,'/ &
+             9X,'MODELP,MODELV,NCMIN,NCMAX,PMAX_DP,EMAX_DP,'/ &
              9X,'RFIN,RPIN,ZPIN,PHIIN,RNPHIN,MODEWIN,RNKIN,UUIN,'/ &
              9X,'ANGTIN,ANGPIN,RCURVAIN,RCURVBIN,RBRADAIN,RBRADBIN,'/ &
              9X,'NRAYMAX,NSTPMAX,NRSMAX,NRLMAX,LMAXNW,'/ &

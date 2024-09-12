@@ -98,11 +98,10 @@ CONTAINS
 !     --- Velocity distribution function parameters ---
 !             --- usually read from fpfile ---
 !
-!     NS_NSA_DP(NSA): particle species of NSA
-!     PMAX_dp(NSA)  : maximum momentum normalized by p_thermal
-!     EMAX_dp(NSA)  : maximum energy in keV, if EMAX is not zero
-!     rhon_min(NSA) : minimum radius of velocity distribution function (r/a)
-!     rhon_max(NSA) : maximum radius of velocity distribution function (r/a)
+!     PMAX_dp(NS)  : maximum momentum normalized by p_thermal
+!     EMAX_dp(NS)  : maximum energy in keV, if EMAX is not zero
+!     rhon_min(NS) : minimum radius of velocity distribution function (r/a)
+!     rhon_max(NS) : maximum radius of velocity distribution function (r/a)
 !
 !     NPMAX_DP : number of momentum magnitude mesh
 !     NTHMAX_DP: number of momentum angle mesh
@@ -110,7 +109,6 @@ CONTAINS
 !     NSAMAX_DP: number of test particle species
 
     DO NS=1,NSM
-       NS_NSA_DP(NS)=NS
        PMAX_dp(NS)= 7.D0
        EMAX_dp(NS)= 7.D0
        rhon_min(NS)=0.D0
