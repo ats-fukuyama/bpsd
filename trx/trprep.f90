@@ -51,6 +51,7 @@ CONTAINS
     icount_of_pellet=0
 
     CALL set_usigmavmal_dt
+!    CALL set_spl_usigmavm(2)  ! DT
 
 !     *** set initial profile ***
 

@@ -65,7 +65,7 @@ check :
 
 clean:
 	-rm -f core* a.out *.o */*.o libgrf/*.o libufile/*.o $(OBJDIR)/*.o $(OBJDIR)/*/*.o $(MOD)/*.mod $(MOD)/*/*.mod *.a ./*~ ./#* $(MOD)/*.mod
-	-rm -f testairy testbes testell testfem testfem_func testgrd testgrf testqsort testspl testspl3d testpol testduo testrk testtri
+	-rm -f testairy testbes testell testfem testfem_func testgrd testgrf testqsort testspl testspl3d testpol testduo testrk testtri testde
 
 veryclean: clean
 
@@ -113,6 +113,9 @@ testrk: libtask.a $(OBJDIR)/testrk.o
 	$(FCFREE) $(OBJDIR)/testrk.o libtask.a libgrf.a $(FFLAGS) -o $@ $(FLIBS)
 testpol: libtask.a $(OBJDIR)/testpol.o 
 	$(FCFREE) $(OBJDIR)/testpol.o libtask.a libgrf.a $(FFLAGS) -o $@ $(FLIBS)
+
+testde: libtask.a libgrf.a $(OBJDIR)/testde.o
+	$(FCFREE) $(OBJDIR)/testde.o libtask.a libgrf.a $(FFLAGS) -o $@ $(FLIBS)
 
 TASKCOMM=task_kinds.f90
 

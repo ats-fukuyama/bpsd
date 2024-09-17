@@ -44,7 +44,7 @@ CONTAINS
           PNF_NSNR(NS,NR)=0.D0
           DO NNF=1,NNFMAX
 !             WRITE(6,'(A,3I4,2ES12.4)') &
-!                  '@@@SNF:',NS,NNF,NR,SNF_NSNNFNR(NS,NNF,NR), &
+!                  '--- SNF:',NS,NNF,NR,SNF_NSNNFNR(NS,NNF,NR), &
 !                  PNF_NSNNFNR(NS,NNF,NR)
              SNF_NSNR(NS,NR)=SNF_NSNR(NS,NR)+SNF_NSNNFNR(NS,NNF,NR)
              PNF_NSNR(NS,NR)=PNF_NSNR(NS,NR)+PNF_NSNNFNR(NS,NNF,NR)
@@ -91,7 +91,7 @@ CONTAINS
        SNFT=SNFT+SNF_NS(NS)
        PNFT=PNFT+PNF_NS(NS)
        IF(PNFT.LT.0D0) &
-            WRITE(6,'(A,I4,2ES12.4)') '@@@ SNF,PNF:',NS,SNF_NS(NS),PNF_NS(NS)
+            WRITE(6,'(A,I4,2ES12.4)') '--- SNF,PNF:',NS,SNF_NS(NS),PNF_NS(NS)
     END DO
 
     DO NR=1,NRMAX
@@ -150,6 +150,7 @@ CONTAINS
   SUBROUTINE TRNFDT(nnf)
 
     USE TRCOMM
+    USE libsigma
     IMPLICIT NONE
     INteGER,INTENT(IN):: nnf
     REAL(rkind)   :: &
@@ -177,7 +178,9 @@ CONTAINS
             SSB=0.D0
             PB=0.D0
             DO NNB=1,NNBMAX
+               IF(pnbin(nnb).GT.0.D0) THEN
                NS_beam=ns_nnb(nnb)
+               IF (NS_beam.EQ.NS_D) THEN
                ! Critiral energy: (5.43) Takamura     
                EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
                ! Ion-electron slowing time: (3.22) Takamura: 
@@ -187,17 +190,16 @@ CONTAINS
                PTNT= PNB_NNBNR(nnb,NR)*TAUS &
                     /(RN(NR,NS_beam)*1.D20*PNBENG(NNB)*RKEV)
                ! fusion reaction rate
-
-               ! IF (NS_beam.EQ.NS_D) THEN
-               !    TI = TT
-               ! else 
-               !    TI = TD
-
-               SSB = SSB+PNB_NNBNR(NNB,NR)*SIGMAB(PNBENG(NNB),EC,TT,PTNT)
+               SSB = SSB+SIGMAB(PNBENG(NNB),EC,TT,PTNT)
                PB  = PB +PNB_NNBNR(NNB,NR)
 !               WRITE(26,'(A,6ES12.4)') 'SSB:',SSB,PNB_NNBNR(NNB,NR), &
 !                    SIGMAB(PNBENG(NNB),EC,TT,PTNT), &
 !                    PNBENG(NNB),EC,TAUS
+               ELSEIF(NS_beam.EQ.NS_T) THEN
+               TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
+               SSB = SSB + (((PNB_NNBNR(NNB,NR))*1E6)/(AEE*PNBIN(nnb)*RKEV))*TAUS * sigmaDbuTbm(TE) / RN(NR,NS_beam)
+               ENDIF
+               END IF
             END DO
             
             ! ####### fast ion calculation #######
@@ -211,19 +213,21 @@ CONTAINS
             !      /(RN(NR,NS_beam)*1.D20*PNBENG(NNB)*RKEV)
             ! ! fusion reaction rate
             ! PBF  = PB +PNB_NNBNR(NNB,NR)
+
             ! ####### For fast ion calculation end ########
-            
-            SSF = ((8.1725*1E9 &
-                 + (-9.1013*1E8)*TT &
-                 + (4.6685*1E7)*TT**2 &
-                 + (-1.1075*1E6)*TT**3 &
-                 + 9753.1*TT**4)) * 1E-31
-            
-            IF(PB.NE.0.D0) THEN
-               SSB=SSB/PB
-            ELSE
-               SSB=0.D0
-            END IF
+            ! if NS nnf= 12
+            ! SSF = ((8.1725*1E9 &
+            !      + (-9.1013*1E8)*TT &
+            !      + (4.6685*1E7)*TT**2 &
+            !      + (-1.1075*1E6)*TT**3 &
+            !      + 9753.1*TT**4)) * 1E-31
+           
+         ! いるのか確認
+         !    IF(PB.NE.0.D0) THEN
+         !       SSB=SSB/PB
+         !    ELSE
+         !       SSB=0.D0
+         !    END IF
          ELSE
             SSB=0.D0
          ENDIF
@@ -233,7 +237,8 @@ CONTAINS
          !  DD反応からのfast TについてもDD reationのmoduleにてRNに統合し、
          !  SSFで断面積を与えている。
          
-         SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB+SSF)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20
+         SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 
+         ! SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB+SSF)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 + TAUS*RN(NR,NS_D)*sigmaDbuTbm(TE,ETNBI)
          PNF_NSNNFNR(NS_A,NNF,NR) = SNF_NSNNFNR(NS_A,NNF,NR)*3.5D3*RKEV*1.D20
          IF(MOD(model_nnf(nnf),2).EQ.1) &
               SNF_NSNNFNR(NS_A,NNF,NR)=0.D0
@@ -294,7 +299,7 @@ CONTAINS
 
          TI = (3.D0*ABS(TD)+2.D0*ABS(TT))/5.D0
 
-         SIGMAM=sigmavm_dt(TI)
+         SIGMAM=sigmavm_dt(TI)*(1E-6)
          
          RETURN
          END FUNCTION SIGMAM

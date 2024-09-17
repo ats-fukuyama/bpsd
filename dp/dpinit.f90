@@ -68,6 +68,7 @@ CONTAINS
 !                     ABSORPTION   = GIVEN MODEL
 !
 !     MODELV(NS) : NUMERICAL MODEL (*: not yet implemented)
+!                                  (1,3 or 2,4 not both, because of nsamax)
 !              0 : ANALYTIC MODEL
 !              1 : KINETIC: ANALYTIC MAXWELLIAN DISTRIBUTION
 !              2 : KINETIC: READ FPDATA DISTRIBUTION
