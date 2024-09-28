@@ -45,7 +45,7 @@ CONTAINS
     CALL EQCHEK(IERR)
     CALL DP_CHEK(IERR)
     IF(MODE.EQ.0.AND.IERR.NE.0) GOTO 1
-    CALL DPPREP(IERR)
+    CALL DPPREP_LOCAL(IERR)
     RETURN
   END SUBROUTINE DP_PARM
 
@@ -164,7 +164,28 @@ CONTAINS
 
 !     ***** Setup velocity distribution function *****
 
-  SUBROUTINE DPPREP(IERR)
+  SUBROUTINE DPPREP(NTHMAX_DP_1,NRMAX_DP_1,RMIN_1,RMAX_1,IERR)
+
+    USE dpcomm
+    IMPLICIT NONE
+    INTEGER,INTENT(IN):: NTHMAX_DP_1,NRMAX_DP_1
+    REAL(rkind),INTENT(IN):: RMIN_1,RMAX_1
+    INTEGER,INTENT(OUT):: IERR
+    INTEGER:: NS
+
+    NTHMAX_DP=NTHMAX_DP_1
+    NRMAX_DP=NRMAX_DP_1
+    DO NS=1,NSMAX
+       RHON_MIN(NS)=RMIN_1
+       RHON_MAX(NS)=RMAX_1
+    END DO
+    CALL DPPREP_LOCAL(IERR)
+    RETURN
+  END SUBROUTINE DPPREP
+
+!     ***** Setup velocity distribution function *****
+
+  SUBROUTINE DPPREP_LOCAL(IERR)
 
     USE dpcomm
     USE dpfpin
@@ -183,7 +204,7 @@ CONTAINS
 
     IF(nsamax_fp.GT.0.AND.nsamax_fm.GT.0) THEN
        WRITE(6,'(A,2I4)') &
-            'XX dpprep: Either fp or fm: nsamax_fp,nsamax_fm=', &
+            'XX dpprep_local: Either fp or fm: nsamax_fp,nsamax_fm=', &
             nsamax_fp,nsamax_fm
        STOP
     END IF
@@ -215,12 +236,12 @@ CONTAINS
        END DO
        IF(nsa.NE.nsamax_fm) THEN
           WRITE(6,'(A,2I4)') &
-               'XX dpprep: inconsistency: nsa,nsamax_fm=',nsa,nsamax_fm
+               'XX dpprep_local: inconsistency: nsa,nsamax_fm=',nsa,nsamax_fm
           STOP
        END IF
     END IF
     RETURN
-  END SUBROUTINE DPPREP
+  END SUBROUTINE DPPREP_LOCAL
 
 !     ****** SHOW PARAMETERS ******
 

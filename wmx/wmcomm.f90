@@ -137,6 +137,7 @@ END MODULE wmcomm_parm
 MODULE wmcomm
 
   USE wmcomm_parm
+  USE dpcomm,ONLY: ns_nsa_dp
   USE commpi
   IMPLICIT NONE
 

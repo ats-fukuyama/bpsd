@@ -22,10 +22,15 @@ CONTAINS
     USE wmfile
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
-    INTEGER:: NPH0_save,NPH,NR,NTH,NS,NHH,NPOW,NPP,NPHA
+    INTEGER:: NPH0_save,NPH,NR,NTH,NS,NHH,NPOW,NPP,NPHA,NSA
     CHARACTER(LEN=80):: KNAMWM_SAVE
     CHARACTER(LEN=2):: KNHC
     CHARACTER(LEN=4):: KNPH0
+
+    nsamax_dp=nsmax
+    DO nsa=1,nsamax_dp
+       ns_nsa_dp(nsa)=nsa
+    END DO
 
     NPH0_save  = NPH0
 

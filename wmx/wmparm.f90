@@ -62,7 +62,7 @@ CONTAINS
            NRMAX,NTHMAX,NHHMAX,NPPMAX, &
            factor_nth,factor_nhh,factor_nph, &
            NRMAX_DP,NTHMAX_DP,NPMAX_DP,NSAMAX_DP,RHON_MIN,RHON_MAX, &
-           NS_NSA_DP,EPSRT,LMAXRT, &
+           EPSRT,LMAXRT, &
            NSUMAX,NSWMAX,B0_FACT, &
            RF,RFI,RD,PRFIN,BETAJ,NTH0,NPH0,NHC, &
            NAMAX,AJ,AEWGT,AEWGZ,APH,THJ1,THJ2,PHJ1,PHJ2,ANTANG, &
@@ -108,7 +108,7 @@ CONTAINS
          '       NRMAX,NTHMAX,NHHMAX,NPPMAX,', &
          '       factor_nth,factor_nhh,factor_nph,', &
          '       NRMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_DP,RHON_MIN,RHON_MAX,', &
-         '       NS_NSA_SP,EPSRT,LMAXRT,', &
+         '       EPSRT,LMAXRT,', &
          '       NSUMAX,NSWMAX,B0_FACT,', &
          '       RF,RFI,RD,PRFIN,BETAJ,NTH0,NPH0,NHC,', &
          '       NAMAX,AJ,AEWGT,AEWGZ,APH,THJ1,THJ2,PHJ1,PHJ2,ANTANG,', &
@@ -185,11 +185,6 @@ CONTAINS
 
     !----- DP input parameters -----
 
-    nsamax_dp=nsmax
-    DO nsa=1,nsamax_dp
-       ns_nsa_dp(nsa)=nsa
-    END DO
-       
     CALL dp_broadcast
 
     ! --- WM specific input parameters ---

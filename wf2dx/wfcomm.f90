@@ -1,6 +1,8 @@
 ! wfcomm.f90
 
-!   Define and allocate global variables
+!   *** Define and allocate global variables ***
+
+!   --- Input parameter definition ---
 
 MODULE wfcomm_parm
 
@@ -12,7 +14,7 @@ MODULE wfcomm_parm
   ! === input parameter array size ====
   
   INTEGER,PARAMETER:: nantm =       8 ! maximum number of antenna
-  INTEGER,PARAMETER:: npointm =  2000 ! maximum number of antenna path points
+  INTEGER,PARAMETER:: npointm =  1000 ! maximum number of antenna path points
   INTEGER,PARAMETER:: nmedm =      10 ! maximum number of medium type
   INTEGER,PARAMETER:: idebuga_max=100 ! maximum number of debug parameter array
 
