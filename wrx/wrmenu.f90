@@ -27,7 +27,7 @@ CONTAINS
     IMPLICIT NONE
     CHARACTER(LEN=1):: KID
     CHARACTER(LEN=80):: LINE
-    INTEGER:: NSTAT,IERR,MODE,NID
+    INTEGER:: NSTAT,IERR,MODE,NID,ns,nsa
 
     NSTAT=0
 
@@ -67,6 +67,7 @@ CONTAINS
       ELSEIF(KID.EQ.'R') THEN
          CALL wr_prep(ierr)
          IF(ierr.NE.0) GO TO 1
+
          CALL wr_allocate
          CALL wr_setup(ierr)
          IF(ierr.NE.0) GO TO 1

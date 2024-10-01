@@ -13,10 +13,11 @@ MODULE wfcomm_parm
 
   ! === input parameter array size ====
   
-  INTEGER,PARAMETER:: nantm =       8 ! maximum number of antenna
-  INTEGER,PARAMETER:: npointm =  1000 ! maximum number of antenna path points
-  INTEGER,PARAMETER:: nmedm =      10 ! maximum number of medium type
-  INTEGER,PARAMETER:: idebuga_max=100 ! maximum number of debug parameter array
+  INTEGER,PARAMETER:: nantm =        8 ! max number of antenna
+  INTEGER,PARAMETER:: npointm =   1000 ! max number of antenna path points
+  INTEGER,PARAMETER:: nmedm =       20 ! max number of medium type
+  INTEGER,PARAMETER:: nlayerm =    100 ! max number of layers
+  INTEGER,PARAMETER:: idebug_wrm = 100 ! max number of debug param array
 
   ! === wfdiv parameters ===
 
@@ -109,7 +110,7 @@ MODULE wfcomm_parm
 
   ! === debug controll parameters ===
 
-  INTEGER:: idebuga(idebuga_max)
+  INTEGER:: idebug_wr(idebug_wr_max)
 
 END MODULE wfcomm_parm
 

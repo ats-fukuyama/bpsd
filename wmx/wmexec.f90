@@ -17,7 +17,7 @@ CONTAINS
     USE wmemfp
     USE wmpout
     USE wmdout,ONLY: wm_dout
-    USE dpparm,ONLY: dpprep
+    USE dpprep,ONLY: dp_prep_fp,dp_prep_ns
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: ierr
     INTEGER:: nr
@@ -30,7 +30,9 @@ CONTAINS
     CALL wm_setg(IERR)
     IF(IERR.NE.0) RETURN
     
-    CALL dpprep(NTHMAX,NRMAX+1,XRHO(1),XRHO(NRMAX+1),IERR)
+    CALL dp_prep_fp(NTHMAX,NRMAX+1,XRHO(1),XRHO(NRMAX+1),IERR)
+    IF(IERR.NE.0) RETURN
+    CALL dp_prep_ns(IERR)
     IF(IERR.NE.0) RETURN
 
     CALL wm_setj(IERR)

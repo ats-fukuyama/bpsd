@@ -118,6 +118,7 @@ CONTAINS
       VKZ  = DZP/DS
 
       VDU  =-2.D0*ABS(DISPXI(XP,YP,ZP,RKXP,RKYP,RKZP,OMG)/DS)
+      IF(VDU.GT.0.D0) WRITE(6,'(A,3ES12.4)') 'VDU:',XP,VDU,UU
 
       F(1)=VX
       F(2)=VY

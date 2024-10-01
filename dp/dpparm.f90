@@ -5,8 +5,6 @@ MODULE DPPARM
   PRIVATE
   PUBLIC dp_parm
   PUBLIC dp_chek
-  PUBLIC dpprep
-  PUBLIC dpprep_local
   PUBLIC dp_broadcast
   PUBLIC dp_view
 
@@ -44,8 +42,10 @@ CONTAINS
 
     CALL EQCHEK(IERR)
     CALL DP_CHEK(IERR)
-    IF(MODE.EQ.0.AND.IERR.NE.0) GOTO 1
-    CALL DPPREP_LOCAL(IERR)
+    IF(MODE.EQ.0.AND.IERR.NE.0) THEN
+       WRITE(6,*) 'XX DP_CHEK error: IERR=',IERR
+       GOTO 1
+    END IF
     RETURN
   END SUBROUTINE DP_PARM
 
@@ -161,87 +161,6 @@ CONTAINS
 
     RETURN
   END SUBROUTINE DP_CHEK
-
-!     ***** Setup velocity distribution function *****
-
-  SUBROUTINE DPPREP(NTHMAX_DP_1,NRMAX_DP_1,RMIN_1,RMAX_1,IERR)
-
-    USE dpcomm
-    IMPLICIT NONE
-    INTEGER,INTENT(IN):: NTHMAX_DP_1,NRMAX_DP_1
-    REAL(rkind),INTENT(IN):: RMIN_1,RMAX_1
-    INTEGER,INTENT(OUT):: IERR
-    INTEGER:: NS
-
-    NTHMAX_DP=NTHMAX_DP_1
-    NRMAX_DP=NRMAX_DP_1
-    DO NS=1,NSMAX
-       RHON_MIN(NS)=RMIN_1
-       RHON_MAX(NS)=RMAX_1
-    END DO
-    CALL DPPREP_LOCAL(IERR)
-    RETURN
-  END SUBROUTINE DPPREP
-
-!     ***** Setup velocity distribution function *****
-
-  SUBROUTINE DPPREP_LOCAL(IERR)
-
-    USE dpcomm
-    USE dpfpin
-    IMPLICIT NONE
-    INTEGER,INTENT(OUT):: IERR
-    INTEGER:: nsamax_fp,nsamax_fm,ns,nsa
-
-    IERR=0
-
-    nsamax_fp=0
-    nsamax_fm=0
-    DO ns=1,nsmax
-       IF(modelv(ns).EQ.2.OR.modelv(ns).EQ.4) nsamax_fp=nsamax_fp+1
-       IF(modelv(ns).EQ.1.OR.modelv(ns).EQ.3) nsamax_fm=nsamax_fm+1
-    END DO
-
-    IF(nsamax_fp.GT.0.AND.nsamax_fm.GT.0) THEN
-       WRITE(6,'(A,2I4)') &
-            'XX dpprep_local: Either fp or fm: nsamax_fp,nsamax_fm=', &
-            nsamax_fp,nsamax_fm
-       STOP
-    END IF
-
-    IF(nsamax_fp.GT.0) THEN
-       CALL DPLDFP(IERR)
-       IF(IERR.NE.0) RETURN
-    END IF
-
-    IF(nsamax_fm.GT.0) THEN
-       nsamax_dp=nsamax_fm
-       CALL dpfp_allocate
-       nsa=0
-       DO ns=1,nsmax
-          IF(modelv(ns).EQ.1) THEN ! non-relativistic
-             nsa=nsa+1
-             ns_nsa_dp(nsa)=ns
-             nsa_ns_dp(ns)=nsa
-             CALL DPLDFM(ns,0,ierr)
-             IF(ierr.NE.0) RETURN
-          END IF
-          IF(modelv(ns).EQ.3) THEN ! relativistic
-             nsa=nsa+1
-             ns_nsa_dp(nsa)=ns
-             nsa_ns_dp(ns)=nsa
-             CALL DPLDFM(ns,1,ierr)
-             IF(ierr.NE.0) RETURN
-          END IF
-       END DO
-       IF(nsa.NE.nsamax_fm) THEN
-          WRITE(6,'(A,2I4)') &
-               'XX dpprep_local: inconsistency: nsa,nsamax_fm=',nsa,nsamax_fm
-          STOP
-       END IF
-    END IF
-    RETURN
-  END SUBROUTINE DPPREP_LOCAL
 
 !     ****** SHOW PARAMETERS ******
 

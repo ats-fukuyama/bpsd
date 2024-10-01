@@ -46,7 +46,7 @@ CONTAINS
        IF(KID.EQ.'6'.AND.NSTAT.GE.1) CALL WRGRF6
        IF((KID.EQ.'7'.OR.KID.EQ.'8').AND.NSTAT.GE.1) THEN
 2         CONTINUE
-          WRITE(6,'(A,2I6)') '## ns,nmax=',ns,nmax
+          WRITE(6,'(A,2I6)') ' ## ns,nmax=',ns,nmax
           READ(5,*,ERR=2,END=1) ns,nmax
           IF(nmax.NE.nmax_save) THEN
              IF(ALLOCATED(rhona)) DEALLOCATE(rhona)
@@ -55,7 +55,7 @@ CONTAINS
              rhona(1:nmax)=0.D0
           END IF
 3         CONTINUE
-          WRITE(6,'(A)') '## rhona='
+          WRITE(6,'(A)') ' ## rhona='
           WRITE(6,'(10F8.4)') (rhona(n),n=1,nmax)
           READ(5,*,ERR=3,END=2) (rhona(n),n=1,nmax)
           IF(KID.EQ.'7') THEN
@@ -336,7 +336,7 @@ CONTAINS
           GUX(NSTP+1)=GUCLIP(RHON)
           GUY(NSTP+1)=GUCLIP(RAYS(7,NSTP,NRAY))
        ENDDO
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GUX,GUY,1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)      
     ENDDO
 
@@ -356,12 +356,12 @@ CONTAINS
     INTEGER,PARAMETER:: NGXL=101
     INTEGER,PARAMETER:: NGYL=101
     REAL,ALLOCATABLE:: GLCX(:),GLCY(:),GSCX(:),GSCY(:)
-    REAL:: GX(NSTPMAX+1),GY(NSTPMAX+1)
+    REAL,ALLOCATABLE:: GX(:),GY(:)
     INTEGER:: NSR,NSRMAX,NRL,NRAY,NSTP
     REAL:: GRMIN,GRMAX,GXMIN,GXMAX,GXSTEP,GYMIN,GYMAX,GYSTEP,GXORG
     REAL(rkind):: DTH,TH,XL,YL,ZL,RHON
-    REAL:: GUX(NSTPMAX+1),GUY(NSTPMAX+1)
-    REAL:: GPX(nrlmax),GPY(nrlmax,nraymax)
+    REAL,ALLOCATABLE:: GUX(:),GUY(:)
+    REAL,ALLOCATABLE:: GPX(:),GPY(:,:)
     REAL:: GYSMIN,GYSMAX,GYSCAL,GRSMIN,GRSMAX,GRSCAL
     REAL:: GZSMIN,GZSMAX,GZSCAL
     EXTERNAL GMNMX1,GMNMX2,GQSCAL,PAGES,SETCHS,SETFNT,SETLIN,SETRGB,PAGEE
@@ -370,10 +370,14 @@ CONTAINS
     INTEGER:: NGULEN
     REAL:: GUCLIP
 
-!   --- ray trajectory on toroidal cross section -----
-
     NSRMAX=101
     ALLOCATE(GLCX(NSRMAX),GLCY(NSRMAX),GSCX(NSRMAX),GSCY(NSRMAX))
+    ALLOCATE(GX(NSTPMAX+1),GY(NSTPMAX+1))
+    ALLOCATE(GUX(NSTPMAX+1),GUY(NSTPMAX+1))
+    ALLOCATE(GPX(nrlmax),GPY(nrlmax,nraymax))
+
+    !   --- ray trajectory on toroidal cross section -----
+
     DTH=2*PI/(NSRMAX-1)
     DO NSR=1,NSRMAX
        TH=DTH*(NSR-1)
@@ -413,7 +417,7 @@ CONTAINS
           GX(NSTP+1)=GUCLIP(RAYS(1,NSTP,NRAY))
           GY(NSTP+1)=GUCLIP(RAYS(2,NSTP,NRAY))
        ENDDO
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GX,GY,1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -427,6 +431,7 @@ CONTAINS
     DO nrl=1,nrlmax
        GPX(nrl)=GUCLIP(pos_nrl(nrl))
     END DO
+    
 
     CALL GMNMX2(GPY,NRLMAX,1,NRLMAX,1,1,NRAYMAX,1,GYMIN,GYMAX)
     CALL GQSCAL(GYMIN,GYMAX,GYSMIN,GYSMAX,GYSCAL)
@@ -471,7 +476,7 @@ CONTAINS
 !               WRITE(6,'(A,I5,1P5E12.4)') &
 !               'PF:',NSTP,XL,YL,ZL,RHON,RAYS(7,NSTP,NRAY)
        ENDDO
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GUX,GUY,1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)      
     ENDDO
 
@@ -548,7 +553,7 @@ CONTAINS
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY1(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -565,7 +570,7 @@ CONTAINS
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY2(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -617,7 +622,7 @@ CONTAINS
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY1(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -634,7 +639,7 @@ CONTAINS
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY2(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -710,7 +715,7 @@ CONTAINS
     CALL GVALUE(0.0,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -741,7 +746,7 @@ CONTAINS
     CALL GVALUE(0.0,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -774,7 +779,7 @@ CONTAINS
     CALL GVALUE(0.0,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -806,7 +811,7 @@ CONTAINS
     CALL GVALUE(0.0,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -1210,12 +1215,15 @@ CONTAINS
     INTEGER:: nstp_nray(2,nraymax)
     EXTERNAL PAGES,PAGEE,MOVE2D,DRAW2D
 
-    IF(nmax.LE.4) THEN
-       WRITE(6,'(A,2I6,4ES12.4)') 'ns,nmax,rhona=',ns,nmax,(rhona(n),n=1,nmax)
-    ELSE
-       WRITE(6,'(A,2I6,4ES12.4)') 'ns,nmax,rhona=',ns,nmax,(rhona(n),n=1,4)
-       WRITE(6,'(14X   5ES12.4)')                          (rhona(n),n=5,nmax)
-    END IF
+!    IF(nmax.LE.4) THEN
+!       WRITE(6,'(A,2I6,4ES12.4)') &
+!       'ns,nmax,rhona=',ns,nmax,(rhona(n),n=1,nmax)
+!    ELSE
+!       WRITE(6,'(A,2I6,4ES12.4)') &
+!       'ns,nmax,rhona=',ns,nmax,(rhona(n),n=1,4)
+!       WRITE(6,'(14X   5ES12.4)') &
+!       (rhona(n),n=5,nmax)
+!    END IF
        
     dang=PI/nang_max
     CALL pages
@@ -1265,16 +1273,15 @@ CONTAINS
        pt0=(ptpr(ns)+2.D0*ptpp(ns))/3.D0          ! axis temperature [J]
        vt0c=SQRT(pt0*AEE*1.D3/(PA(ns)*AMP*VC**2))  ! vt0/c
        DO nray=1,nraymax
-!          CALL SETRGBDA(line_rgb_nlmax(1:3,MOD(2*(nray-1)+(i-1),nlmax_p)+1))
           CALL SETLIN(0,2,7-MOD(nray-1,5))
           omega=2*PI*RAYIN(1,nray)*1.D6
           DO i=1,2
-             SELECT CASE(i)
-             CASE(1)
-                CALL SETRGB(1.0,0.0,0.0)
-             CASE(2)
-                CALL SETRGB(0.0,0.0,1.0)
-             END SELECT
+!             SELECT CASE(i)
+!             CASE(1)
+!                CALL SETRGB(1.0,0.0,0.0)
+!             CASE(2)
+!                CALL SETRGB(0.0,0.0,1.0)
+!             END SELECT
              nstp=nstp_nray(i,nray)
              IF(nstp.NE.0) THEN
                 xl=rays(1,nstp,nray)
@@ -1409,7 +1416,6 @@ CONTAINS
 !       vt0c=SQRT(pt0*AEE*1.D3/(PA(ns)*AMP*VC**2))  ! vt0/c
        vt0c=1.D0
        DO nray=1,nraymax
-!          CALL SETRGBDA(line_rgb_nlmax(1:3,MOD(2*(nray-1)+(i-1),nlmax_p)+1))
           CALL SETLIN(0,2,7-MOD(nray-1,5))
           omega=2*PI*RAYIN(1,nray)*1.D6
           DO i=1,2
@@ -1539,7 +1545,7 @@ CONTAINS
     CALL GVALUE(GXMIN,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -1576,7 +1582,7 @@ CONTAINS
     CALL GVALUE(GXMIN,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
     
@@ -1661,7 +1667,7 @@ CONTAINS
     CALL GVALUE(0.0,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
 
@@ -1698,7 +1704,7 @@ CONTAINS
     CALL GVALUE(0.0,2*GXSTEP,0.0,0.0,NGULEN(2*GXSTEP))
     CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
     DO NRAY=1,NRAYMAX
-       CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+       CALL SETLIN(0,2,7-MOD(NRAY-1,5))
        CALL GPLOTP(GKX(1,NRAY),GKY(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
     ENDDO
     
@@ -2541,7 +2547,7 @@ CONTAINS
 
       DO N=1,6
       CALL GPLOTP(GKX,GKSY(1,N),1,NSTPMAX_NRAY(1)+1,1,0,0,0)
-      CALL SETLIN(0,0,N)
+      CALL SETLIN(0,2,N)
       ENDDO
       CALL SETRGB(1.0,0.0,0.0)
       CALL SETRGB(0.0,0.0,0.0)
@@ -2587,7 +2593,7 @@ CONTAINS
 !      
       DO N=1,6
       CALL GPLOTP(GKX,GKPY(1,N),1,NSTPMAX_NRAY(1)+1,1,0,0,0)
-      CALL SETLIN(0,0,N)
+      CALL SETLIN(0,2,N)
       ENDDO
 
       CALL SETRGB(1.0,0.0,0.0)
@@ -2658,7 +2664,7 @@ CONTAINS
 !      
       CALL GPLOTP(GKX,GKY(1,1),1,NSTPMAX_NRAY(1)+1,1,0,0,0)
       CALL GPLOTP(GKX,GKY(1,2),1,NSTPMAX_NRAY(1)+1,1,0,0,0)
-      CALL SETLIN(0,0,7)
+      CALL SETLIN(0,2,7)
 
       CALL SETRGB(1.0,0.0,0.0)
       CALL SETRGB(0.0,0.0,0.0)
@@ -2734,7 +2740,7 @@ CONTAINS
 
       DO N=1,3
         CALL GPLOTP(GKX,GKY(1,N),1,NSTPMAX_NRAY(1)+1,1,0,0,0)      
-        CALL SETLIN(0,0,N+2)
+        CALL SETLIN(0,2,N+2)
       ENDDO  
 
       CALL SETRGB(1.0,0.0,0.0)
@@ -2772,7 +2778,7 @@ CONTAINS
 
       DO N=1,3
         CALL GPLOTP(GKX,GKBY(1,N),1,NSTPMAX_NRAY(1)+1,1,0,0,0)      
-        CALL SETLIN(0,0,N+2)
+        CALL SETLIN(0,2,N+2)
       ENDDO  
 
       CALL SETRGB(1.0,0.0,0.0)
@@ -2811,7 +2817,7 @@ CONTAINS
 
       DO N=1,3
         CALL GPLOTP(GKX,GKKBY(1,N),1,NSTPMAX_NRAY(1)+1,1,0,0,0)      
-        CALL SETLIN(0,0,N+2)
+        CALL SETLIN(0,2,N+2)
       ENDDO  
 
       CALL SETRGB(1.0,0.0,0.0)
@@ -2849,7 +2855,7 @@ CONTAINS
 
       DO N=1,3
         CALL GPLOTP(GKX,GVGY(1,N),1,NSTPMAX_NRAY(1)+1,1,0,0,0)      
-        CALL SETLIN(0,0,N+2)
+        CALL SETLIN(0,2,N+2)
       ENDDO  
 
       CALL SETRGB(1.0,0.0,0.0)
@@ -2870,7 +2876,7 @@ CONTAINS
 
 !     ----- DRAW PARAMETERS -----
 
-      CALL SETLIN(0,0,7)
+      CALL SETLIN(0,2,7)
       CALL WRPRMT(1.0,18.0, 'BB   =',6, BB  ,'(F8.3)',8)
       CALL WRPRMT(1.0,17.6, 'RR   =',6, RR  ,'(F8.3)',8)
       CALL WRPRMT(1.0,17.2, 'RA   =',6, RA  ,'(F8.3)',8)
@@ -3145,7 +3151,7 @@ CONTAINS
       CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
       DO NRAY=1,NRAYMAX
-         CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+         CALL SETLIN(0,2,7-MOD(NRAY-1,5))
          CALL GPLOTP(GKX(1,NRAY),GKY1(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
       ENDDO
       CALL SETLIN(0,2,7)
@@ -3230,7 +3236,7 @@ CONTAINS
             GX(NSTP+1)=GUCLIP(RAYS(1,NSTP,NRAY))
             GY(NSTP+1)=GUCLIP(RAYS(2,NSTP,NRAY))
          ENDDO
-         CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+         CALL SETLIN(0,2,7-MOD(NRAY-1,5))
          CALL GPLOTP(GX,GY,1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
       ENDDO
       CALL SETLIN(0,2,7)
@@ -3276,7 +3282,7 @@ CONTAINS
       CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
       DO NRAY=1,NRAYMAX
-         CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+         CALL SETLIN(0,2,7-MOD(NRAY-1,5))
          CALL GPLOTP(GKX(1,NRAY),GKY1(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
       ENDDO
       CALL SETLIN(0,2,7)
@@ -3293,7 +3299,7 @@ CONTAINS
       CALL GVALUE(0.0,0.0,GYORG,2*GYSTEP,NGULEN(2*GYSTEP))
 
       DO NRAY=1,NRAYMAX
-         CALL SETLIN(0,0,7-MOD(NRAY-1,5))
+         CALL SETLIN(0,2,7-MOD(NRAY-1,5))
          CALL GPLOTP(GKX(1,NRAY),GKY2(1,NRAY),1,NSTPMAX_NRAY(NRAY)+1,1,0,0,0)
       ENDDO
       CALL SETLIN(0,2,7)

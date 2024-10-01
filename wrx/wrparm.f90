@@ -25,7 +25,7 @@ CONTAINS
 !     IERR=7 : unknown MODE
 !     IERR=10X : input parameter out of range
 
-    USE dpparm,ONLY: dp_chek,dpprep_local
+    USE dpparm,ONLY: dp_chek
     USE dpcomm,ONLY: nsamax_dp
 !    USE wrcomm,ONLY: nsamax_wr,nsmax
     USE wrcomm
@@ -46,7 +46,6 @@ CONTAINS
     NSAMAX_DP=NSAMAX_WR
     CALl DP_CHEK(IERR)
     IF(MODE.EQ.0.AND.IERR.NE.0) GOTO 1
-    CALL DPPREP_LOCAL(IERR)
 
     RETURN
   END SUBROUTINE WR_PARM

@@ -30,7 +30,6 @@ CONTAINS
        omega=2.D6*PI*RFIN(nray)
        rkv=omega/VC
        rnv=VC/omega
-       WRITE(6,'(A,I4,3ES12.4)') 'nray,omega,rkv,rnv=',nray,omega,rkv,rnv
 
        CALL wr_setup_start_point(NRAY,RAYS(0,0,NRAY),nstp,IERR)
        nstpmax_nray(nray)=nstp
@@ -79,7 +78,7 @@ CONTAINS
     TYPE(pl_prfw_type),DIMENSION(nsmax):: plfw
     TYPE(pl_prf_type),DIMENSION(nsmax):: plf
     REAL(rkind):: RF,RP,ZP,PHI,ANGT,ANGP,RNK,UU
-    INTEGER:: MODEW,mode
+    INTEGER:: MODEW,mode,nsa
     REAL(rkind):: XP,YP,s,deg,factor,omega_pe2,rne,arg,err
     REAL(rkind):: rhon,rkpara,rkperp_1,rkperp_2
     REAL(rkind):: rk,rk_x,rk_y,rk_z,dXP,dYP,dZP
@@ -170,6 +169,9 @@ CONTAINS
     YN(6,nstp)= RK_Z
     YN(7,nstp)= UU
     YN(8,nstp)= 0.D0
+    DO nsa=1,nsamax_dp
+       pwr_nsa_nstp(nsa,nstp)=0.D0
+    END DO
     CALL wr_write_line(NSTP,YN(0,NSTP),YN(1:NEQ,NSTP),YN(8,NSTP))
     
     ! --- set magnetic field and minor radius at the start point ---
@@ -227,6 +229,9 @@ CONTAINS
           YN(6,nstp)= RK_Z
           YN(7,nstp)= UU
           YN(8,nstp)= 0.D0
+          DO nsa=1,nsamax_dp
+             pwr_nsa_nstp(nsa,nstp)=0.D0
+          END DO
           CALL wr_write_line(NSTP,YN(0,NSTP),YN(1:NEQ,NSTP),YN(8,NSTP))
 
           
@@ -422,6 +427,9 @@ CONTAINS
     YN(6,nstp)= rk_z
     YN(7,nstp)= UU
     YN(8,nstp)= 0.D0
+    DO nsa=1,nsamax_dp
+       pwr_nsa_nstp(nsa,nstp)=0.D0
+    END DO
 
     IF(idebug_wr(7).NE.0) THEN
        CALL wr_cal_ep(nstp,nray,cepola,cenorm,err)

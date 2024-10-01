@@ -139,7 +139,6 @@ CONTAINS
   SUBROUTINE WR_CHEK(IERR)
 
     USE wrcomm_parm
-    USE dpparm,ONLY: dpprep_local
     USE equnit
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
@@ -181,8 +180,6 @@ CONTAINS
     ELSE
        INITEQ=0
     ENDIF
-
-    CALL DPPREP_LOCAL(IERR)
 
     RETURN
   END SUBROUTINE WR_CHEK
