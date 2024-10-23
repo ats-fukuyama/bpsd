@@ -41,7 +41,7 @@ MODULE plcomm_parm
       INTEGER:: NSMAX,NCOILMAX
       INTEGER:: MODELG,MODELB,MODELN,MODELQ,IDEBUG,MODEFR,MODEFW
       INTEGER:: mdlplw
-      INTEGER:: MODEL_PROF,MODEL_NPROF,model_coll
+      INTEGER:: MODEL_PROF,MODEL_NPROF,model_coll,model_eqdsk_psi
 
       REAL(rkind):: RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ
       REAL(rkind):: RMIR,ZBB,Hpitch1,Hpitch2,RRCH
@@ -57,10 +57,10 @@ MODULE plcomm_parm
            proft_travis_p,proft_travis_q,proft_travis_w
 
       REAL(rkind),DIMENSION(NSM):: & 
-           PA,PZ,PN,PNS,PTPR,PTPP,PTS, &
-           PU,PUS,PUPR,PUPP, &
+           PA,PZ,PN,PNS,PNM,PTPR,PTPP,PTS,PTM, &
+           PU,PUS,PUM,PUPR,PUPP, &
            RHOITB,PNITB,PTITB,PUITB, &
-           PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
+           PROFN1,PROFN2,PROFN3,PROFT1,PROFT2,PROFT3,PROFU1,PROFU2,PROFU3, &
            PZCL,PNUC
       INTEGER,DIMENSION(NSM)::NPA,ID_NS
       CHARACTER(len=2),DIMENSION(NSM)::KID_NS

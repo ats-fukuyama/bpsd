@@ -58,6 +58,7 @@ CONTAINS
            RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ, &
            RMIR,ZBB,Hpitch1,Hpitch2,RRCH,RCOIL,ZCOIL,BCOIL,NCOILMAX, &
            NSMAX,NPA,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS,PUPR,PUPP,PNUC,PZCL, &
+           PNM,PTM,PUM,PROFN3,PROFT3,PROFU3, &
            ID_NS,KID_NS, &
            PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
            RHOMIN,QMIN,RHOITB,PNITB,PTITB,PUITB,RHOEDG, &
@@ -69,6 +70,7 @@ CONTAINS
            profn_travis_w,proft_travis_g,proft_travis_h,proft_travis_p, &
            proft_travis_q,proft_travis_w, &
            MODELG,MODELB,MODELN,MODELQ,model_coll,MODEL_PROF,MODEL_NPROF, &
+           model_eqdsk_psi, &
            RHOGMN,RHOGMX, &
            KNAMEQ,KNAMWR,KNAMWM,KNAMFP,KNAMFO,KNAMPF, &
            MODEFR,MODEFW,IDEBUG,mdlplw
@@ -106,6 +108,7 @@ CONTAINS
       WRITE(6,*) 'NSMAX,PA,PZ,PN,PNS,PTPR,PTPP,PTS,'
       WRITE(6,*) 'PU,PUS,PUPR,PUPP,PNUC,PZCL,ID_NS,KID_NS,'
       WRITE(6,*) 'PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2,'
+      WRITE(6,*) 'PNM,PTM,PUM,PROFN3,PROFT3,PROFU3'
       WRITE(6,*) 'r_corner,z_corner,br_corner,bz_corner,bt_corner,'
       WRITE(6,*) 'pn_corner,ptpr_corner,ptpp_corner,'
       WRITE(6,*) 'profn_travis_g,profn_travis_h,profn_travis_p,'
@@ -116,6 +119,7 @@ CONTAINS
       WRITE(6,*) 'PPN0,PTN0,RFCL,BAXIS_SCALED,'
       WRITE(6,*) 'MODELG,MODELB,MODELN,MODELQ,'
       WRITE(6,*) 'model_coll,MODEL_PROF,MODEL_NPROF,RHOGMN,RHOGMX,'
+      WRITE(6,*) 'model_eqdsk_psi,'
       WRITE(6,*) 'KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2'
       WRITE(6,*) 'MODEFW,MODEFR,IDEBUG,mdlplw'
       RETURN
@@ -378,6 +382,7 @@ CONTAINS
                    'mdlplw',mdlplw
       WRITE(6,'(A,I5)') ' MODEL_PROF  =',MODEL_PROF
       WRITE(6,'(A,I5)') ' MODEL_NPROF =',MODEL_NPROF
+      WRITE(6,'(A,I5)') ' model_eqdsk_psi =',model_eqdsk_psi
 
       WRITE(6,100)
       DO NS=1,NSMAX

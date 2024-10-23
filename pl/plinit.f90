@@ -82,11 +82,14 @@
 !        PZ    : Charge number
 !        PN    : Density at center                     (1.0E20/m**3)
 !        PNS   : Density on plasma surface             (1.0E20/m**3)
+!        PNM   : Density on mid plasma                 (1.0E20/m**3)
 !        PTPR  : Parallel temperature at center                (keV)
 !        PTPP  : Perpendicular temperature at center           (keV)
 !        PTS   : Temperature on surface                        (keV)
+!        PTM   : Temperature on mid plamsma                    (keV)
 !        PU    : Toroidal rotation velocity at center          (m/s)
 !        PUS   : Toroidal rotation velocity on surface         (m/s)
+!        PUM   : Toroidal rotation velocity on mid plasma      (m/s)
 !        PUPR  : typical parallel velocity                     (m/s)
 !        PUPP  : typical perpendicular velocity                (m/s)
 !        RHOITB: rho at ITB (0 for no ITB)
@@ -105,7 +108,10 @@
 !                 0 : neutral
 !                 1 : ion
 !                 2 : fast ion
-
+!
+!        RN(rho)=(PN-PNS)*(1-rho^PROFN1)^PROFN2 + PNS + PNM*rho^PROFN3(1-rho^PROFN3)
+!
+!
       NSMAX = 2                  ! Default number of particle species
 
 !     *** electron ***
@@ -118,11 +124,14 @@
          PZ(NS)   =-1.0D0
          PN(NS)   = 1.0D0
          PNS(NS)  = 0.0D0
+         PNM(NS)  = 0.0D0
          PTPR(NS) = 5.0D0
          PTPP(NS) = 5.0D0
          PTS(NS)  = 0.05D0
+         PTM(NS)  = 0.0D0
          PU(NS)   = 0.D0
          PUS(NS)  = 0.D0
+         PUM(NS)  = 0.D0
          PUPR(NS) = 0.D0
          PUPP(NS) = 0.D0
          RHOITB(NS)=0.D0
@@ -142,11 +151,14 @@
          PZ(NS)   = 1.0D0
          PN(NS)   = 1.0D0
          PNS(NS)  = 0.0D0
+         PNM(NS)  = 0.0D0
          PTPR(NS) = 5.0D0
          PTPP(NS) = 5.0D0
          PTS(NS)  = 0.05D0
+         PTM(NS)  = 0.D0
          PU(NS)   = 0.D0
          PUS(NS)  = 0.D0
+         PUM(NS)  = 0.D0
          PUPR(NS) = 0.D0
          PUPP(NS) = 0.D0
          RHOITB(NS)=0.D0
@@ -167,11 +179,14 @@
          PZ(NS)   = 1.0D0
          PN(NS)   = 1.0D0
          PNS(NS)  = 0.0D0
+         PNM(NS)  = 0.0D0
          PTPR(NS) = 5.0D0
          PTPP(NS) = 5.0D0
          PTS(NS)  = 0.05D0
+         PTM(NS)  = 0.D0
          PU(NS)   = 0.D0
          PUS(NS)  = 0.D0
+         PUM(NS)  = 0.D0
          PUPR(NS) = 0.D0
          PUPP(NS) = 0.D0
          RHOITB(NS)=0.D0
@@ -191,11 +206,14 @@
          PZ(NS)   = 2.0D0
          PN(NS)   = 1.0D0
          PNS(NS)  = 0.0D0
+         PNM(NS)  = 0.0D0
          PTPR(NS) = 5.0D0
          PTPP(NS) = 5.0D0
          PTS(NS)  = 0.05D0
+         PTM(NS)  = 0.D0
          PU(NS)   = 0.D0
          PUS(NS)  = 0.D0
+         PUM(NS)  = 0.D0
          PUPR(NS) = 0.D0
          PUPP(NS) = 0.D0
          RHOITB(NS)=0.D0
@@ -214,11 +232,14 @@
          PZ(NS)   = 1.0D0
          PN(NS)   = 0.0D0
          PNS(NS)  = 0.0D0
+         PNM(NS)  = 0.0D0
          PTPR(NS) = 5.0D0
          PTPP(NS) = 5.0D0
          PTS(NS)  = 0.0D0
+         PTM(NS)  = 0.0D0
          PU(NS)   = 0.D0
          PUS(NS)  = 0.D0
+         PUM(NS)  = 0.D0
          PUPR(NS) = 0.D0
          PUPP(NS) = 0.D0
          RHOITB(NS)=0.D0
@@ -258,18 +279,24 @@
 
 !        PROFN1: Density profile parameter (power of rho)
 !        PROFN2: Density profile parameter (power of (1 - rho^PROFN1))
+!        PROFN3: Density profile parameter (power of rho) for PNM
 !        PROFT1: Temperature profile parameter (power of rho)
 !        PROFT2: Temperature profile parameter (power of (1 - rho^PROFN1))
+!        PROFT3: Temperature profile parameter (power of rho) for PTM
 !        PROFU1: Rotation profile parameter (power of rho)
 !        PROFU2: Rotation profile parameter (power of (1 - rho^PROFN1))
+!        PROFU2: Rotation profile parameter (power of rho) for PUM
 
   DO NS=1,NSM
      PROFN1(NS)= 2.D0
      PROFN2(NS)= 0.5D0
+     PROFN3(NS)= 2.D0
      PROFT1(NS)= 2.D0
      PROFT2(NS)= 1.D0
+     PROFT3(NS)= 2.D0
      PROFU1(NS)= 2.D0
      PROFU2(NS)= 1.D0
+     PROFU3(NS)= 2.D0
   END DO
 
 !     ======( TRAVIS PROFILE PARAMETERS )======
@@ -340,6 +367,8 @@
 !                   0: Flat profile
 !                   1: Flat only in plasma, 0 outside
 !                   2: (1-psi) dependence, 0 outside
+!        model_eqdsk_psi: 0 : definition of psi in EQDSK document
+!                         1 : definition of psi in QST EQDSK format
 
       MODELG= 2
       MODELB= 0
@@ -348,6 +377,7 @@
       model_coll=0
       MODEL_PROF=0
       MODEL_NPROF=0
+      model_eqdsk_psi=1
 
 !        RHOMIN: rho at minimum q (0 for positive shear)
 !        QMIN  : q minimum for reversed shear

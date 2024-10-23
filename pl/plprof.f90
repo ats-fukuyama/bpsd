@@ -475,9 +475,9 @@
 
     SUBROUTINE pl_prof(RHON,PLF)
 
-        USE plcomm,ONLY: PZ,PN,PTPR,PTPP,PU,PNS,PTS,PUS,NSMAX&
-             &,MODELN,RA,RB, PROFN1,PROFN2,PROFT1,PROFT2, PROFU1&
-             &,PROFU2, PNITB,PTITB,PUITB,RHOITB,RHOEDG
+        USE plcomm,ONLY: PZ,PN,PTPR,PTPP,PU,PNS,PTS,PUS,PNM,PTM,PUM,NSMAX&
+             &,MODELN,RA,RB, PROFN1,PROFN2,PROFN3,PROFT1,PROFT2,PROFT3,PROFU1&
+             &,PROFU2,PROFU3,PNITB,PTITB,PUITB,RHOITB,RHOEDG
         USE plload,ONLY: pl_read_trdata
         USE plprof_travis
         USE plcoll
@@ -486,7 +486,7 @@
         TYPE(pl_prf_type),DIMENSION(NSMAX),INTENT(OUT):: PLF
         REAL(rkind):: RHOL, FACTN, FACTT, FACTU, FACTITB, PL0, PL,&
              & FACT, FNX, DFNX, AN, BN, FTX, DFTX, AT, BT, FUX, DFUX,&
-             & AU, BU, VAL, PNL, PTL, profn, proft
+             & AU, BU, VAL, PNL, PTL, profn, proft,FACTNM,FACTTM,FACTUM
         INTEGER(ikind)  :: NS
         REAL(rkind),DIMENSION(NSMAX) :: RN_PL,RT_PL,RTPR_PL,RTPP_PL&
              &,RU_PL,RUPL_PL
@@ -518,12 +518,15 @@
            ELSE
               DO NS=1,NSMAX
                  FACTN=(1.D0-RHOL**PROFN1(NS))**PROFN2(NS)
+                 FACTNM=RHOL**PROFN3(NS)*(1.D0-RHOL**PROFN3(NS))
                  FACTT=(1.D0-RHOL**PROFT1(NS))**PROFT2(NS)
+                 FACTTM=RHOL**PROFT3(NS)*(1.D0-RHOL**PROFT3(NS))
                  FACTU=(1.D0-RHOL**PROFU1(NS))**PROFU2(NS)
-                 PLF(NS)%RN  =(PN(NS)  -PNS(NS))*FACTN+PNS(NS)
-                 PLF(NS)%RTPR=(PTPR(NS)-PTS(NS))*FACTT+PTS(NS)
-                 PLF(NS)%RTPP=(PTPP(NS)-PTS(NS))*FACTT+PTS(NS)
-                 PLF(NS)%RU  =(PU(NS)  -PUS(NS))*FACTU+PUS(NS)
+                 FACTUM=RHOL**PROFU3(NS)*(1.D0-RHOL**PROFU3(NS))
+                 PLF(NS)%RN  =(PN(NS)  -PNS(NS))*FACTN+PNS(NS)+PNM(NS)*FACTNM
+                 PLF(NS)%RTPR=(PTPR(NS)-PTS(NS))*FACTT+PTS(NS)+PTM(NS)*FACTTM
+                 PLF(NS)%RTPP=(PTPP(NS)-PTS(NS))*FACTT+PTS(NS)+PTM(NS)*FACTTM
+                 PLF(NS)%RU  =(PU(NS)  -PUS(NS))*FACTU+PUS(NS)+PUM(NS)*FACTTM
                  PLF(NS)%RUPL=0.D0
                  IF(RHOL.LT.RHOITB(NS)) THEN
                     FACTITB =(1.D0-(RHOL/RHOITB(NS))**4)**2
@@ -551,11 +554,12 @@
               CALL GETPP(RHOL,PL)
               FACT=SQRT(PL/PL0)
               DO NS=1,NSMAX
-                 FACTU=(1.D0-RHOL**PROFU1(NS))**PROFU2(NS)
                  PLF(NS)%RN  =(PN(NS)-PNS(NS))*FACT+PNS(NS)
                  PLF(NS)%RTPR=(PTPR(NS)-PTS(NS))*FACT+PTS(NS)
                  PLF(NS)%RTPP=(PTPP(NS)-PTS(NS))*FACT+PTS(NS)
-                 PLF(NS)%RU  =(PU(NS)-PUS(NS))*FACTU+PUS(NS)
+                 FACTU=(1.D0-RHOL**PROFU1(NS))**PROFU2(NS)
+                 FACTUM=RHOL**PROFU3(NS)*(1.D0-RHOL**PROFU3(NS))
+                 PLF(NS)%RU  =(PU(NS)-PUS(NS))*FACTU+PUS(NS)+PNM(NS)*FACTUM
                  PLF(NS)%RUPL=0.D0
               ENDDO
            ENDIF
