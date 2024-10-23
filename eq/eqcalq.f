@@ -497,13 +497,15 @@ c$$$      enddo
 C
       RST(1)=0.D0
       DO NR=2,NRPMAX
-         RST(NR)=SQRT(PSIT(NR)/(PI*BB))
+         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,BB=',NR,PSIT(NR),BB
+         RST(NR)=SQRT(ABS(PSIT(NR)/(PI*BB)))
       ENDDO
       RSTA=RST(NRPMAX)
 C
       RHOT(1)=0.D0
       DO NR=2,NRPMAX
-         RHOT(NR)=SQRT(PSIT(NR)/PSITA)
+         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,BB=',NR,PSIT(NR),PSITA
+         RHOT(NR)=SQRT(ABS(PSIT(NR)/PSITA))
       ENDDO
 C
 C     ----- CALCULATE EDGE VALUE -----
@@ -898,12 +900,12 @@ C
       PSIPB=PSIP(NRMAX)
 C
       DO NR=NRPMAX+1,NRMAX
-         RST(NR)=SQRT(PSIT(NR)/(PI*BB))
+         RST(NR)=SQRT(ABS(PSIT(NR)/(PI*BB)))
       ENDDO
       RSTB=RST(NRMAX)
 C
       DO NR=NRPMAX+1,NRMAX
-         RHOT(NR)=SQRT(PSIT(NR)/PSITA)
+         RHOT(NR)=SQRT(ABS(PSIT(NR)/PSITA))
       ENDDO
 C
       DO NR=NRPMAX+1,NRMAX
@@ -1196,7 +1198,7 @@ C
 C
       PVOL =SUMV           ! Volume (or FNVPS(1.D0))
       PAREA=SUMS/(2.D0*PI) ! Cross section
-      RAAVE=SQRT(PAREA/PI) ! Minor radius determined by cross section
+      RAAVE=SQRT(ABS(PAREA)/PI) ! Minor radius determined by cross section
       PVAVE=SUMPV/PVOL     ! Volume averaged pressure
       BPA=RMU0*RIP*1.D6/FNRLEN(1.D0)   ! Poloidal magnetic field at the separatrix
       BETAT=PVAVE/(BB**2/(2.D0*RMU0))  ! Toroidal beta
