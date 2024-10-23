@@ -28,8 +28,10 @@ c
       ENDDO
       read (neqdsk,2020) RAXIS,ZAXIS,PSI0,PSIA,Bctr
 C
-      PSI0=2.D0*PI*PSI0
-      PSIA=2.D0*PI*PSIA
+      IF(model_eqdsk_phi.EQ.1) THEN
+         PSI0=2.D0*PI*PSI0
+         PSIA=2.D0*PI*PSIA
+      END IF
 C
       DPS=(PSIA-PSI0)/(NPSMAX-1)
       PSI0=PSI0-PSIA
@@ -122,17 +124,28 @@ C      WRITE(6,'(1P4E12.4)') ZG(1),ZG(2),ZG(NZGMAX-1),ZG(NZGMAX)
 C      WRITE(6,'(1P4E12.4)') PSIPS(1),PSIPS(2),
 C     &                      PSIPS(NPSMAX-1),PSIPS(NPSMAX)
 C
-      DO NZG=1,NZGMAX
-         DO NRG=1,NRGMAX
-            PSIRZ(NRG,NZG)=2.D0*PI*PSIRZ(NRG,NZG)-PSIA
+
+      IF(model_eqdsk_phi.EQ.0) THEN
+         DO NZG=1,NZGMAX
+            DO NRG=1,NRGMAX
+               PSIRZ(NRG,NZG)=PSIRZ(NRG,NZG)-PSIA
+            ENDDO
          ENDDO
-      ENDDO
-      DO i=1,NPSMAX
-         TTPS(i)   =2.D0*PI*TTPS(i)
-         TTDTTPS(i)=4.D0*PI**2*TTDTTPS(i)
-         DTTPS(i)  =TTDTTPS(i)/TTPS(i)
-Chonda         write(6,*) PSIPS(i),QQPS(i)
-      ENDDO
+         DO i=1,NPSMAX
+            DTTPS(i)  =TTDTTPS(i)/TTPS(i)
+         ENDDO
+      ELSE IF(model_eqdsk_phi.EQ.1) THEN
+         DO NZG=1,NZGMAX
+            DO NRG=1,NRGMAX
+               PSIRZ(NRG,NZG)=2.D0*PI*PSIRZ(NRG,NZG)-PSIA
+            ENDDO
+         ENDDO
+         DO i=1,NPSMAX
+            TTPS(i)   =2.D0*PI*TTPS(i)
+            TTDTTPS(i)=4.D0*PI**2*TTDTTPS(i)
+            DTTPS(i)  =TTDTTPS(i)/TTPS(i)
+         ENDDO
+      END IF
 C
       DO NZG=1,NZGMAX
       DO NRG=1,NRGMAX

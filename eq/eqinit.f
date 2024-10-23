@@ -308,6 +308,7 @@ C                 if negative, wall is extraporated by polynomials
 C
       MDLEQV = 3
 C
+      
 C        NPRINT: Level print out
 C            0: no print
 C            1: print first and last loop
@@ -410,7 +411,8 @@ C
      &              NPSMAX,NRVMAX,NTVMAX,NRMAX,NTHMAX,NSUMAX,
      &              MODEFR,MODEFW,
      &              MDLEQF,MDLEQC,MDLEQA,MDLEQX,MDLEQV,NPRINT,
-     &              PSIB,NPFCMAX,RIPFC,RPFC,ZPFC,WPFC,FRBIN
+     &              PSIB,NPFCMAX,RIPFC,RPFC,ZPFC,WPFC,FRBIN,
+     &              model_eqdsk_psi
 C
       READ(NID,EQ,IOSTAT=IST,ERR=9800,END=9900)
       RBRA=RB/RA
@@ -446,7 +448,8 @@ C
      &       9X,'EPSEQ,NLPMAX,EPSNW,DELNW,NLPNW'/
      &       9X,'RGMIN,RGMAX,RZMIN,RZMAX,ZLIMP,ZLIMM'/
      &       9X,'MODEFR,MODEFW,'/
-     &       9X,'PSIB,NPFCMAX,RIPFC,RPFC,ZPFC,WPFC,FRBIN')
+     &       9X,'PSIB,NPFCMAX,RIPFC,RPFC,ZPFC,WPFC,FRBIN,'/
+     &       9X,'model_eqdsk_psi')
       END
 C
 C     ***** CHECK INPUT PARAMETERS *****
@@ -603,7 +606,7 @@ C
       WRITE(6,602) 'NPRINT',NPRINT,
      &             'NLPMAX',NLPMAX,
      &             'NLPNW ',NLPNW
-C
+
       RETURN
   601 FORMAT(4(A6,'=',1PE11.2:2X))
   602 FORMAT(4(A6,'=',I7:6X))
