@@ -62,7 +62,7 @@ CONTAINS
 
     NAMELIST /WR/ RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ, &
                   NSMAX,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS,PZCL, &
-                  PNM,PTM,PUM,PROFN3,PROFT3,PROFU3,model_eqdsk.psi, &
+                  PNM,PTM,PUM,PROFN3,PROFT3,PROFU3,model_eqdsk_psi, &
                   r_corner,z_corner, &
                   br_corner,bz_corner,bt_corner, &
                   pn_corner,ptpr_corner,ptpp_corner, &
