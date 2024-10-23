@@ -62,6 +62,7 @@ CONTAINS
 
     NAMELIST /WR/ RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ, &
                   NSMAX,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS,PZCL, &
+                  PNM,PTM,PUM,PROFN3,PROFT3,PROFU3,model_eqdsk.psi, &
                   r_corner,z_corner, &
                   br_corner,bz_corner,bt_corner, &
                   pn_corner,ptpr_corner,ptpp_corner, &
@@ -69,6 +70,7 @@ CONTAINS
                   RHOMIN,QMIN,RHOITB,PNITB,PTITB,PUITB,RHOEDG, &
                   PPN0,PTN0,RF_PL, &
                   MODELG,MODELN,MODELQ,model_coll,MODEL_PROF,MODEL_NPROF, &
+                  model_eqdsk_psi, &
                   RHOGMN,RHOGMX, &
                   KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2, &
                   MODEFW,MODEFR,IDEBUG, &
@@ -119,6 +121,7 @@ CONTAINS
              9X,'RHOMIN,QMIN,RHOITB,PNITB,PTITB,PUITB,RHOEDG,'/ &
              9X,'PPN0,PTN0,RFCL,'/ &
              9X,'MODELG,MODELN,MODELQ,model_coll,MODEL_PROF,MODEL_NPROF,'/ &
+             9X,'model_eqdsk_psi,'/ &
              9X,'RHOGMN,RHOGMX,'/ &
              9X,'KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2'/ &
              9X,'MODEFW,MODEFR,IDEBUG'/ &
