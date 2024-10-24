@@ -38,10 +38,6 @@ SRCS =  fpcomm.f90 fpinit.f90 fpparm.f90 \
 	fpcalr.f90 fpreadsv.f90 fpoutdata.f90 fpcoef.f90 fpcale.f90 \
 	fpbounce.f90 fpcalj.f90 fpdisrupt.f90 fpprep.f90 fploop.f90 \
 	fpcont.f90 fpfout.f90 fpgsub.f90 fpgout.f90 fpfile.f90 \
-	fowcomm.f90 fowlib.f90 foworbit.f90 fowdistribution.f90 \
-	fowobclassify.f90 fowprep.f90 \
-	fowsource.f90 fowcoef.f90 fowexec.f90 \
-	fowevalNC.f90 fowloop.f90\
 	fpmenu.f90
 
 OBJS=$(addprefix $(OBJDIR)/, $(SRCS:.f90=.o))

@@ -21,7 +21,6 @@
 PROGRAM fp
 
   USE fpcomm
-  USE fowcomm
   USE plinit
   USE plparm
   USE equnit
