@@ -57,7 +57,8 @@ CONTAINS
       NAMELIST /PL/ &
            RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ, &
            RMIR,ZBB,Hpitch1,Hpitch2,RRCH,RCOIL,ZCOIL,BCOIL,NCOILMAX, &
-           NSMAX,NPA,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS,PUPR,PUPP,PNUC,PZCL, &
+           NSMAX,NPP,NPN,PA,PZ, &
+           PN,PNS,PTPR,PTPP,PTS,PU,PUS,PUPR,PUPP,PNUC,PZCL, &
            PNM,PTM,PUM,PROFN3,PROFT3,PROFU3, &
            ID_NS,KID_NS, &
            PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
@@ -81,10 +82,13 @@ CONTAINS
          DO NS=2,NSMAX
             PROFN1(NS)=PROFN1(1)
             PROFN2(NS)=PROFN2(1)
+            PROFN3(NS)=PROFN3(1)
             PROFT1(NS)=PROFT1(1)
             PROFT2(NS)=PROFT2(1)
+            PROFT3(NS)=PROFT3(1)
             PROFU1(NS)=PROFU1(1)
             PROFU2(NS)=PROFU2(1)
+            PROFU3(NS)=PROFU3(1)
          END DO
       END IF
 
@@ -291,6 +295,12 @@ CONTAINS
     proft_travis_w=rdata(33)
     BAXIS_SCALED=rdata(34)
 
+    CALL mtx_broadcast_integer(NPP,NSMAX)
+    CALL mtx_broadcast_integer(NPN,NSMAX)
+    CALL mtx_broadcast_integer(ID_NS,NSMAX)
+    DO NS=1,NSMAX
+       CALL mtx_broadcast_character(KID_NS(NS),4)
+    END DO
     CALL mtx_broadcast_real8(PA,NSMAX)
     CALL mtx_broadcast_real8(PZ,NSMAX)
     CALL mtx_broadcast_real8(PN,NSMAX)
@@ -308,17 +318,15 @@ CONTAINS
     CALL mtx_broadcast_real8(PUITB,NSMAX)
     CALL mtx_broadcast_real8(PROFN1,NSMAX)
     CALL mtx_broadcast_real8(PROFN2,NSMAX)
+    CALL mtx_broadcast_real8(PROFN3,NSMAX)
     CALL mtx_broadcast_real8(PROFT1,NSMAX)
     CALL mtx_broadcast_real8(PROFT2,NSMAX)
+    CALL mtx_broadcast_real8(PROFT3,NSMAX)
     CALL mtx_broadcast_real8(PROFU1,NSMAX)
     CALL mtx_broadcast_real8(PROFU2,NSMAX)
+    CALL mtx_broadcast_real8(PROFU3,NSMAX)
     CALL mtx_broadcast_real8(PNUC,NSMAX)
     CALL mtx_broadcast_real8(PZCL,NSMAX)
-    CALL mtx_broadcast_integer(NPA,NSMAX)
-    CALL mtx_broadcast_integer(ID_NS,NSMAX)
-    DO NS=1,NSMAX
-       CALL mtx_broadcast_character(KID_NS(NS),2)
-    END DO
 
     CALL mtx_broadcast_real8(RCOIL,NCOILMAX)
     CALL mtx_broadcast_real8(ZCOIL,NCOILMAX)
@@ -386,7 +394,7 @@ CONTAINS
 
       WRITE(6,100)
       DO NS=1,NSMAX
-         WRITE(6,110) NS,NPA(NS),PA(NS),PZ(NS),PN(NS),PNS(NS)
+         WRITE(6,110) NS,NPP(NS),NPN(NS),PA(NS),PZ(NS),PN(NS),PNS(NS)
       ENDDO
       WRITE(6,120)
       DO NS=1,NSMAX
@@ -428,17 +436,17 @@ CONTAINS
 
   100 FORMAT(' ','NS    NPA         PA          PZ          ', &
                        'PN          PNS')
-  110 FORMAT(' ',I2,' ',I5,7X,1P4E12.4)
+  110 FORMAT(' ',I3,' ',2I5,7X,4ES12.4)
   120 FORMAT(' ','NS    PTPR        PTPP        PTS         ', &
                        'PU          PUS')
-  130 FORMAT(' ',I2,' ',1P5E12.4)                               
+  130 FORMAT(' ',I2,' ',1P5E12.4)
   131 FORMAT(' ','NS    PUPR        PUPP        PNUC        PZCL')
-  132 FORMAT(' ',I2,' ',1P4E12.4)                               
+  132 FORMAT(' ',I3,' ',1P4E12.4)
   140 FORMAT(' ','NS    RHOITB      PNITB       PTITB       PUITB')
-  150 FORMAT(' ',I2,' ',1P4E12.4)                               
+  150 FORMAT(' ',I3,' ',1P4E12.4)
   160 FORMAT(' ','NS    PROFN1      PROFN2      PROFT1      ', &
                        'PROFT2      PROFU1      PROFU2')
-  170 FORMAT(' ',I2,' ',1P6E12.4)                               
+  170 FORMAT(' ',I3,' ',1P6E12.4)
   601 FORMAT(' ',A6,'=',1PE11.3:2X,A6,'=',1PE11.3: &
              2X,A6,'=',1PE11.3:2X,A6,'=',1PE11.3)
   604 FORMAT(' ',A6,'=',I7,4X  :2X,A6,'=',I7,4X  : &

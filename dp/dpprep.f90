@@ -65,7 +65,7 @@ CONTAINS
     END IF
 
     IF(nsamax_fm.GT.0) THEN
-       nsamax_dp=nsamax_fm
+       nsamax_dp=MAX(nsamax_fm,nsmax)
        CALL dpfp_allocate  ! nsamax_dp=nsamax_fm and allocated
        nsa=0
        DO ns=1,nsmax
@@ -87,6 +87,9 @@ CONTAINS
              END IF
           END SELECT
        END DO
+    ELSE
+       nsamax_dp=nsmax
+       CALL dpfp_allocate  ! nsamax_dp=nsamax_fm and allocated
     END IF
 
     IF(nsamax_dp.LT.nsmax) THEN

@@ -77,8 +77,9 @@
 !     ======( PLASMA PARAMETERS )======
 
 !        NSMAX : Number of particle species
-!        NPA   : Atomic number (0 for electron)
-!        PA    : Mass number (to be replaced by PM)
+!        NPP   : number of protons: Atomic number (0 for electron)
+!        NPN   : number of neutron
+!        PA    : Atomic mass (NPP+NPN)
 !        PZ    : Charge number
 !        PN    : Density at center                     (1.0E20/m**3)
 !        PNS   : Density on plasma surface             (1.0E20/m**3)
@@ -109,127 +110,114 @@
 !                 1 : ion
 !                 2 : fast ion
 !
-!        RN(rho)=(PN-PNS)*(1-rho^PROFN1)^PROFN2 + PNS + PNM*rho^PROFN3(1-rho^PROFN3)
-!
+!        RN(rho)= (PN-PNS)*(1-rho^PROFN1)^PROFN2 + PNS
+!               + PNM*rho^PROFN3*(1-rho^PROFN3)
 !
       NSMAX = 2                  ! Default number of particle species
 
 !     *** electron ***
-         NS = 1
 
-         KID_NS(NS)= ' e'
-         ID_NS(NS) = -1
-         NPA(NS)  = 0
-         PA(NS)   = AME/AMP
-         PZ(NS)   =-1.0D0
-         PN(NS)   = 1.0D0
-         PNS(NS)  = 0.0D0
-         PNM(NS)  = 0.0D0
-         PTPR(NS) = 5.0D0
-         PTPP(NS) = 5.0D0
-         PTS(NS)  = 0.05D0
-         PTM(NS)  = 0.0D0
-         PU(NS)   = 0.D0
-         PUS(NS)  = 0.D0
-         PUM(NS)  = 0.D0
-         PUPR(NS) = 0.D0
-         PUPP(NS) = 0.D0
-         RHOITB(NS)=0.D0
-         PNITB(NS)= 0.D0
-         PTITB(NS)= 0.D0
-         PUITB(NS)= 0.D0
-         PNUC(NS) = 0.D0
-         PZCL(NS) = 0.D0
+      NS = 1
+
+      KID_NS(NS)= 'e   '
+      ID_NS(NS) = -1
+      NPP(NS)  = 0
+      NPN(NS)  = 0
+      PA(NS)   = AME/AMP
+      PZ(NS)   =-1.0D0
+      PN(NS)   = 1.0D0
+      PNS(NS)  = 0.0D0
+      PNM(NS)  = 0.0D0
+      PTPR(NS) = 5.0D0
+      PTPP(NS) = 5.0D0
+      PTS(NS)  = 0.05D0
+      PTM(NS)  = 0.0D0
+      PU(NS)   = 0.D0
+      PUS(NS)  = 0.D0
+      PUM(NS)  = 0.D0
+      PUPR(NS) = 0.D0
+      PUPP(NS) = 0.D0
+      RHOITB(NS)=0.D0
+      PNITB(NS)= 0.D0
+      PTITB(NS)= 0.D0
+      PUITB(NS)= 0.D0
+      PNUC(NS) = 0.D0
+      PZCL(NS) = 0.D0
 
 !     *** deuteron ***
-         NS = 2
 
-         KID_NS(NS)= ' D'
-         ID_NS(NS) = 1
-         NPA(NS)  = 1
-         PA(NS)   = 2.0D0
-         PZ(NS)   = 1.0D0
-         PN(NS)   = 1.0D0
-         PNS(NS)  = 0.0D0
-         PNM(NS)  = 0.0D0
-         PTPR(NS) = 5.0D0
-         PTPP(NS) = 5.0D0
-         PTS(NS)  = 0.05D0
-         PTM(NS)  = 0.D0
-         PU(NS)   = 0.D0
-         PUS(NS)  = 0.D0
-         PUM(NS)  = 0.D0
-         PUPR(NS) = 0.D0
-         PUPP(NS) = 0.D0
-         RHOITB(NS)=0.D0
-         PNITB(NS)= 0.D0
-         PTITB(NS)= 0.D0
-         PUITB(NS)= 0.D0
-         PNUC(NS) = 0.D0
-         PZCL(NS) = 0.D0
+      NS = 2
+
+      KID_NS(NS)= 'D   '
+      ID_NS(NS) = 1
+      NPP(NS)  = 1
+      NPN(NS)  = 1
+      PA(NS)   = 2.0D0
+      PZ(NS)   = 1.0D0
+      PN(NS)   = 1.0D0
+      PNS(NS)  = 0.0D0
+      PNM(NS)  = 0.0D0
+      PTPR(NS) = 5.0D0
+      PTPP(NS) = 5.0D0
+      PTS(NS)  = 0.05D0
+      PTM(NS)  = 0.D0
+      PU(NS)   = 0.D0
+      PUS(NS)  = 0.D0
+      PUM(NS)  = 0.D0
+      PUPR(NS) = 0.D0
+      PUPP(NS) = 0.D0
+      RHOITB(NS)=0.D0
+      PNITB(NS)= 0.D0
+      PTITB(NS)= 0.D0
+      PUITB(NS)= 0.D0
+      PNUC(NS) = 0.D0
+      PZCL(NS) = 0.D0
 
 !     *** triton ***
 
-         NS = 3
+      NS = 3
 
-         KID_NS(NS)= ' T'
-         ID_NS(NS) = 1
-         NPA(NS)  = 1
-         PA(NS)   = 3.0D0
-         PZ(NS)   = 1.0D0
-         PN(NS)   = 1.0D0
-         PNS(NS)  = 0.0D0
-         PNM(NS)  = 0.0D0
-         PTPR(NS) = 5.0D0
-         PTPP(NS) = 5.0D0
-         PTS(NS)  = 0.05D0
-         PTM(NS)  = 0.D0
-         PU(NS)   = 0.D0
-         PUS(NS)  = 0.D0
-         PUM(NS)  = 0.D0
-         PUPR(NS) = 0.D0
-         PUPP(NS) = 0.D0
-         RHOITB(NS)=0.D0
-         PNITB(NS)= 0.D0
-         PTITB(NS)= 0.D0
-         PUITB(NS)= 0.D0
-         PNUC(NS) = 0.D0
-         PZCL(NS) = 0.D0
+      KID_NS(NS)= 'T   '
+      ID_NS(NS) = 1
+      NPP(NS)  = 1
+      NPN(NS)  = 2
+      PA(NS)   = 3.0D0
+      PZ(NS)   = 1.0D0
 
-!     *** Helium ion ***
-         NS = 4
+!     *** Helium4 ion ***
 
-         KID_NS(NS)= 'He'
-         ID_NS(NS) = 1
-         NPA(NS)  = 2
-         PA(NS)   = 4.0D0
-         PZ(NS)   = 2.0D0
-         PN(NS)   = 1.0D0
-         PNS(NS)  = 0.0D0
-         PNM(NS)  = 0.0D0
-         PTPR(NS) = 5.0D0
-         PTPP(NS) = 5.0D0
-         PTS(NS)  = 0.05D0
-         PTM(NS)  = 0.D0
-         PU(NS)   = 0.D0
-         PUS(NS)  = 0.D0
-         PUM(NS)  = 0.D0
-         PUPR(NS) = 0.D0
-         PUPP(NS) = 0.D0
-         RHOITB(NS)=0.D0
-         PNITB(NS)= 0.D0
-         PTITB(NS)= 0.D0
-         PUITB(NS)= 0.D0
-         PNUC(NS) = 0.D0
-         PZCL(NS) = 0.D0
+      NS = 4
 
-         ! *** dummy ***
-      DO NS = 5, NSM
-         KID_NS(NS)= ' H'
+      KID_NS(NS)= 'He4 '
+      ID_NS(NS) = 1
+      NPP(NS)  = 2
+      NPN(NS)  = 2
+      PA(NS)   = 4.0D0
+      PZ(NS)   = 2.0D0
+
+!     *** Helium 3 ion ***
+
+      NS = 5
+
+      KID_NS(NS)= 'He3 '
+      ID_NS(NS) = 1
+      NPP(NS)  = 2
+      NPN(NS)  = 2
+      PA(NS)   = 3.0D0
+      PZ(NS)   = 2.0D0
+
+      ! *** default proton ***
+
+      DO NS=6,NSM
+         KID_NS(NS)= 'H   '
          ID_NS(NS)= 1
-         NPA(NS)  = 1
+         NPP(NS)  = 1
+         NPN(NS)  = 0
          PA(NS)   = 1.0D0
          PZ(NS)   = 1.0D0
+      END DO
+
+      DO NS=3,NSM
          PN(NS)   = 0.0D0
          PNS(NS)  = 0.0D0
          PNM(NS)  = 0.0D0
