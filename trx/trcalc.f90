@@ -46,6 +46,15 @@
       BP(1:NRMAX)=AR1RHOG(1:NRMAX)*RDP(1:NRMAX)/RR
       QP(1:NRMAX)=TTRHOG(1:NRMAX)*ARRHOG(1:NRMAX) &
            /(4.D0*PI**2*RDPVRHOG(1:NRMAX))
+      IF(qp_max.GT.0.D0) THEN
+         DO NR=1,NRMAX
+            IF(QP(NR).GT.qp_max) THEN
+               QP(NR)=qp_max
+            ELSE IF(QP(NR).LT.-qp_max) THEN
+               QP(NR)=-qp_max
+            END IF
+         END DO
+      END IF
       Q0=FCTR(RG(1),RG(2),QP(1),QP(2))
 
 !     *** RADIAL ELECTRIC FIELD ***

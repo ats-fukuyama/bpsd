@@ -375,6 +375,13 @@
          S(NR)=RHOG(NR)/QL*DQ
 !     pressure gradient for MHD instability
          ALPHA(NR)=-2.D0*RMU0*QL**2*RR/BB**2*(DPP*1.D20*RKEV)
+         IF(ALPHA_MAX.GT.0.D0) THEN
+            IF(ALPHA(NR).GT.alpha_max) THEN
+               ALPHA(NR)=alpha_max
+            ELSE IF(ALPHA(NR).LT.-alpha_max) THEN
+               ALPHA(NR)=-alpha_max
+            END IF
+         END IF
 !     magnetic curvature
          RKCV(NR)=-EPS*(1.D0-1.D0/(QL*QL))
 

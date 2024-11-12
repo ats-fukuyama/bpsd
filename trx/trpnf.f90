@@ -155,7 +155,7 @@ CONTAINS
     INteGER,INTENT(IN):: nnf
     REAL(rkind)   :: &
          ANE, EC, HYF, P1, PTNT, SS, SSB, TAUS, &
-         TD, TE, TT, VC3, VCA3, VCD3, VCR, VCT3, VF, WF, ZEFFM, PB, SSF
+         TD, TE, TT, VC3, VCA3, VCD3, VCR, VCT3, VF, WF, ZEFFM, PB, SSF, RSB
     INTEGER:: NR,NNB,NS_beam
     REAL(rkind)   :: COULOG, HY   !FUNCTION
 
@@ -196,8 +196,13 @@ CONTAINS
 !                    SIGMAB(PNBENG(NNB),EC,TT,PTNT), &
 !                    PNBENG(NNB),EC,TAUS
                ELSEIF(NS_beam.EQ.NS_T) THEN
-               TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
-               SSB = SSB + (((PNB_NNBNR(NNB,NR))*1E6)/(AEE*PNBIN(nnb)*RKEV))*TAUS * sigmaDbuTbm(TE) / RN(NR,NS_beam)
+                  RSB = 0
+               ! TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
+               ! ! sf*nj*τsA
+               ! ! SSB = SSB + ((((PNB_NNBNR(NNB,NR)))/(AEE*PNBENG(nnb)*RKEV))/(RN(NR,NS_beam))*1.D20) * TAUS*sigmaDbuTbm(TE) 
+               ! !sigmaDbuTbm derived from NRL formlary, 1E-26 multiplied to adjust the unit from barn to m^2
+               ! RSB = (((PNB_NNBNR(NNB,NR)))/(AEE*PNBENG(nnb)*RKEV))* TAUS * (sigmaDbuTbm(TE)*1.0D-28)
+               ! WRITE(6,*) sigmaDbuTbm(TE)
                ENDIF
                END IF
             END DO
@@ -237,7 +242,7 @@ CONTAINS
          !  DD反応からのfast TについてもDD reationのmoduleにてRNに統合し、
          !  SSFで断面積を与えている。
          
-         SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 
+         SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 !+ RSB*RN(NR,NS_D)
          ! SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB+SSF)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 + TAUS*RN(NR,NS_D)*sigmaDbuTbm(TE,ETNBI)
          PNF_NSNNFNR(NS_A,NNF,NR) = SNF_NSNNFNR(NS_A,NNF,NR)*3.5D3*RKEV*1.D20
          IF(MOD(model_nnf(nnf),2).EQ.1) &

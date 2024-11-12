@@ -458,6 +458,8 @@ CONTAINS
       CKALFA = 0.D0
       CKBETA = 0.D0
       CKGUMA = 0.D0
+      ALPHA_MAX= 100.D0 ! maximum alpha for limiting pressure gradient
+      QP_MAX   = 0.D0 ! maximum QP for limiting shear
 
       !  ==== RADIAL ELECTRIC FIELD SWITCH ====
 
