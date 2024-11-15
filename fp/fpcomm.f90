@@ -110,6 +110,12 @@ MODULE fpcomm_parm
 	CHARACTER(LEN=80):: dir_text_data
         CHARACTER(LEN=80):: dir_binary_data
 
+CONTAINS
+
+  SUBROUTINE open_fpcomm_parm
+    RETURN
+  END SUBROUTINE open_fpcomm_parm
+
 END module fpcomm_parm
 
 module fpcomm
