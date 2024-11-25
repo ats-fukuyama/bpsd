@@ -1073,7 +1073,6 @@ SUBROUTINE PWRABS
 
   integer    :: NE,IN,NN,NSD,NS
   integer    :: I,J,K,II,JJ
-  real(rkind),dimension(:,:),ALLOCATABLE:: PABS
   real(rkind)    :: RW,S,MU(3,3,6),R(3),Z(3)
   complex(rkind) :: DTENS(NSM,3,3,3),CTENS(NSM,3,3,3)
   complex(rkind) :: CIWE,CINT(NSM,6,6),CE(6)
@@ -1102,8 +1101,6 @@ SUBROUTINE PWRABS
   END IF
 
   ! --- initialize ---
-  
-  allocate(PABS(NSMAX,NEMAX))
   
   RW=2.D0*PI*RF*1.D6
   CIWE=CII*RW*EPS0
@@ -1232,8 +1229,6 @@ SUBROUTINE PWRABS
   DO NS=1,NSMAX
      PABSTT=PABSTT+PABST(NS)
   END DO
-
-  deallocate(PABS)
 
   RETURN
 END SUBROUTINE PWRABS

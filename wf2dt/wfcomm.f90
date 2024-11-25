@@ -187,6 +187,7 @@ module wfcomm
 !       /WFPWR/
   real(rkind):: PABSTT
   real(rkind),dimension(NSM):: PABST
+  real(rkind),dimension(:,:),ALLOCATABLE:: PABS
 !  real(rkind),dimension(:)  ,ALLOCATABLE :: PABSS !(NSM)
 !  real(rkind),dimension(:)  ,ALLOCATABLE :: PABSK !(NKMAX)
 !  real(rkind),dimension(:)  ,ALLOCATABLE :: PABSTN!(NNMAX)
@@ -491,11 +492,15 @@ contains
     integer,save :: NSDMAX_save=0
     integer,save :: NNMAX_save=0
     integer,save :: NMDMAX_save=0
+    integer,save :: NSMAX_save=0
+    integer,save :: NEMAX_save=0
 
     if(fldinit.eq.1) then
        if((NSDMAX.eq.NSDMAX_save).and.&
          &( NNMAX.eq. NNMAX_save).and.&
-         &(NMDMAX.eq.NMDMAX_save)) THEN
+         &(NMDMAX.eq.NMDMAX_save).and.&
+         &( NEMAX.eq. NEMAX_save).and.&
+         &( NSMAX.eq. NSMAX_save)) THEN
 !          .and.&
 !         &( NBMAX.eq. NBMAX_save)) then
           return
@@ -503,15 +508,20 @@ contains
           call wffld_deallocate
           NSDMAX_save=0
           NNMAX_save=0
+          NEMAX_save=0
           NMDMAX_save=0
+          NSMAX_save=0
        end if
     end if
     allocate(CESD(NSDMAX),CEND(NNMAX))!,CEP(3,NNMAX))
     allocate(CBF(3,NNMAX),CBP(3,NNMAX),EMAX(4))   !,CRFL(NMDMAX,NBMAX))
+    ALLOCATE(PABS(NSMAX,NEMAX))
 
     NSDMAX_save = NSDMAX
      NNMAX_save = NNMAX
+     NEMAX_save = NEMAX
     NMDMAX_save = NMDMAX
+     NSMAX_save = NSMAX
 !     NBMAX_save = NBMAX
     fldinit = 1
 
@@ -521,7 +531,7 @@ contains
   subroutine wffld_deallocate
     implicit none
 
-    deallocate(CESD,CEND,CBF,CBP,EMAX) !,CRFL)!,CEP)
+    deallocate(CESD,CEND,CBF,CBP,EMAX,PABS)
 
     return
   end subroutine wffld_deallocate
