@@ -275,9 +275,9 @@ subroutine DTENSR(NE,DTENS)
                    th.GT.thdamp_min.AND.th.LT.thdamp_max) ID=0
            END IF
         END SELECT
-        IF(ID.NE.0) THEN
-           WRITE(26,'(A,I4,5ES12.4)') 'id,x,y,r,th;',id,x,y,r,th*180.D0/PI,del
-        END IF
+!        IF(ID.NE.0) THEN
+!           WRITE(26,'(A,I4,5ES12.4)') 'id,x,y,r,th;',id,x,y,r,th*180.D0/PI,del
+!        END IF
         IF(ID.NE.0) THEN
            CDAMP=CII*PZCL(NSMAX)
            F=FDAMP
