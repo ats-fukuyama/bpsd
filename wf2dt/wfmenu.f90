@@ -56,13 +56,14 @@ subroutine wfmenu
      if (nrank.eq.0) call WFGOUT
   elseif (KID.eq.'S') then
      call wfsave
-  elseif (KID.eq.'L') then
+  elseif (KID.eq.'F') then
      CALL wfload
-!     IDEBUG_SAVE=IDEBUG
-!     IDEBUG=1
-!     CALL pl_load(ierr)
-!     CALL wf_load_wg(ierr)
-!     IDEBUG=IDEBUG_SAVE
+  elseif (KID.eq.'L') then
+     IDEBUG_SAVE=IDEBUG
+     IDEBUG=1
+     CALL pl_load(ierr)
+     CALL wf_load_wg(ierr)
+     IDEBUG=IDEBUG_SAVE
   elseif (KID.eq.'?') then
      if(nrank.eq.0) call WFINFO
   elseif (KID.eq.'Q') then
