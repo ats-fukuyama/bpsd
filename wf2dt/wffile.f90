@@ -479,6 +479,7 @@ SUBROUTINE wfload
 
   use wfcomm
   USE femmeshprep
+  USE feminterpolate
   implicit none
   integer :: IST
   CHARACTER KNAME*32
@@ -502,24 +503,32 @@ SUBROUTINE wfload
   ENDIF
 30 CONTINUE
      
-  WRITE(26) NNMAX,NEMAX,NSDMAX,NBNOD,NBSID
+  READ(26) NNMAX,NEMAX,NSDMAX,NBNOD,NBSID
   CALL wf_node_allocate
   CALL wf_elm_allocate
   CALL wfsid_allocate
-  WRITE(26) NNMAX,NEMAX,NSDMAX,NBNOD,NBSID
-  WRITE(26) RNODE,ZNODE
-  WRITE(26) KANOD,KBNOD
-  WRITE(26) NDELM,KNELM,NSDELM
-  WRITE(26) NDSID,KASID,KBSID
-  WRITE(26) CESD
-  WRITE(26) CEND
-  WRITE(26) CBF
-  WRITE(26) CBP
-  WRITE(26) NSDBS,NNDBS
-  WRITE(26) CEBSD,CEBND
+  CALL wfsrt_allocate
+  CALL wffld_allocate
+  READ(26) RNODE,ZNODE
+  READ(26) KANOD,KBNOD
+  READ(26) NDELM,KNELM,NSDELM
+  READ(26) NDSID,KASID,KBSID
+  READ(26) CESD
+  READ(26) CEND
+  READ(26) CBF
+  READ(26) CBP
+  READ(26) NSDBS,NNDBS
+  READ(26) CEBSD,CEBND
   CLOSE(26)
-  
+
   WRITE(6,*) '## wf2d data loaded from FILE: ',KFNAMF
+
+  CALL fem_meshprep
+  CALL fem_setup_zone
+  CALL wfindx
+  CALL wffepi
+  CALL setLSD
+  CALL setewg
   
 9000 RETURN
 END SUBROUTINE wfload

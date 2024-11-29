@@ -11,7 +11,6 @@ subroutine wfmenu
   integer  :: MODE
   integer  :: IERR
   character:: KID*1,LINE*80
-  INTEGER:: IDEBUG_SAVE
   INTEGER:: input_error_count
 
   input_error_count=0
@@ -58,11 +57,12 @@ subroutine wfmenu
   elseif (KID.eq.'S') then
      call wfsave
   elseif (KID.eq.'L') then
-     IDEBUG_SAVE=IDEBUG
-     IDEBUG=1
-     CALL pl_load(ierr)
-     CALL wf_load_wg(ierr)
-     IDEBUG=IDEBUG_SAVE
+     CALL wfload
+!     IDEBUG_SAVE=IDEBUG
+!     IDEBUG=1
+!     CALL pl_load(ierr)
+!     CALL wf_load_wg(ierr)
+!     IDEBUG=IDEBUG_SAVE
   elseif (KID.eq.'?') then
      if(nrank.eq.0) call WFINFO
   elseif (KID.eq.'Q') then
