@@ -10,6 +10,7 @@ subroutine wfmenu
   
   integer  :: MODE
   integer  :: IERR
+  INTEGER:: idebug_save
   character:: KID*1,LINE*80
   INTEGER:: input_error_count
 
