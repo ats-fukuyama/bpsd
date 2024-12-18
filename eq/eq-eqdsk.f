@@ -132,6 +132,7 @@ C
             ENDDO
          ENDDO
          DO i=1,NPSMAX
+            TTPS(i)   =TTPS(i)/SQRT(2.D0*Pi)
             DTTPS(i)  =TTDTTPS(i)/TTPS(i)
          ENDDO
       ELSE IF(model_eqdsk_phi.EQ.1) THEN

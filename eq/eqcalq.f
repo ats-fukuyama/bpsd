@@ -494,17 +494,17 @@ c$$$     &        nr,psip(nr)/psipa,psit(nr)/psita,
 c$$$     &        vps(nr),sps(nr),dvdpsip(nr),dvdpsit(nr)
 c$$$      enddo
 
-C
+
       RST(1)=0.D0
       DO NR=2,NRPMAX
-         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,BB=',NR,PSIT(NR),BB
+C         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,BB=',NR,PSIT(NR),BB
          RST(NR)=SQRT(ABS(PSIT(NR)/(PI*BB)))
       ENDDO
       RSTA=RST(NRPMAX)
 C
       RHOT(1)=0.D0
       DO NR=2,NRPMAX
-         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,BB=',NR,PSIT(NR),PSITA
+C         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,PSITA=',NR,PSIT(NR),PSITA
          RHOT(NR)=SQRT(ABS(PSIT(NR)/PSITA))
       ENDDO
 C
