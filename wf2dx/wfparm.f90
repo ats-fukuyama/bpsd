@@ -71,10 +71,10 @@ CONTAINS
            MODELG,MODELB,MODELN,MODELQ,model_coll,MODEL_PROF,MODEL_NPROF, &
            RHOGMN,RHOGMX, &
            KNAMEQ,KNAMWR,KNAMWM,KNAMFP,KNAMFO,KNAMPF, &
-           MODEFR,MODEFW,IDEBUG,mdlplw, &
+           MODEFR,MODEFW,idebug_wf,mdlplw, &
            !           
            MODELP,MODELV,NCMIN,NCMAX,MODEL_ES,EPSRT,LMAXRT, &
-           NS_NSA_DP,PMAX_dp,EMAX_dp,RHON_MIN,RHON_MAX, &
+           PMAX_dp,EMAX_dp,RHON_MIN,RHON_MAX, &
            NPMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_DP, &
            !
            model_config,model_shape, &
@@ -98,8 +98,7 @@ CONTAINS
            sort_weight_x,sort_weight_y, &
            ngxmax,ngymax,ngvmax,gaspect,nxzone_max,nyzone_max, &
            tolerance,modeli, &
-           KFNAME,KFNAMA,KFNAMF,KFNAMB,KNAMWG, &
-           idebuga
+           KFNAME,KFNAMA,KFNAMF,KFNAMB,KNAMWG
 
     IERR=0
     
@@ -172,11 +171,11 @@ CONTAINS
     WRITE(6,*) 'MODELG,MODELB,MODELN,MODELQ,'
     WRITE(6,*) 'model_coll,MODEL_PROF,MODEL_NPROF,RHOGMN,RHOGMX,'
     WRITE(6,*) 'KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2'
-    WRITE(6,*) 'MODEFW,MODEFR,IDEBUG,mdlplw,'
+    WRITE(6,*) 'MODEFW,MODEFR,idebug_wf,mdlplw,'
     
     WRITE(6,*) 'MODELP,MODELV,NCMIN,NCMAX,'
     WRITE(6,*) 'MODEL_ES,EPSRT,LMAXRT,'
-    WRITE(6,*) 'NS_NSA_DP,PMAX_dp,EMAX_dp,ROHN_MIN,ROHN_MAX,'
+    WRITE(6,*) 'PMAX_dp,EMAX_dp,ROHN_MIN,ROHN_MAX,'
     WRITE(6,*) 'NPMAX_DP,NTHMAX_DP,NRMAX_DP,NSAMAX_DP,'
 
     WRITE(6,*) 'MODELI,KFNAME,KFNAMA,KFNAMF,KFNAMB,KNAMWG,'
@@ -197,7 +196,7 @@ CONTAINS
     WRITE(6,*) 'sort_weight_x,sort_weight_y,'
     WRITE(6,*) 'delr,delz,bdrmin,bdrmax,bdzmin,bdzmax,'
     WRITE(6,*) 'ngxmax,ngymax,ngvmax,gaspect,nxzone_max,nyzone_max,'
-    WRITE(6,*) 'tolerance,idebuga'
+    WRITE(6,*) 'tolerance'
     RETURN
   END SUBROUTINE wf_namelist
 
@@ -490,7 +489,7 @@ SUBROUTINE wfparm_broadcast
   call mtx_broadcast_real8(thmin_nmed,nmed_max)
   call mtx_broadcast_real8(thmax_nmed,nmed_max)
   
-  call mtx_broadcast_integer(idebuga,idebuga_max)
+  call mtx_broadcast_integer(idebug_wf,idebug_wfm)
 
 ! ------ broadcast character ------
 

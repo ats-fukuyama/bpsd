@@ -187,6 +187,8 @@ SUBROUTINE CVSOLV
 
      LL=0
      DO J=1,6
+        JNSD=0
+        JNN=0
         if(J.ge.1.and.J.le.3) then
            JNSD=ABS(NSDELM(J,NE))
            JNV =NVNSD(JNSD)
@@ -194,6 +196,7 @@ SUBROUTINE CVSOLV
            JNN=NDELM(J-3,NE)
            JNV=NVNN(JNN)
         end if
+        WRITE(26,'(A,4I8)') 'NE,J,JNSD,JNN=',NE,J,JNSD,JNN
         if (JNV.eq.0) goto 8110
         LL=JNV
 
@@ -221,12 +224,13 @@ SUBROUTINE CVSOLV
      ENDDO
      
 8100 continue
+!     WRITE(6,*) '@@@ JMIN,JMAX=',JMIN,JMAX
   end do
 
 ! ------ Count non-zero component -------
 
   NNZ=0
-
+  WRITE(6,'(A,2I8)') '@@@ NEMAX,NNMAX=',NEMAX,NNMAX
   DO NE=1,NEMAX
      IF(NEFLAG(NE).NE.0) THEN
 
@@ -273,6 +277,7 @@ SUBROUTINE CVSOLV
   NNZMAX=NNZ
   MILEN=iend-istart+1
   MJLEN=JMAX-JMIN+1
+  WRITE(6,*) '@@@ nnzmax=',NNZMAX
 
   ! ----- set CEQP,CRVP -----
 
@@ -439,7 +444,7 @@ SUBROUTINE CVSOLV
 
   ! ----- initialize for parallel computing -----
 
-  itype = 0
+  itype = 3
   call mtxc_setup(MLEN,istart,iend,nzmax=NNZME)
 
   do NNZ=1,NNZME

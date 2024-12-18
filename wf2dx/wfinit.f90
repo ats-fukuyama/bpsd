@@ -354,8 +354,8 @@ CONTAINS
     ! --- idebuga( 3) : wg e-field output ---
     ! --- idebuga( 4) : wfindex
 
-    DO id=1,idebuga_max
-       idebuga(id)=0
+    DO id=1,idebug_wfm
+       idebug_wf(id)=0
     END DO
 
     RETURN
