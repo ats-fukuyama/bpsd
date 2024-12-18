@@ -1,26 +1,23 @@
-### make.mtxp.petsc+mumps
-### Setup configureation with MPI, PETSc and MUMPS
+### make.mtxp.macport.petsc
+### Setup configureation with mpich, petsc and mumps from macports
 
-EXEC=testbnd testbndc testpcg testdmumps testzmumps testksp
+EXEC=testbnd testbndc testpcg testksp
 
-INCLUDE_MTX_MUMPS=-I${PETSC_DIR}/${PETSC_ARCH}/include
+PETSC_DIR=/opt/local/lib/petsc
+INCLUDE_MTX_PETSC=-I${PETSC_DIR}/include -I${PETSC_DIR}/include/petsc
 include ${PETSC_DIR}/lib/petsc/conf/variables
-
-INCLUDE_MTX_PETSC=-I${PETSC_DIR}/include -I${PETSC_DIR}/include/petsc -I${PETSC_DIR}/${PETSC_ARCH}/include
+PETSC_KSP_LIB=/opt/local/lib/petsc/lib/libpetsc.dylib
 
 LIBMTXMPI=../mtxp/libmtxmpi.o
-
-MUMPS_LIB=-L${PETSC_DIR}/${PETSC_ARCH}/lib -ldmumps -lzmumps -lmumps_common -lpord -lscalapack -lparmetis -lmetis -lflapack -lfblas
-
 LIB_MTX_BND=$(LIBMTXMPI) ../mtxp/libmtxbndmpi.o
 LIB_MTX_PCG=$(LIBMTXMPI) ../mtxp/libmtxpcgmpi.o
 LIB_MTX_KSP=$(LIBMTXMPI) ../mtxp/libmtxksp.o
-LIB_MTX_MUMPS=$(LIBMTXMPI) ../mtxp/libmtxmumps.o
+LIB_MTX_MUMPS=
 
 LIBX_MTX_BND=$(LIB_MTX_BND)
 LIBX_MTX_PCG=$(LIB_MTX_PCG)
 LIBX_MTX_KSP=$(LIB_MTX_KSP) $(PETSC_KSP_LIB)
-LIBX_MTX_MUMPS=$(LIB_MTX_MUMPS) $(PETSC_KSP_LIB) $(MUMPS_LIB)
+LIBX_MTX_MUMPS=
 
 ### PART 2: Selection of default setup ###
 ###            overwritten in Makefile in each directory ###
@@ -35,10 +32,10 @@ LIBX_MTX_MUMPS=$(LIB_MTX_MUMPS) $(PETSC_KSP_LIB) $(MUMPS_LIB)
 #LIBX_MTX=$(LIBX_MTX_PCG)
 
 ## with MPI, use PETSc for real matrix
-#LIB_MTX=$(LIB_MTX_KSP)
-#LIBX_MTX=$(LIBX_MTX_KSP)
+LIB_MTX=$(LIB_MTX_KSP)
+LIBX_MTX=$(LIBX_MTX_KSP)
 
 ## with MPI, use MUMPS for real and complex matrix
-LIB_MTX=$(LIB_MTX_MUMPS)
-LIBX_MTX=$(LIBX_MTX_MUMPS)
+#LIB_MTX=$(LIB_MTX_MUMPS)
+#LIBX_MTX=$(LIBX_MTX_MUMPS)
 

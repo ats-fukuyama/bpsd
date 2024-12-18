@@ -39,9 +39,11 @@ CONTAINS
       endif
 
       do ns=1,species%nsmax
-         species%data(ns)%pa=pm(ns)
+         species%data(ns)%pa=pa(ns)
          species%data(ns)%pz=pz(ns)
-         species%data(ns)%npa=npa(ns)
+         species%data(ns)%np_p=np_p(ns)
+         species%data(ns)%np_n=np_n(ns)
+         species%data(ns)%np_a=np_a(ns)
       enddo
       call bpsd_put_data(species,ierr)
 

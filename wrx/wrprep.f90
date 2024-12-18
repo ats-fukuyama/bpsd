@@ -14,6 +14,7 @@ CONTAINS
     USE wrcomm_parm
     USE dpprep,ONLY: dp_prep_ns
     USE equnit
+    USE plprof
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
     CHARACTER(LEN=80):: LINE
@@ -28,6 +29,9 @@ CONTAINS
          INTEGER,INTENT(OUT):: nsumax
        END SUBROUTINE eqget_rzsu
     END INTERFACE
+    INTEGER:: nrr,nrrmax_wr
+    REAL(rkind):: rr_wr,drr_wr
+    TYPE(pl_mag_type):: mag_wr
 
     IERR=0
 
@@ -118,6 +122,15 @@ CONTAINS
 
     CALL dp_prep_ns(ierr)
 
+    nrrmax_wr=21
+    drr_wr=(rmax_wr-rmin_wr)/nrrmax_wr
+    DO nrr=1,nrrmax_wr
+       rr_wr=rmin_wr+drr_wr*(nrr-1)
+       CALL pl_mag(rr_wr,0.D0,0.D0,mag_wr)
+       WRITE(6,'(A,I4,6ES12.4)') 'nrr=', &
+            nrr,rr_wr,mag_wr%babs,rr_wr*mag_wr%babs, &
+            mag_wr%bnx,mag_wr%bny,mag_wr%bnz
+    END DO
     RETURN
   END SUBROUTINE wr_prep
 END MODULE wrprep

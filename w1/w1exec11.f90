@@ -805,6 +805,7 @@ CONTAINS
 
     DO NX=1,NXMAX
        XR=XAM(NX)/RR
+!       XR=XA(NX)/RR
        DO NS=1,NSMAX
           IF(IELEC(NS).EQ.1) THEN
              RKPR=RKZ

@@ -253,8 +253,8 @@
                RLNI = -(LOG(ABS(RN(NR+1,2)))-LOG(ABS(RN(NR,2))))*DRL
                RLTI = -(LOG(ABS(RT(NR+1,2)))-LOG(ABS(RT(NR,2))))*DRL
             ENDIF
-            CS = SQRT(ABS(TEL)*RKEV/(PM(2)*AMP))
-            RHO_S = CS*PM(2)*AMP/(PZ(2)*AEE*BB)
+            CS = SQRT(ABS(TEL)*RKEV/(PA(2)*AMP))
+            RHO_S = CS*PA(2)*AMP/(PZ(2)*AEE*BB)
             ER(NR) =-BB*( (TIL/TEL)*RHO_S*CS*(RLNI+ALPHA_NEO*RLTI)-EPS/QP(NR)*VTOR(NR))
          ENDIF
       ENDDO
@@ -859,9 +859,9 @@
          ZEFFL=0.5D0*(ZEFF(NR+1)+ZEFF(NR))
 
          TAUE = FTAUE(ANE,ANDX,TEL,ZEFFL)
-         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PM(2))
-         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PM(3))
-         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PM(4))
+         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PA(2))
+         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PA(3))
+         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PA(4))
 
          VTE=SQRT(TEL*RKEV/AME)
          VTD=SQRT(TDL*RKEV/AMD)
@@ -944,9 +944,9 @@
          ZEFFL=2.D0*ZEFF(NR-1)-ZEFF(NR-2)
 
          TAUE = FTAUE(ANE,ANDX,TEL,ZEFFL)
-         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PM(2))
-         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PM(3))
-         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PM(4))
+         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PA(2))
+         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PA(3))
+         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PA(4))
 
          VTE=SQRT(TEL*RKEV/AME)
          VTD=SQRT(TDL*RKEV/AMD)

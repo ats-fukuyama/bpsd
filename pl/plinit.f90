@@ -77,9 +77,9 @@
 !     ======( PLASMA PARAMETERS )======
 
 !        NSMAX : Number of particle species
-!        NPP   : number of protons: Atomic number (0 for electron)
-!        NPN   : number of neutron
-!        PA    : Atomic mass (NPP+NPN)
+!        NP_P  : number of protons: Atomic number (0 for electron)
+!        NP_N  : number of neutron
+!        PA    : Atomic mass (NP_P+NP_N)
 !        PZ    : Charge number
 !        PN    : Density at center                     (1.0E20/m**3)
 !        PNS   : Density on plasma surface             (1.0E20/m**3)
@@ -121,8 +121,8 @@
 
       KID_NS(NS)= 'e   '
       ID_NS(NS) = -1
-      NPP(NS)  = 0
-      NPN(NS)  = 0
+      NP_P(NS)  = 0
+      NP_N(NS)  = 0
       PA(NS)   = AME/AMP
       PZ(NS)   =-1.0D0
       PN(NS)   = 1.0D0
@@ -150,8 +150,8 @@
 
       KID_NS(NS)= 'D   '
       ID_NS(NS) = 1
-      NPP(NS)  = 1
-      NPN(NS)  = 1
+      NP_P(NS)  = 1
+      NP_N(NS)  = 1
       PA(NS)   = 2.0D0
       PZ(NS)   = 1.0D0
       PN(NS)   = 1.0D0
@@ -179,8 +179,8 @@
 
       KID_NS(NS)= 'T   '
       ID_NS(NS) = 1
-      NPP(NS)  = 1
-      NPN(NS)  = 2
+      NP_P(NS)  = 1
+      NP_N(NS)  = 2
       PA(NS)   = 3.0D0
       PZ(NS)   = 1.0D0
 
@@ -190,8 +190,8 @@
 
       KID_NS(NS)= 'He4 '
       ID_NS(NS) = 1
-      NPP(NS)  = 2
-      NPN(NS)  = 2
+      NP_P(NS)  = 2
+      NP_N(NS)  = 2
       PA(NS)   = 4.0D0
       PZ(NS)   = 2.0D0
 
@@ -201,8 +201,8 @@
 
       KID_NS(NS)= 'He3 '
       ID_NS(NS) = 1
-      NPP(NS)  = 2
-      NPN(NS)  = 2
+      NP_P(NS)  = 2
+      NP_N(NS)  = 2
       PA(NS)   = 3.0D0
       PZ(NS)   = 2.0D0
 
@@ -211,8 +211,8 @@
       DO NS=6,NSM
          KID_NS(NS)= 'H   '
          ID_NS(NS)= 1
-         NPP(NS)  = 1
-         NPN(NS)  = 0
+         NP_P(NS)  = 1
+         NP_N(NS)  = 0
          PA(NS)   = 1.0D0
          PZ(NS)   = 1.0D0
       END DO
@@ -237,6 +237,10 @@
          PNUC(NS) = 0.D0
          PZCL(NS) = 0.D0
       ENDDO
+
+      DO NS=1,NSMAX
+         NP_A(NS)=NP_P(NS)+NP_N(NS)
+      END DO
 
 !     *** PLANE  PARAMETERS ***
 

@@ -139,14 +139,14 @@ CONTAINS
     END DO
 
     IF(NSACM.EQ.0.OR.DXFACT.LT.1.D-6) THEN
-!       DX=2.D0*RB/DBLE(NXMAX-1)
-!       DO NX=1,NXMAX
-!          XA(NX)=DBLE(NX-1)*DX-RB
-!       END DO
-       DX=RB/DBLE(NXMAX-1)
+       DX=2.D0*RB/DBLE(NXMAX-1)
        DO NX=1,NXMAX
-          XA(NX)=DBLE(NX-1)*DX
+          XA(NX)=DBLE(NX-1)*DX-RB
        END DO
+!       DX=RB/DBLE(NXMAX-1)
+!       DO NX=1,NXMAX
+!          XA(NX)=DBLE(NX-1)*DX
+!       END DO
     ELSE
        FVT=AEE*1.D3/(AMP*PA(NSACM))
        FWC=AEE*PZ(NSACM)*BB/(AMP*PA(NSACM))
@@ -364,8 +364,8 @@ CONTAINS
     DO NS=1,NSMAX
        DO NX=1,NXMAX-1
           PABSXZ(NS)  =PABSXZ(NS)  +PABSX(NX,NS)
-          IF(NS.EQ.1) WRITE(21,'(A,I5,1P2E12.4)') &
-               'NX,PABSX,PABSXZ=',NX,PABSX(NX,NS),PABSXZ(NS)
+          IF(NS.EQ.1) WRITE(29,'(A,I5,3ES12.4)') &
+               'NX,XAM,PABSX,PABSXZ=',NX,XAM(NX),PABSX(NX,NS),PABSXZ(NS)
        END DO
     END DO
 

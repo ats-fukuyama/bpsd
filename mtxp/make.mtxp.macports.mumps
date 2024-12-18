@@ -1,17 +1,17 @@
-### make.mtxp.petsc+mumps
-### Setup configureation with MPI, PETSc and MUMPS
+### make.mtxp.petsc.macports.mumps
+### Setup configureation with  mpich, petsc and mumps from macports
 
 EXEC=testbnd testbndc testpcg testdmumps testzmumps testksp
 
-INCLUDE_MTX_MUMPS=-I${PETSC_DIR}/${PETSC_ARCH}/include
+PETSC_DIR=/opt/local/lib/petsc
+INCLUDE_MTX_PETSC=-I${PETSC_DIR}/include -I${PETSC_DIR}/include/petsc
 include ${PETSC_DIR}/lib/petsc/conf/variables
 
-INCLUDE_MTX_PETSC=-I${PETSC_DIR}/include -I${PETSC_DIR}/include/petsc -I${PETSC_DIR}/${PETSC_ARCH}/include
+INCLUDE_MTX_MUMPS=-I/opt/local/include
+MUMPS_LIB=-L${PETSC_DIR}/lib -ldmumps -lzmumps -lmumps_common -lpord -lscalapack -lparmetis -lmetis -L${PETSC_DIR}/lib/lapack -lblas -llapack
+
 
 LIBMTXMPI=../mtxp/libmtxmpi.o
-
-MUMPS_LIB=-L${PETSC_DIR}/${PETSC_ARCH}/lib -ldmumps -lzmumps -lmumps_common -lpord -lscalapack -lparmetis -lmetis -lflapack -lfblas
-
 LIB_MTX_BND=$(LIBMTXMPI) ../mtxp/libmtxbndmpi.o
 LIB_MTX_PCG=$(LIBMTXMPI) ../mtxp/libmtxpcgmpi.o
 LIB_MTX_KSP=$(LIBMTXMPI) ../mtxp/libmtxksp.o

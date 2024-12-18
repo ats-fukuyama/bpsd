@@ -599,9 +599,9 @@
          ZEFFL=0.5D0*(ZEFF(NR+1)+ZEFF(NR))
 
          TAUE = FTAUE(ANE,ANDX,TEL,ZEFFL)
-         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PM(2))
-         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PM(3))
-         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PM(4))
+         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PA(2))
+         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PA(3))
+         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PA(4))
 
          VTE=SQRT(TEL*RKEV/AME)
          VTD=SQRT(TDL*RKEV/AMD)
@@ -684,9 +684,9 @@
          ZEFFL=2.D0*ZEFF(NR-1)-ZEFF(NR-2)
 
          TAUE = FTAUE(ANE,ANDX,TEL,ZEFFL)
-         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PM(2))
-         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PM(3))
-         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PM(4))
+         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PA(2))
+         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PA(3))
+         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PA(4))
 
          VTE=SQRT(TEL*RKEV/AME)
          VTD=SQRT(TDL*RKEV/AMD)

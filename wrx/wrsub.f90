@@ -370,12 +370,15 @@ CONTAINS
     REAL(rkind),INTENT(OUT):: YK(3)
     REAL(rkind):: Y(0:NEQ)
     INTEGER:: I,IMODNWTN
-    REAL(rkind):: DELTA,XP,YP,ZP,VV,TT
+    REAL(rkind):: DELTA,XP,YP,ZP,VV,TT,R
     REAL(rkind):: RKXP,RKYP,RKZP,RRKXP,RRKYP,RRKZP,DKXP,DKYP,DKZP
     REAL(rkind):: DS2,FAC_NWTN,DDELTA
 
     Y(1:NEQ)=Y_zh(1:NEQ)
+    R=SQRT(Y(1)**2+Y(2)**2)
+!    IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 231: R=',R
     DELTA=DISPXR( Y(1), Y(2), Y(3), Y(4), Y(5), Y(6), omega )
+!    IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 232: R=',R
     XP=Y(1)
     YP=Y(2)
     ZP=Y(3)
@@ -389,6 +392,8 @@ CONTAINS
        RRKXP=MAX(ABS(RKXP)*VV,TT)
        RRKYP=MAX(ABS(RKYP)*VV,TT)
        RRKZP=MAX(ABS(RKZP)*VV,TT)
+!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 233:  Rk=',RKXP,RKYP,RKZP
+!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 233: RRk=',RRKXP,RRKYP,RRKZP
 
        DKXP=(DISPXR(XP,YP,ZP,RKXP+RRKXP,RKYP,RKZP,omega) &
             -DISPXR(XP,YP,ZP,RKXP-RRKXP,RKYP,RKZP,omega))/(2.D0*RRKXP)
@@ -398,6 +403,8 @@ CONTAINS
             -DISPXR(XP,YP,ZP,RKXP,RKYP,RKZP-RRKZP,omega))/(2.D0*RRKZP)
 
        DS2 = DKXP**2+DKYP**2+DKZP**2
+!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 234: DS=',DKXP,DKYP,DKZP
+!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 234: DS2=',DS2
        FAC_NWTN = 10.D0
        DO IMODNWTN=1,10
           FAC_NWTN = FAC_NWTN/10.D0
@@ -407,6 +414,7 @@ CONTAINS
           DDELTA = DISPXR(XP,YP,ZP,Y(4),Y(5),Y(6),omega)
           IF (ABS(DDELTA) .LT. ABS(DELTA)) EXIT
        END DO
+!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 235: R=',R
        IF(idebug_wr(13).NE.0) THEN
           WRITE(6,'(A)') '*** idebug_wr(13):'
           WRITE(6,'(A,4ES12.4)') &
@@ -415,6 +423,7 @@ CONTAINS
        IF (ABS(DDELTA).LT.EPSD0) EXIT
        DELTA = DDELTA
     END DO
+!    IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 235: R=',R
 
     DO I =1,3
        YK(I) = Y(I+3)

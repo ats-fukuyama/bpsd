@@ -123,7 +123,7 @@ CONTAINS
           NS_NSA(NSA)=NS
           NSA_DN(NSA)=0
           NSA_UP(NSA)=0
-          ND_adpost(NS)=ND_NPA_ADPOST(NPA(NS))
+          ND_adpost(NS)=ND_NPA_ADPOST(NP_A(NS))
        CASE(10,11,12)
           DO NZ=NZMIN_NS(NS),NZMAX_NS(NS)
              NSA=NSA+1
@@ -258,10 +258,10 @@ CONTAINS
     IF(nrank.EQ.0) THEN
        WRITE(6,*)
        WRITE(6,'(A)') &
-          '       NEQ   NS  NSA  NPA          PM        PZ   NV  ID_NS KID_NS'
+          '       NEQ   NS  NSA  NP_A         PM        PZ   NV  ID_NS KID_NS'
        WRITE(6,'(5X,4I5,F12.5,F10.3,I5,I7,5X,A2)') &
                (NEQ,NS_NSA(NSA_NEQ(NEQ)),NSA_NEQ(NEQ), &
-                NPA(NS_NSA(NSA_NEQ(NEQ))), &
+                NP_A(NS_NSA(NSA_NEQ(NEQ))), &
                 PMA(NSA_NEQ(NEQ)), &
                 PZA(NSA_NEQ(NEQ)), &
                 NV_NEQ(NEQ), &

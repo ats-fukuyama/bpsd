@@ -12,6 +12,7 @@ CONTAINS
     USE w1prof,ONLY: w1_prof
     USE w1disp,ONLY: w1dspa
     USE w1mlm,ONLY: w1wkxb,w1wkxd
+    USE w1wkxm,ONLY: w1_wkxm
     USE w1intg,ONLY: w1dspq
     IMPLICIT NONE
     INTEGER:: NXP,NX,NZ,NS
@@ -50,11 +51,14 @@ CONTAINS
 
 
     CALL W1DSPA
-    IF(NMODEL.LE.3) THEN
+    SELECT CASE(NMODEL)
+    CASE(0,1,2,3,6,9)
        CALL W1WKXB
-    ELSE
+    CASE(4,5,7,10)
        CALL W1WKXD
-    ENDIF
+    CASE(8,11)
+       CALL W1_WKXM
+    END SELECT
     DEALLOCATE(CF)
     CALL W1GDSPA(PKXMIN,PKXMAX)
     GOTO 100

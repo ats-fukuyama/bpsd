@@ -34,10 +34,10 @@ CONTAINS
                    'BB    ',BB
 
       WRITE(6,611)
-611   FORMAT(' ','NS NPA',2X, &
+611   FORMAT(' ','NS NP_A',1X, &
              'PM          PZ          PN(E20)     PNS(E20)    PT(KEV)     PTS(KEV)')
       DO NS=1,NSMAX
-         WRITE(6,612) NS,NPA(NS),PM(NS),PZ(NS),PN(NS),PNS(NS),PT(NS),PTS(NS)
+         WRITE(6,612) NS,NP_A(NS),PA(NS),PZ(NS),PN(NS),PNS(NS),PT(NS),PTS(NS)
       ENDDO
 
       WRITE(6,601) 'PROFN1',PROFN1,'PROFT1',PROFT1,'PROFU1',PROFU1,'PROFJ1',PROFJ1

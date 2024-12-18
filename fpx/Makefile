@@ -85,7 +85,7 @@ fp : $(LIB_MTX) $(LIBS) $(OBJDIR)/fpmain.o
 clean :
 	-rm -f core a.out *.o *.a ./#* ./*~ ./mod/*.mod
 	-rm -f ./obj/*.o
-	-rm -f fp fow out
+	-rm -f fp fow
 	-rm -rf ./*.dSYM
 	-rm -f ./csv/*
 	-rm -rf __pycache__

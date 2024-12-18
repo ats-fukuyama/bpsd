@@ -57,7 +57,7 @@ CONTAINS
       NAMELIST /PL/ &
            RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ, &
            RMIR,ZBB,Hpitch1,Hpitch2,RRCH,RCOIL,ZCOIL,BCOIL,NCOILMAX, &
-           NSMAX,NPP,NPN,PA,PZ, &
+           NSMAX,NP_P,NP_N,PA,PZ, &
            PN,PNS,PTPR,PTPP,PTS,PU,PUS,PUPR,PUPP,PNUC,PZCL, &
            PNM,PTM,PUM,PROFN3,PROFT3,PROFU3, &
            ID_NS,KID_NS, &
@@ -295,8 +295,8 @@ CONTAINS
     proft_travis_w=rdata(33)
     BAXIS_SCALED=rdata(34)
 
-    CALL mtx_broadcast_integer(NPP,NSMAX)
-    CALL mtx_broadcast_integer(NPN,NSMAX)
+    CALL mtx_broadcast_integer(NP_P,NSMAX)
+    CALL mtx_broadcast_integer(NP_N,NSMAX)
     CALL mtx_broadcast_integer(ID_NS,NSMAX)
     DO NS=1,NSMAX
        CALL mtx_broadcast_character(KID_NS(NS),4)
@@ -394,7 +394,7 @@ CONTAINS
 
       WRITE(6,100)
       DO NS=1,NSMAX
-         WRITE(6,110) NS,NPP(NS),NPN(NS),PA(NS),PZ(NS),PN(NS),PNS(NS)
+         WRITE(6,110) NS,NP_P(NS),NP_N(NS),PA(NS),PZ(NS),PN(NS),PNS(NS)
       ENDDO
       WRITE(6,120)
       DO NS=1,NSMAX
@@ -434,7 +434,7 @@ CONTAINS
 
       RETURN
 
-  100 FORMAT(' ','NS    NPA         PA          PZ          ', &
+  100 FORMAT(' ','NS    NP A        PA          PZ          ', &
                        'PN          PNS')
   110 FORMAT(' ',I3,' ',2I5,7X,4ES12.4)
   120 FORMAT(' ','NS    PTPR        PTPP        PTS         ', &

@@ -20,6 +20,7 @@ CONTAINS
     USE wmexec
     USE wmpout
     USE wmfile
+    USE dpprep
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
     INTEGER:: NPH0_save,NPH,NR,NTH,NS,NHH,NPOW,NPP,NPHA,NSA
@@ -27,10 +28,12 @@ CONTAINS
     CHARACTER(LEN=2):: KNHC
     CHARACTER(LEN=4):: KNPH0
 
-    nsamax_dp=nsmax
-    DO nsa=1,nsamax_dp
-       ns_nsa_dp(nsa)=nsa
-    END DO
+    WRITE(6,*) '@@@ point 1'
+    CALL dp_prep_ns(ierr)
+    WRITE(6,*) '@@@ point 2'
+    IF(ierr.NE.0) RETURN
+
+    WRITE(6,'(A,I8,ES12.4)') 'NPH0,RNPH0=',nph0,VC*nph0/RR/(2.D0*PI*RF*1.D6)
 
     NPH0_save  = NPH0
 
@@ -92,7 +95,8 @@ CONTAINS
           END DO
        END DO
     END DO
-      
+
+    WRITE(6,*) '@@@ point 3'
     CALL wm_setg(IERR)
     CALL wm_pout_init
       
@@ -101,8 +105,10 @@ CONTAINS
        IF(nrank.EQ.0) WRITE(6,'(A,I4)') &
             "== Toroidal mode number : ",NPH0
 
+    WRITE(6,*) '@@@ point 4'
        CALL wm_exec(IERR)
        IF(IERR.NE.0) EXIT
+    WRITE(6,*) '@@@ point 5'
 
        DO NR=1,NRMAX+1
           DO NHH=1,NHHMAX
