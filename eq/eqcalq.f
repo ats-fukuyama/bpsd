@@ -226,13 +226,8 @@ C
             R=0.5D0*(YA(1,N-1)+YA(1,N))
             Z=0.5D0*(YA(2,N-1)+YA(2,N))
             CALL PSIGD(R,Z,DPSIDR,DPSIDZ)
-            IF(model_eqdsk_psi.EQ.0) THEN
-               BPL=SQRT(DPSIDR**2+DPSIDZ**2)/R
-               BTL=TTS(NR)/R
-            ELSE
-               BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
-               BTL=TTS(NR)/(2.D0*PI*R)
-            END IF
+            BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
+            BTL=TTS(NR)/(2.D0*PI*R)
             B2L=BTL**2+BPL**2
 C
             SUMV=SUMV+H/BPL
@@ -252,27 +247,16 @@ C
             XCHI1(N)=SUMAVIR2
             RCHI(N)=YA(1,N)
             ZCHI(N)=YA(2,N)
-
-            IF(model_eqdsk_psi.EQ.0) THEN
-               BRCHI(N)=-DPSIDZ/R
-               BZCHI(N)= DPSIDR/R
-            ELSE
-               BRCHI(N)=-DPSIDZ/(2.D0*PI*R)
-               BZCHI(N)= DPSIDR/(2.D0*PI*R)
-            END IF
+            BRCHI(N)=-DPSIDZ/(2.D0*PI*R)
+            BZCHI(N)= DPSIDR/(2.D0*PI*R)
             BTCHI(N)= BTL
             BBCHI(N)= SQRT(B2L)
 C
             R=YA(1,N)
             Z=YA(2,N)
             CALL PSIGD(R,Z,DPSIDR,DPSIDZ)
-            IF(model_eqdsk_psi.EQ.0) THEN
-               BPL=SQRT(DPSIDR**2+DPSIDZ**2)/R
-               BTL=TTS(NR)/R
-            ELSE
-               BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
-               BTL=TTS(NR)/(2.D0*PI*R)
-            END IF
+            BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
+            BTL=TTS(NR)/(2.D0*PI*R)
             B2L=BTL**2+BPL**2
             B=SQRT(B2L)
 C
@@ -290,18 +274,10 @@ C
             BMAX=MAX(BMAX,B)
          ENDDO
 C
-         IF(model_eqdsk_psi.EQ.0) THEN
-            QPS(NR)=SUMAVIR2*TTS(NR)/(2.D0*PI)
-         ELSE
-            QPS(NR)=SUMAVIR2*TTS(NR)/(4.D0*PI**2)
-         END IF
+         QPS(NR)=SUMAVIR2*TTS(NR)/(4.D0*PI**2)
          DVDPSIP(NR)=SUMV
          DVDPSIT(NR)=SUMV/QPS(NR)
-         IF(model_eqdsk_psi.EQ.0) THEN
-            SPS(NR)=SUMS
-         ELSE
-            SPS(NR)=SUMS*2.D0*PI
-         END IF
+         SPS(NR)=SUMS*2.D0*PI
          RLEN(NR)=XA(NA)
          AVERR  (NR)=SUMAVRR /SUMV
          AVERR2 (NR)=SUMAVRR2/SUMV
@@ -309,17 +285,11 @@ C
          AVEBB  (NR)=SUMAVBB /SUMV
          AVEBB2 (NR)=SUMAVBB2/SUMV
          AVEIB2 (NR)=SUMAVIB2/SUMV
-         IF(model_eqdsk_psi.EQ.0) THEN
-            AVEGV  (NR)=SUMAVGV      
-            AVEGV2 (NR)=SUMAVGV2*SUMV
-            AVEGVR2(NR)=SUMAVGR2*SUMV
-            AVEGP2 (NR)=SUMAVGV2/SUMV
-         ELSE
-            AVEGV  (NR)=SUMAVGV      *2.d0*PI
-            AVEGV2 (NR)=SUMAVGV2*SUMV*4.d0*PI**2
-            AVEGVR2(NR)=SUMAVGR2*SUMV*4.d0*PI**2
-            AVEGP2 (NR)=SUMAVGV2/SUMV*4.d0*PI**2
-         END IF
+         AVEGV  (NR)=SUMAVGV      *2.d0*PI
+         AVEGV2 (NR)=SUMAVGV2*SUMV*4.d0*PI**2
+         AVEGVR2(NR)=SUMAVGR2*SUMV*4.d0*PI**2
+Chonda         write(6,'(4E15.7)') PSIP(NR),SUMAVGR2,SUMV,AVEGVR2(NR)
+         AVEGP2 (NR)=SUMAVGV2/SUMV*4.d0*PI**2
          AVEIR  (NR)=SUMAVIR /SUMV
          RITOR  (NR)=SUMAVGR2
 
@@ -408,15 +378,9 @@ C
          DPPSL=DPPFUNC(PSIP(NR))
          DTTSL=DTTFUNC(PSIP(NR))
          TTSL =TTFUNC(PSIP(NR))
-         IF(model_eqdsk_psi.EQ.0) THEN
-            AVEJTR(NR)=-RR*DPPSL-TTSL*DTTSL/(RMU0*RR)
-            AVEJPR(NR)=(-TTSL*DPPSL-DTTSL*AVEBB2(NR)/RMU0)
-     &           /(ABS(BB))
-         ELSE
-            AVEJTR(NR)=-RR*DPPSL-TTSL*DTTSL/(4.d0*PI**2*RMU0*RR)
-            AVEJPR(NR)=(-TTSL*DPPSL-DTTSL*AVEBB2(NR)/RMU0)
-     &           /(2.d0*PI*ABS(BB))
-         ENDIF
+         AVEJTR(NR)=-RR*DPPSL-TTSL*DTTSL/(4.d0*PI**2*RMU0*RR)
+         AVEJPR(NR)=(-TTSL*DPPSL-DTTSL*AVEBB2(NR)/RMU0)
+     &              /(2.d0*PI*ABS(BB))
 C         WRITE(6,'(A,I6,4ES12.4)') 'AVEJ=',NR,
 C     &        AVEJTR(NR),AVEJPR(NR),AVEGP2(NR),AVEGVR2(NR)
       ENDDO
@@ -456,13 +420,8 @@ C
       RSPSI(1)   = 0.D0
       ELIPPSI(1) = ELIPPSI(2)
       TRIGPSI(1) = 0.D0
-      IF(model_eqdsk_psi.EQ.0) THEN
-         BBMIN(1)   = ABS(TTS(1)/RAXIS)
-         BBMAX(1)   = ABS(TTS(1)/RAXIS)
-      ELSE
-         BBMIN(1)   = ABS(TTS(1)/(2.D0*PI*RAXIS))
-         BBMAX(1)   = ABS(TTS(1)/(2.D0*PI*RAXIS))
-      END IF
+      BBMIN(1)   = ABS(TTS(1)/(2.D0*PI*RAXIS))
+      BBMAX(1)   = ABS(TTS(1)/(2.D0*PI*RAXIS))
 C
 C     ----- CALCULATE TOROIDAL FLUX -----
 C
@@ -494,18 +453,16 @@ c$$$     &        nr,psip(nr)/psipa,psit(nr)/psita,
 c$$$     &        vps(nr),sps(nr),dvdpsip(nr),dvdpsit(nr)
 c$$$      enddo
 
-
+C
       RST(1)=0.D0
       DO NR=2,NRPMAX
-C         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,BB=',NR,PSIT(NR),BB
-         RST(NR)=SQRT(ABS(PSIT(NR)/(PI*BB)))
+         RST(NR)=SQRT(PSIT(NR)/(PI*BB))
       ENDDO
       RSTA=RST(NRPMAX)
 C
       RHOT(1)=0.D0
       DO NR=2,NRPMAX
-C         WRITE(6,'(A,I4,2ES12.4)') 'NR,PSIT,PSITA=',NR,PSIT(NR),PSITA
-         RHOT(NR)=SQRT(ABS(PSIT(NR)/PSITA))
+         RHOT(NR)=SQRT(PSIT(NR)/PSITA)
       ENDDO
 C
 C     ----- CALCULATE EDGE VALUE -----
@@ -524,13 +481,8 @@ C
          Z=0.5D0*(YA(2,N-1)+YA(2,N))
          CALL PSIGD(R,Z,DPSIDR,DPSIDZ)
          BPRL=SQRT(DPSIDR**2+DPSIDZ**2)
-         IF(model_eqdsk_psi.EQ.0) THEN
-            BPL=BPRL/R
-            BTL=TTSA/R
-         ELSE
-            BPL=BPRL/(2.D0*PI*R)
-            BTL=TTSA/(2.D0*PI*R)
-         END IF
+         BPL=BPRL/(2.D0*PI*R)
+         BTL=TTSA/(2.D0*PI*R)
          B=SQRT(BPL**2+BTL**2)
 C
          SUMS=SUMS+H*R
@@ -606,11 +558,7 @@ C
             Sratio=(RL_OUT-RR)**2/(REDGE-RR)**2
             PSIP(NR)=PSIG(RL_OUT,ZL)-PSI0
             PPS(NR)=0.D0
-            IF(model_eqdsk_psi.EQ.0) THEN
-               TTS(NR)=BB*RR
-            ELSE
-               TTS(NR)=2.D0*PI*BB*RR
-            END IF
+            TTS(NR)=2.D0*PI*BB*RR
 C
             DVDPSIP(NR)=DVDPSIP(NRPMAX)*Sratio
             DVDPSIT(NR)=DVDPSIT(NRPMAX)
@@ -694,11 +642,7 @@ C
             ZINIT=ZAXIS
             PSIP(NR)=PSIG(RINIT,ZINIT)-PSI0
             PPS(NR)=0.D0
-            IF(model_eqdsk_psi.EQ.0) THEN
-               TTS(NR)=BB*RR
-            ELSE
-               TTS(NR)=2.D0*PI*BB*RR
-            END IF
+            TTS(NR)=2.D0*PI*BB*RR
 C
 C         WRITE(6,'(A,I5,1P3E12.4)') 'NR:',NR,
 C     &        PSIP(NR),PPS(NR),TTS(NR)
@@ -736,13 +680,8 @@ C
                R=0.5D0*(YA(1,N-1)+YA(1,N))
                Z=0.5D0*(YA(2,N-1)+YA(2,N))
                CALL PSIGD(R,Z,DPSIDR,DPSIDZ)
-               IF(model_eqdsk_psi.EQ.0) THEN
-                  BPL=SQRT(DPSIDR**2+DPSIDZ**2)/R
-                  BTL=TTS(NR)/R
-               ELSE
-                  BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
-                  BTL=TTS(NR)/(2.D0*PI*R)
-               END IF
+               BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
+               BTL=TTS(NR)/(2.D0*PI*R)
                B2L=BTL**2+BPL**2
 C
                SUMV=SUMV+H/BPL
@@ -766,13 +705,8 @@ C
                R=YA(1,N)
                Z=YA(2,N)
                CALL PSIGD(R,Z,DPSIDR,DPSIDZ)
-               IF(model_eqdsk_psi.EQ.0) THEN
-                  BPL=SQRT(DPSIDR**2+DPSIDZ**2)/R
-                  BTL=TTS(NR)/R
-               ELSE
-                  BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
-                  BTL=TTS(NR)/(2.D0*PI*R)
-               END IF
+               BPL=SQRT(DPSIDR**2+DPSIDZ**2)/(2.D0*PI*R)
+               BTL=TTS(NR)/(2.D0*PI*R)
                B2L=BTL**2+BPL**2
                B=SQRT(B2L)
 C
@@ -790,19 +724,11 @@ C
                BMAX=MAX(BMAX,B)
             ENDDO
 C
-            IF(model_eqdsk_psi.EQ.0) THEN
-               QPS(NR)=SUMAVIR2*TTS(NR)/(2.D0*PI)
-            ELSE
-               QPS(NR)=SUMAVIR2*TTS(NR)/(4.D0*PI**2)
-            END IF
+            QPS(NR)=SUMAVIR2*TTS(NR)/(4.D0*PI**2)
             RITOR(NR)=RITOR(NRPMAX)
             DVDPSIP(NR)=SUMV
             DVDPSIT(NR)=SUMV/QPS(NR)
-            IF(model_eqdsk_psi.EQ.0) THEN
-               SPS(NR)=SUMS
-            ELSE
-               SPS(NR)=SUMS*2.D0*PI
-            END IF
+            SPS(NR)=SUMS*2.D0*PI
             RLEN(NR)=XA(NA)
             AVERR  (NR)=SUMAVRR /SUMV
             AVERR2 (NR)=SUMAVRR2/SUMV
@@ -810,17 +736,10 @@ C
             AVEBB  (NR)=SUMAVBB /SUMV
             AVEBB2 (NR)=SUMAVBB2/SUMV
             AVEIB2 (NR)=SUMAVIB2/SUMV
-            IF(model_eqdsk_psi.EQ.0) THEN
-               AVEGV  (NR)=SUMAVGV
-               AVEGV2 (NR)=SUMAVGV2*SUMV
-               AVEGVR2(NR)=SUMAVGR2*SUMV
-               AVEGP2 (NR)=SUMAVGV2/SUMV
-            ELSE
-               AVEGV  (NR)=SUMAVGV      *2.D0*PI
-               AVEGV2 (NR)=SUMAVGV2*SUMV*4.D0*PI**2
-               AVEGVR2(NR)=SUMAVGR2*SUMV*4.D0*PI**2
-               AVEGP2 (NR)=SUMAVGV2/SUMV*4.D0*PI**2
-            END IF
+            AVEGV  (NR)=SUMAVGV      *2.D0*PI
+            AVEGV2 (NR)=SUMAVGV2*SUMV*4.D0*PI**2
+            AVEGVR2(NR)=SUMAVGR2*SUMV*4.D0*PI**2
+            AVEGP2 (NR)=SUMAVGV2/SUMV*4.D0*PI**2
             AVEIR  (NR)=SUMAVIR /SUMV
 
             call zminmax(YA,NZMINR,ZMIN,ZMINR)
@@ -900,12 +819,12 @@ C
       PSIPB=PSIP(NRMAX)
 C
       DO NR=NRPMAX+1,NRMAX
-         RST(NR)=SQRT(ABS(PSIT(NR)/(PI*BB)))
+         RST(NR)=SQRT(PSIT(NR)/(PI*BB))
       ENDDO
       RSTB=RST(NRMAX)
 C
       DO NR=NRPMAX+1,NRMAX
-         RHOT(NR)=SQRT(ABS(PSIT(NR)/PSITA))
+         RHOT(NR)=SQRT(PSIT(NR)/PSITA)
       ENDDO
 C
       DO NR=NRPMAX+1,NRMAX
@@ -1100,19 +1019,10 @@ C
 !     &           NR,DRRHOL,DRPSI(NTH,NR),QPSL,PSITA
 C
             CALL PSIGD(RPSL,ZPSL,DPSIDR,DPSIDZ)
-            IF(model_eqdsk_psi.EQ.0) THEN
-               BPR(NTH,NR)= DPSIDZ/RPSL
-               BPZ(NTH,NR)=-DPSIDR/RPSL
-            ELSE
-               BPR(NTH,NR)= DPSIDZ/(2.D0*PI*RPSL)
-               BPZ(NTH,NR)=-DPSIDR/(2.D0*PI*RPSL)
-            END IF
+            BPR(NTH,NR)= DPSIDZ/(2.D0*PI*RPSL)
+            BPZ(NTH,NR)=-DPSIDR/(2.D0*PI*RPSL)
             BPT(NTH,NR)=SQRT(BPR(NTH,NR)**2+BPZ(NTH,NR)**2)
-            IF(model_eqdsk_psi.EQ.0) THEN
-               BTP(NTH,NR)= TTS(NR)/RPSL
-            ELSE
-               BTP(NTH,NR)= TTS(NR)/(2.D0*PI*RPSL)
-            END IF
+            BTP(NTH,NR)= TTS(NR)/(2.D0*PI*RPSL)
 C
 C            IF(NTH.EQ.1) WRITE(6,'(2I3,1P6E12.4)') 
 C     &           NTH,NR,RPSL,ZPSL,
@@ -1198,7 +1108,7 @@ C
 C
       PVOL =SUMV           ! Volume (or FNVPS(1.D0))
       PAREA=SUMS/(2.D0*PI) ! Cross section
-      RAAVE=SQRT(ABS(PAREA)/PI) ! Minor radius determined by cross section
+      RAAVE=SQRT(PAREA/PI) ! Minor radius determined by cross section
       PVAVE=SUMPV/PVOL     ! Volume averaged pressure
       BPA=RMU0*RIP*1.D6/FNRLEN(1.D0)   ! Poloidal magnetic field at the separatrix
       BETAT=PVAVE/(BB**2/(2.D0*RMU0))  ! Toroidal beta

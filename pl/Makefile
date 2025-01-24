@@ -23,15 +23,17 @@ ${OBJDIR}/%.o:%.f
 ${OBJDIR}/%.o:%.f90
 	$(FCFREE) $(FFLAGS) -c $< -o $@ $(MODDIR) $(MODINCLUDE)
 
-SRCS = plvmec.f90 plcomm.f90 plinit.f90 plparm.f90 \
-       platmd.f90 plcoll.f90 \
-       plload.f90 plprof_travis.f90 plprof2d.f90 \
-       plprof.f90 plprofw.f90  \
-       plgout.f90 plmenu.f90
-SRCO = noeqlib.f noequlib.f
+SRCS_NOEQ = plvmec.f90 plcomm.f90 plinit.f90 plparm.f90 \
+           platmd.f90 plcoll.f90 \
+           plload.f90 
 
-OBJS=$(addprefix $(OBJDIR)/, $(SRCS:.f90=.o))
-OBJO=$(addprefix $(OBJDIR)/, $(SRCO:.f90=.o))
+SRCS_EQ=plprof_travis.f90 plprof2d.f90 \
+     plprof.f90 plprofw.f90  \
+     plgout.f90 plmenu.f90
+
+
+OBJS_NOEQ=$(addprefix $(OBJDIR)/, $(SRCS_NOEQ:.f90=.o))
+OBJS_EQ=$(addprefix $(OBJDIR)/, $(SRCS_EQ:.f90=.o))
 
 LIBS = libpl.a ../eq/libeq.a ../lib/libgrf.a ../lib/libtask.a ../../bpsd/libbpsd.a
 
@@ -45,15 +47,20 @@ all : libs pl
 	(cd ../lib; make libgrf.a)
 ../eq/libeq.a:
 	(cd ../eq; make libeq.a)
-libpl.a: $(OBJS)
-	$(LD) $(LDFLAGS) libpl.a $(OBJS)
+
+libpl_noeq.a: $(OBJS_NOEQ)
+	$(LD) $(LDFLAGS) libpl.a $(OBJS_NOEQ)
+	(cd ../eq; make libeq.a)
+	cp -f libpl.a libpl_noeq.a
+
+libpl.a: libpl_noeq.a $(OBJS_EQ)
+	$(LD) $(LDFLAGS) libpl.a $(OBJS_EQ)
 
 libs:
 	(cd ../../bpsd; make libbpsd.a)
 	(cd ../lib; make libtask.a)
 	(cd ../lib; make libgrf.a)
 	(cd ../mtxp; make)
-	(cd ../eq; make libeq.a)
 
 pl : libs $(LIB_MTX) libpl.a $(OBJDIR)/plmain.o
 	$(FLINKER) $(OBJDIR)/plmain.o $(LIBS) -o $@ $(FFLAGS) $(FLIBS) $(LIBX_MTX)

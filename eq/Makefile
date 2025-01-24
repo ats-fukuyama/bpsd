@@ -10,18 +10,18 @@ include ../mtxp/make.mtxp
 #LIB_MTX=$(LIBXMTX_KSP)
 #LIBX_MTX=$(LIBX_MTX_KSP)
 
-FFLAGS=$(OFLAGS)
-#FFLAGS=$(DFLAGS)
+#FFLAGS=-g $(OFLAGS)
+FFLAGS=$(DFLAGS)
 
 MODINCLUDE=-I$(MOD) -I../../bpsd/$(MOD) -I../mtxp/$(MOD) -I../pl/$(MOD) -I../lib/$(MOD)
-OBJDIR=./obj
 
 SRCX = equcom.f90 equread.f90 eqlib.f90
 SRCS = eqbpsd.f eqinit.f eqmenu.f eqcalc.f eqcalq.f eqcalv.f \
        eqsub.f eqfunc.f eqintf.f eqsplf.f equintf.f \
        eq-eqdsk.f eq-qst.f eqfile.f \
-       eqgout.f eqgsub.f \
+       eqgout.f eqgsub.f eqgetp.f \
        newton.f invematrix.f equnit.f eqrppl.f
+
 SRCT = trtest.f treqin.f
 SRCP = pltest.f
 SRCA = aktest.f akeqin.f
@@ -57,9 +57,9 @@ all : libs eq
 ../pl/libpl.a:
 	(cd ../mtxp; make)
 	(cd ../pl; make libpl.a)
+
 libeq.a: $(OBJS) $(OBJ2D)
-	(cd ../pl; make $(OBJDIR)/plcomm.o)
-	$(LD) $(LDFLAGS) libeq.a $(OBJS) $(OBJ2D)
+	$(LD) $(LDFLAGS) libeq.a $(OBJS) $(OBJ2D) ../pl/libpl.a
 libeq3.a: $(OBJS) $(OBJ3D)
 	$(LD) $(LDFLAGS) libeq3.a $(OBJS) $(OBJ3D)
 
@@ -121,6 +121,7 @@ equcom.o: equcom.f90
 equread.o: equread.f90 equcom.f90
 equintf.o: equintf.f $(EQCOMM) eqcom3.inc
 eqrppl.o: eqrppl.f $(EQCOMM) eqcom3.inc
+eqgetp.o: eqgetp.f $(EQCOMM) eqcom3.inc
 trtest.o: trtest.f
 treqin.o: treqin.f $(EQCOMM) eqcom3.inc eqcom4.inc
 pltest.o: pltest.f

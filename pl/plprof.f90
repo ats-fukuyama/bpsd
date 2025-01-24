@@ -63,11 +63,11 @@
          USE bpsd_kinds
          REAL(rkind),INTENT(OUT):: RAXIS,ZAXIS
        END SUBROUTINE GETAXS
-       SUBROUTINE eqget_rzsu(rsu,zsu,nsumax)
+       SUBROUTINE GETRSU(rsu,zsu,nsumax)
          USE bpsd_kinds
          REAL(rkind),INTENT(OUT):: rsu(:),zsu(:)
-         INTEGER(ikind),INTENT(OUT):: nsumax
-       END SUBROUTINE eqget_rzsu
+         INTEGER,INTENT(OUT):: nsumax
+       END SUBROUTINE GETRSU
        SUBROUTINE GET_BMINMAX(rhon,BBMIN,BBMAX)
          USE bpsd_kinds
          REAL(rkind),INTENT(IN):: rhon
@@ -287,7 +287,7 @@
       REAL(rkind),INTENT(IN):: RHON
       REAL(rkind),INTENT(OUT),DIMENSION(NSMAX):: RN,RTPR,RTPP,RU
       TYPE(pl_prf_type),DIMENSION(NSMAX):: PLF
-      INTEGER(ikind):: NS
+      INTEGER:: NS
 
       CALL pl_prof(RHON,PLF)
       DO NS=1,NSMAX
@@ -487,7 +487,7 @@
         REAL(rkind):: RHOL, FACTN, FACTT, FACTU, FACTITB, PL0, PL,&
              & FACT, FNX, DFNX, AN, BN, FTX, DFTX, AT, BT, FUX, DFUX,&
              & AU, BU, VAL, PNL, PTL, profn, proft,FACTNM,FACTTM,FACTUM
-        INTEGER(ikind)  :: NS
+        INTEGER  :: NS
         REAL(rkind),DIMENSION(NSMAX) :: RN_PL,RT_PL,RTPR_PL,RTPP_PL&
              &,RU_PL,RUPL_PL
 
@@ -744,7 +744,7 @@
       REAL(rkind),INTENT(IN):: rho
       REAL(rkind),DIMENSION(nsmax),INTENT(OUT):: rn,rtpr,rtpp,ru,rupl
       TYPE(bpsd_plasmaf_type),save :: plasmaf
-      INTEGER(ikind):: ns,ierr
+      INTEGER:: ns,ierr
 
       plasmaf%nrmax=1
       plasmaf%rho(1)=rho
@@ -948,9 +948,9 @@
       USE plcomm,ONLY: PI,RA,RKAP,RR,MODELG
       IMPLICIT NONE
       REAL(rkind),ALLOCATABLE,INTENT(OUT) :: RSU(:),ZSU(:)
-      INTEGER(ikind),INTENT(OUT):: NSUMAX
+      INTEGER,INTENT(OUT):: NSUMAX
       REAL(rkind)     :: DTH, TH
-      INTEGER(ikind)  :: NSU
+      INTEGER  :: NSU
 
       SELECT CASE(MODELG)
       CASE(0:2)
@@ -965,7 +965,7 @@
             ZSU(NSU)=   RKAP*RA*SIN(TH)
          ENDDO
       CASE(3,5,8)
-         CALL eqget_rzsu(RSU,ZSU,NSUMAX)
+         CALL GETRSU(RSU,ZSU,NSUMAX)
       END SELECT
       RETURN
     END SUBROUTINE pl_rzsu
@@ -980,7 +980,7 @@
       IMPLICIT NONE
       REAL(rkind),DIMENSION(NXPRF,NXSPC):: PRFN,PRFT
       CHARACTER(LEN=80):: TRFILE='topics-data' ! fixed name
-      INTEGER(ikind):: ierr,ifno,nr,ns,irc,n,i
+      INTEGER:: ierr,ifno,nr,ns,irc,n,i
       REAL(rkind):: val
 
       ierr = 0
@@ -1046,11 +1046,11 @@
       USE libspl1d
       IMPLICIT NONE
       REAL(rkind),INTENT(IN):: rhol   ! Normalized radius
-      INTEGER(ikind),INTENT(IN):: NS  ! Particle species
+      INTEGER,INTENT(IN):: NS  ! Particle species
       REAL(rkind),INTENT(OUT):: PNL   ! Density at Rhol
       REAL(rkind),INTENT(OUT):: PTL   ! Temperature at Rhol
       REAL(rkind):: PPL
-      INTEGER(ikind):: IERR
+      INTEGER:: IERR
 
       IF (Rhol.GT.1.0D0) THEN
          IF(modeln.EQ.1) THEN

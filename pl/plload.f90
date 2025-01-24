@@ -2,7 +2,7 @@
 
 MODULE plp2D
   USE bpsd_kinds
-  INTEGER(ikind):: NXMAX,NYMAX
+  INTEGER:: NXMAX,NYMAX
   REAL(rkind),DIMENSION(:),ALLOCATABLE:: XD,YD
   REAL(rkind),DIMENSION(:,:,:),ALLOCATABLE:: VA
   REAL(rkind),DIMENSION(:,:,:,:,:),ALLOCATABLE:: UA
@@ -10,7 +10,7 @@ END MODULE plp2D
 
 MODULE pl_trdata
   USE bpsd_kinds
-  INTEGER(ikind):: NRMAX_TR,NSMAX_TR,NFMAX_TR
+  INTEGER:: NRMAX_TR,NSMAX_TR,NFMAX_TR
   REAL(rkind),DIMENSION(:),ALLOCATABLE:: RM_TR,RG_TR,DERIV
   REAL(rkind),DIMENSION(:,:),ALLOCATABLE:: RN_TR,RT_TR,RW_TR,RNF_TR,RTF_TR
   REAL(rkind),DIMENSION(:,:,:),ALLOCATABLE:: URN_TR,URT_TR
@@ -57,8 +57,9 @@ CONTAINS
       USE libspl1d
       IMPLICIT NONE
       INTEGER,INTENT(OUT):: ierr
-      REAL(rkind),DIMENSION(NXPRF,NXSPC):: PRFN,PRFT
-      INTEGER(ikind):: ifno,nr,ns,irc
+!      REAL(rkind),DIMENSION(NXPRF,NXSPC):: PRFN,PRFT
+      REAL(rkind):: PRFN(NXPRF,NXSPC),PRFT(NXPRF,NXSPC)
+      INTEGER:: ifno,nr,ns,irc
       REAL(rkind):: val
       CHARACTER(LEN=80),SAVE:: KNAMPF_SAVE=' '
 
@@ -112,18 +113,18 @@ CONTAINS
 
 !     ***** Interpolation of profile at a given point *****
 
-    SUBROUTINE pl_read_xprf(Rhol,NS,PNL,PTL)
+    SUBROUTINE pl_read_xprf(rhol,NS,PNL,PTL)
 
       USE plcomm
       USE plxprf
       USE libspl1d
       IMPLICIT NONE
       REAL(rkind),INTENT(IN):: rhol   ! Normalized radius
-      INTEGER(ikind),INTENT(IN):: NS  ! Particle species
+      INTEGER,INTENT(IN):: NS  ! Particle species
       REAL(rkind),INTENT(OUT):: PNL   ! Density at Rhol
       REAL(rkind),INTENT(OUT):: PTL   ! Temperature at Rhol
       REAL(rkind):: PPL
-      INTEGER(ikind):: IERR
+      INTEGER:: IERR
 
       IF (Rhol.GT.1.0D0) THEN
          IF(modeln.EQ.1) THEN
@@ -243,11 +244,11 @@ CONTAINS
       USE libspl1d
       IMPLICIT NONE
       REAL(rkind),INTENT(IN):: rho    ! Normalized radius
-      INTEGER(ikind),INTENT(IN):: NS  ! Particle species
+      INTEGER,INTENT(IN):: NS  ! Particle species
       REAL(rkind),INTENT(OUT):: PNL   ! Density at rho
       REAL(rkind),INTENT(OUT):: PTL   ! Temperature at rho
       REAL(rkind):: rhol
-      INTEGER(ikind):: IERR
+      INTEGER:: IERR
 
       rhol=MIN(MAX(RM_TR(1),rho),RM_TR(NRMAX_TR))
       IF(NS.LE.NSMAX_TR) THEN
@@ -266,7 +267,7 @@ CONTAINS
 
     SUBROUTINE pl_load_p2D(ierr)
 
-      USE plcomm,ONLY: ikind,rkind,KNAMPF
+      USE plcomm,ONLY: rkind,KNAMPF
       USE plp2D
       USE libspl2d
       USE libfio
@@ -425,15 +426,15 @@ CONTAINS
 
     SUBROUTINE pl_read_p2Dmag(X,Y,BX,BY,BZ,IERR)
 
-      USE plcomm,ONLY: rkind,ikind
+      USE plcomm,ONLY: rkind
       USE plp2d
       USE libspl2d
       IMPLICIT NONE
       REAL(rkind),INTENT(IN):: X,Y       ! Position
       REAL(rkind),INTENT(OUT):: BX,BY,BZ ! magnetic field
-      INTEGER(ikind),INTENT(OUT):: IERR  ! ERROR Indicator 
+      INTEGER,INTENT(OUT):: IERR  ! ERROR Indicator 
       REAL(rkind):: XL,YL
-      INTEGER(ikind):: IERL
+      INTEGER:: IERL
 
       XL=X
       IF(XL.LT.XD(1))     XL=XD(1)
@@ -457,7 +458,7 @@ CONTAINS
 
     SUBROUTINE pl_read_p2D(X,Y,RN,RTPR,RTPP,RU,IERR)
 
-      USE plcomm,ONLY: rkind,ikind,NSMAX
+      USE plcomm,ONLY: rkind,NSMAX
       USE plp2d
       USE libspl2d
       IMPLICIT NONE
@@ -467,10 +468,10 @@ CONTAINS
            RTPR,  &! Parallel Temperature [keV]
            RTPP,  &! Parallel Temperature [keV]
            RU      ! Flow velosity [m/s]
-      INTEGER(ikind),INTENT(OUT):: &
+      INTEGER,INTENT(OUT):: &
            IERR    ! ERROR Indicator 
       REAL(rkind):: XL,YL,RN_PL,RT_PL
-      INTEGER(ikind):: IERL
+      INTEGER:: IERL
 
       XL=X
       IF(XL.LT.XD(1))     XL=XD(1)

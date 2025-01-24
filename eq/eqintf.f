@@ -78,26 +78,6 @@ C
       RETURN
       END
 C
-C     ***** GET plasma volume *****
-C
-      SUBROUTINE eq_get_vps(RHON,VPSL)
-C
-      INCLUDE '../eq/eqcomq.inc'
-C
-      VPSL=FNVPS(RHON)
-      RETURN
-      END
-C
-C     ***** GET plasma cross section area *****
-C
-      SUBROUTINE eq_get_sps(RHON,SPSL)
-C
-      INCLUDE '../eq/eqcomq.inc'
-C
-      SPSL=FNSPS(RHON)
-      RETURN
-      END
-C
 C     ***** GET MINIMUM R AS A FUNCTION OF PSIN *****
 C
       SUBROUTINE GETRMN(RHON,RRMINL)
@@ -131,30 +111,10 @@ C
 C
 C     ***** GET PLASMA BOUNDARY POSITION *****
 C
-      SUBROUTINE eqget_rzsu(rsu1,zsu1,nsumax1)
+      SUBROUTINE GETRSU(RSU1,ZSU1,NSUMAX1)
 C
       INCLUDE '../eq/eqcomq.inc'
-      REAL(rkind),ALLOCATABLE,INTENT(OUT):: rsu1(:),zsu1(:)
-      INTEGER,INTENT(OUT):: nsumax1
-      INTEGER:: nsu
-C
-      IF(ALLOCATED(rsu1)) DEALLOCATE(rsu1)
-      IF(ALLOCATED(zsu1)) DEALLOCATE(zsu1)
-      ALLOCATE(rsu1(nsumax),zsu1(nsumax))
-      DO nsu=1,nsumax
-         rsu1(nsu)=rsu(nsu)
-         zsu1(nsu)=zsu(nsu)
-      enddo
-      nsumax1=nsumax
-      return
-      end
-C
-C     ***** GET PLASMA BOUNDARY POSITION *****
-C
-      SUBROUTINE GETRSU(RSU1,ZSU1,N,NSUMAX1)
-C
-      INCLUDE '../eq/eqcomq.inc'
-      DIMENSION RSU1(N),ZSU1(N)
+      DIMENSION RSU1(NSUMAX),ZSU1(NSUMAX)
 C
       NSUMAX1=NSUMAX
       DO NSU=1,MIN(N,NSUMAX)
@@ -166,15 +126,15 @@ C
 C
 C     ***** GET R and Z for rhot and th *****
 C
-      SUBROUTINE GET_RZ(rhon_,chip_,R_,Z_)
+      SUBROUTINE GET_RZ(rhon_,rchip_,R_,Z_)
 C
       USE libspl2d
       INCLUDE '../eq/eqcomq.inc'
       REAL(rkind):: chip_
 C
-      CALL SPL2DF(chip_,rhon_,R_,
+      CALL SPL2DF(rchip_,rhon_,R_,
      &                  CHIP,RHOT,URPS,NTHMP,NTHMAX+1,NRMAX,IERR)
-      CALL SPL2DF(chip_,rhon_,Z_,
+      CALL SPL2DF(rchip_,rhon_,Z_,
      &                  CHIP,RHOT,UZPS,NTHMP,NTHMAX+1,NRMAX,IERR)
       RETURN
       END
