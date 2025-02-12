@@ -170,9 +170,9 @@ CONTAINS
          TT = RT(NR,NS_T)
          SS = SIGMAM(TD,TT)
          IF(model_nnf(nnf).GE.3) THEN
-            ZEFFM = (PZ(NS_D)*PZ(NS_D)*RN(NR,NS_D)/PA(NS_D) &
-                    +PZ(NS_T)*PZ(NS_T)*RN(NR,NS_T)/PA(NS_T) &
-                    +PZ(NS_A)*PZ(NS_A)*RN(NR,NS_A)/PA(NS_A) &
+            ZEFFM = (PZ(NS_D  )*PZ(NS_D  )*RN(NR,NS_D  )/PM(NS_D  ) &
+                    +PZ(NS_T)  *PZ(NS_T  )*RN(NR,NS_T  )/PM(NS_T  ) &
+                    +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PM(NS_He4) &
                     +PZC(NR)*PZC(NR) *ANC(NR) /12.D0 &
                     +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
             SSB=0.D0
@@ -182,9 +182,9 @@ CONTAINS
                NS_beam=ns_nnb(nnb)
                IF (NS_beam.EQ.NS_D) THEN
                ! Critiral energy: (5.43) Takamura     
-               EC  = 14.8D0*TE*PA(NS_beam)*ZEFFM**(2.D0/3.D0)
+               EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
                ! Ion-electron slowing time: (3.22) Takamura: 
-               TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 &
+               TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 &
                     /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
                ! weight factor in SIGMAB 
                PTNT= PNB_NNBNR(nnb,NR)*TAUS &
@@ -197,7 +197,7 @@ CONTAINS
 !                    PNBENG(NNB),EC,TAUS
                ELSEIF(NS_beam.EQ.NS_T) THEN
                   RSB = 0
-               ! TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
+               ! TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
                ! ! sf*nj*τsA
                ! ! SSB = SSB + ((((PNB_NNBNR(NNB,NR)))/(AEE*PNBENG(nnb)*RKEV))/(RN(NR,NS_beam))*1.D20) * TAUS*sigmaDbuTbm(TE) 
                ! !sigmaDbuTbm derived from NRL formlary, 1E-26 multiplied to adjust the unit from barn to m^2
@@ -209,9 +209,9 @@ CONTAINS
             
             ! ####### fast ion calculation #######
             ! ! Critiral energy: (5.43) Takamura     
-            ! EC  = 14.8D0*TE*PA(NS_beam)*ZEFFM**(2.D0/3.D0)
+            ! EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
             ! ! Ion-electron slowing time: (3.22) Takamura: 
-            ! TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 &
+            ! TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 &
             !      /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
             ! ! weight factor in SIGMAB 
             ! PTNT= PNB_NNBNR(nnb,NR)*TAUS &
@@ -242,20 +242,20 @@ CONTAINS
          !  DD反応からのfast TについてもDD reationのmoduleにてRNに統合し、
          !  SSFで断面積を与えている。
          
-         SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 !+ RSB*RN(NR,NS_D)
-         ! SNF_NSNNFNR(NS_A,NNF,NR) = (SS+SSB+SSF)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 + TAUS*RN(NR,NS_D)*sigmaDbuTbm(TE,ETNBI)
-         PNF_NSNNFNR(NS_A,NNF,NR) = SNF_NSNNFNR(NS_A,NNF,NR)*3.5D3*RKEV*1.D20
+         SNF_NSNNFNR(NS_He4,NNF,NR) = (SS+SSB)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 !+ RSB*RN(NR,NS_D)
+         ! SNF_NSNNFNR(NS_He4,NNF,NR) = (SS+SSB+SSF)*RN(NR,NS_D)*RN(NR,NS_T)*1.D20 + TAUS*RN(NR,NS_D)*sigmaDbuTbm(TE,ETNBI)
+         PNF_NSNNFNR(NS_He4,NNF,NR) = SNF_NSNNFNR(NS_He4,NNF,NR)*3.5D3*RKEV*1.D20
          IF(MOD(model_nnf(nnf),2).EQ.1) &
-              SNF_NSNNFNR(NS_A,NNF,NR)=0.D0
-         SNF_NSNNFNR(NS_D,NNF,NR) =-SNF_NSNNFNR(NS_A,NNF,NR)
-         SNF_NSNNFNR(NS_T,NNF,NR) =-SNF_NSNNFNR(NS_A,NNF,NR)
+              SNF_NSNNFNR(NS_He4,NNF,NR)=0.D0
+         SNF_NSNNFNR(NS_D,NNF,NR) =-SNF_NSNNFNR(NS_He4,NNF,NR)
+         SNF_NSNNFNR(NS_T,NNF,NR) =-SNF_NSNNFNR(NS_He4,NNF,NR)
          PNF_NSNNFNR(NS_D,NNF,NR) &
-              =SNF_NSNNFNR(NS_A,NNF,NR)*RT(NR,NS_D)*RKEV*1.D20
+              =SNF_NSNNFNR(NS_He4,NNF,NR)*RT(NR,NS_D)*RKEV*1.D20
          PNF_NSNNFNR(NS_T,NNF,NR) &
-              =SNF_NSNNFNR(NS_A,NNF,NR)*RT(NR,NS_T)*RKEV*1.D20
+              =SNF_NSNNFNR(NS_He4,NNF,NR)*RT(NR,NS_T)*RKEV*1.D20
 !              WRITE(26,'(A1,I3,I3,6E12.4)') ':', &
 !              NT,NR,SS,SSB,SSF,RN(NR,2),RN(NR,3), &
-!              SNF_NSNNFNR(NS_A,NNF,NR)
+!              SNF_NSNNFNR(NS_He4,NNF,NR)
       ENDDO
 
       DO NR=1,NRMAX
@@ -265,12 +265,12 @@ CONTAINS
          P1   = 3.D0*SQRT(0.5D0*PI)*AME/ANE *(ABS(TE)*RKEV/AME)**1.5D0
          VCD3 = P1*RN(NR,NS_D)*PZ(NS_D)**2/AMD
          VCT3 = P1*RN(NR,NS_T)*PZ(NS_T)**2/AMT
-         VCA3 = P1*RN(NR,NS_A)*PZ(NS_A)**2/AMA
+         VCA3 = P1*RN(NR,NS_He4)*PZ(NS_He4)**2/AMA
          VC3  = VCD3+VCT3+VCA3
          VCR  = VC3**(1.D0/3.D0)
          HYF=HY(VF/VCR)
-         TAUS = 0.2D0*PA(4)*ABS(TE)**1.5D0 &
-              /(PZ(NS_A)**2*ANE*COULOG(1,2,ANE,TE))
+         TAUS = 0.2D0*PM(NS_He4)*ABS(TE)**1.5D0 &
+              /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
          TAUF(NNF,NR)= 0.5D0*TAUS*(1.D0-HYF)
          RNF(NR,NNBMAX+NNF) &
               = 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.5D3)
@@ -280,10 +280,10 @@ CONTAINS
             RTF(NR,NNBMAX+NNF)= 0.D0
          ENDIF
          PNFIN_NNFNR(NNF,NR) = WF*RKEV*1.D20/TAUF(nnf,NR)
-         PNFCL_NSNNFNR(NS_e,NNF,NR)=    (1.D0-HYF)*PNFIN_NNFNR(NNF,NR)
-         PNFCL_NSNNFNR(NS_D,NNF,NR)=(VCD3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
-         PNFCL_NSNNFNR(NS_T,NNF,NR)=(VCT3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
-         PNFCL_NSNNFNR(NS_A,NNF,NR)=(VCA3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+         PNFCL_NSNNFNR(NS_e,  NNF,NR)=    (1.D0-HYF)*PNFIN_NNFNR(NNF,NR)
+         PNFCL_NSNNFNR(NS_D,  NNF,NR)=(VCD3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+         PNFCL_NSNNFNR(NS_T,  NNF,NR)=(VCT3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+         PNFCL_NSNNFNR(NS_He4,NNF,NR)=(VCA3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
       ENDDO
 
       RETURN
@@ -337,24 +337,24 @@ CONTAINS
              TT = RT(NR,NS_T)
              SS = SIGMAM_DD(TD)
              IF(model_nnf(nnf).GE.13) THEN
-               !  ZEFFM = (PZ(NS_D)*PZ(NS_D)*RN(NR,NS_D)/PA(NS_D) &
-               !          +PZ(NS_T)*PZ(NS_T)*RN(NR,NS_T)/PA(NS_T) &
-               !          +PZ(NS_A)*PZ(NS_A)*RN(NR,NS_A)/PA(NS_A) &
+               !  ZEFFM = (PZ(NS_D)*PZ(NS_D)*RN(NR,NS_D)/PM(NS_D) &
+               !          +PZ(NS_T)*PZ(NS_T)*RN(NR,NS_T)/PM(NS_T) &
+               !          +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PM(NS_He4) &
                !          +PZC(NR)*PZC(NR) *ANC(NR) /12.D0 &
                !          +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
-               ZEFFM = (PZ(NS_D)*PZ(NS_D)*RN(NR,NS_D)/PA(NS_D) &
-               +PZ(NS_T)*PZ(NS_T)*RN(NR,NS_T)/PA(NS_T) &
-               +PZ(NS_A)*PZ(NS_A)*RN(NR,NS_A)/PA(NS_A) &
-               +PZC(NR)*PZC(NR) *ANC(NR) /12.D0 &
-               +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
+               ZEFFM = (PZ(NS_D  )*PZ(NS_D  )*RN(NR,NS_D  )/PM(NS_D  ) &
+                       +PZ(NS_T  )*PZ(NS_T  )*RN(NR,NS_T  )/PM(NS_T  ) &
+                       +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PM(NS_He4) &
+                       +PZC(NR) *PZC(NR) *ANC(NR) /12.D0 &
+                       +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
                 SSB=0.D0
                 PB=0.D0
                 DO NNB=1,NNBMAX
                    NS_beam=ns_nnb(nnb)
                    ! Critiral energy: (5.43) Takamura     
-                   EC  = 14.8D0*TE*PA(NS_beam)*ZEFFM**(2.D0/3.D0)
+                   EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
                    ! Ion-electron slowing time: (3.22) Takamura: 
-                   TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 &
+                   TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 &
                         /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
                    ! weight factor in SIGMAB 
                    PTNT= PNB_NNBNR(nnb,NR)*TAUS &
@@ -375,7 +375,7 @@ CONTAINS
              SNF_NSNNFNR(NS_T,NNF,NR) = 0.5*0.5*(SS+SSB)*RN(NR,2)*RN(NR,2)*1.D20
              !パワーバランスではHe3生成、p生成との足し合わせとするため、反応数はSNFの2倍
              PNF_NSNNFNR(NS_T,NNF,NR) = 2*SNF_NSNNFNR(NS_T,NNF,NR)*((1.01D3+3.03D3+0.82D3)/2)*RKEV*1.D20
-             IF(MOD(model_nnf(nnf),2).EQ.1) SNF_NSNNFNR(NS_A,NNF,NR)=0.D0
+             IF(MOD(model_nnf(nnf),2).EQ.1) SNF_NSNNFNR(NS_He4,NNF,NR)=0.D0
             !  本来はDは二つ消失。Hを考慮しない場合はSNFD=-SNFT
              SNF_NSNNFNR(NS_D,NNF,NR) =-SNF_NSNNFNR(NS_T,NNF,NR)
           ENDDO
@@ -386,13 +386,13 @@ CONTAINS
             TE = RT(NR,1)
             WF = RW(NR,2)
             P1   = 3.D0*SQRT(0.5D0*PI)*AME/ANE *(ABS(TE)*RKEV/AME)**1.5D0
-            VCD3 = P1*RN(NR,2)*PZ(2)**2/AMD
-            VCT3 = P1*RN(NR,3)*PZ(3)**2/AMT
-            VCA3 = P1*RN(NR,4)*PZ(4)**2/AMA
+            VCD3 = P1*RN(NR,2)*PZ(NS_D)**2/AMD
+            VCT3 = P1*RN(NR,3)*PZ(NS_T)**2/AMT
+            VCA3 = P1*RN(NR,4)*PZ(NS_He4)**2/AMA
             VC3  = VCD3+VCT3+VCA3
             VCR  = VC3**(1.D0/3.D0)
             HYF=HY(VF/VCR)
-            TAUS = 0.2D0*PA(4)*ABS(TE)**1.5D0 /(PZ(4)**2*ANE*COULOG(1,2,ANE,TE))
+            TAUS = 0.2D0*PM(NS_He4)*ABS(TE)**1.5D0 /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
             ! TAUF(NR)= 0.5D0*TAUS*(1.D0-HYF)
             TAUF(nnf,NR) = 0.5D0*TAUS*(1.D0-HYF)
             RNF(NR,2)= 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.5D3)
@@ -402,10 +402,10 @@ CONTAINS
                RTF(NR,2)= 0.D0
             ENDIF
             PNFIN_NNFNR(NNF,NR) = WF*RKEV*1.D20/TAUF(nnf,NR)
-            PNFCL_NSNNFNR(NS_e,NNF,NR)=    (1.D0-HYF)*PNFIN_NNFNR(NNF,NR)
-            PNFCL_NSNNFNR(NS_D,NNF,NR)=(VCD3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
-            PNFCL_NSNNFNR(NS_T,NNF,NR)=(VCT3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
-            PNFCL_NSNNFNR(NS_A,NNF,NR)=(VCA3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+            PNFCL_NSNNFNR(NS_e,  NNF,NR)=    (1.D0-HYF)*PNFIN_NNFNR(NNF,NR)
+            PNFCL_NSNNFNR(NS_D,  NNF,NR)=(VCD3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+            PNFCL_NSNNFNR(NS_T,  NNF,NR)=(VCT3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+            PNFCL_NSNNFNR(NS_He4,NNF,NR)=(VCA3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
 
             ! PFIN(NR) = WF*RKEV*1.D20/TAUF(NR)
             ! PFCL(NR,1)=    (1.D0-HYF)*PFIN(NR)
@@ -556,13 +556,13 @@ CONTAINS
          TD   = RT(NR,NS_D)
          THe3 = RT(NR,NS_He3)
          SS = SIGMADHe3(TD,THe3)
-         SNF_NSNR(NS_A,NR) = SS*RN(NR,NS_D)*RN(NR,NS_T)*1.D20
-         PNF_NSNR(NS_A,NR) = SNF_NSNR(NS_A,NR)*(3.5D3+14.7D3)*RKEV*1.D20
+         SNF_NSNR(NS_He4,NR) = SS*RN(NR,NS_D)*RN(NR,NS_T)*1.D20
+         PNF_NSNR(NS_He4,NR) = SNF_NSNR(NS_He4,NR)*(3.5D3+14.7D3)*RKEV*1.D20
              ! proton energy added
              ! for simplicity
-         IF(MOD(model_nnf(nnf),2).EQ.1) SNF_NSNR(NS_A,NR) = 0.D0
-         SNF_NSNR(NS_D,NR)   =-SNF_NSNR(NS_A,NR)
-         SNF_NSNR(NS_He3,NR) =-SNF_NSNR(NS_A,NR)
+         IF(MOD(model_nnf(nnf),2).EQ.1) SNF_NSNR(NS_He4,NR) = 0.D0
+         SNF_NSNR(NS_D,NR)   =-SNF_NSNR(NS_He4,NR)
+         SNF_NSNR(NS_He3,NR) =-SNF_NSNR(NS_He4,NR)
       ENDDO
 
       DO NR=1,NRMAX
@@ -572,11 +572,11 @@ CONTAINS
          P1   = 3.D0*SQRT(0.5D0*PI)*AME/ANE *(ABS(TE)*RKEV/AME)**1.5D0
          VCD3  = P1*RN(NR,NS_D)*PZ(NS_D)**2/AMD
          VCHe3 = P1*RN(NR,NS_He3)*PZ(NS_He3)**2/AMHe3
-         VCA3  = P1*RN(NR,NS_A)*PZ(NS_A)**2/AMA
+         VCA3  = P1*RN(NR,NS_He4)*PZ(NS_He4)**2/AMA
          VC3  = VCD3+VCHe3+VCA3
          VCR  = VC3**(1.D0/3.D0)
          HYF=HY(VF/VCR)
-         TAUS = 0.2D0*PA(4)*ABS(TE)**1.5D0 /(PZ(4)**2*ANE*COULOG(1,2,ANE,TE))
+         TAUS = 0.2D0*PM(NS_He4)*ABS(TE)**1.5D0 /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
          TAUF(nnf,NR)= 0.5D0*TAUS*(1.D0-HYF)
          RNF(NR,NNBMAX+NNF) &
               = 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.6D3)
@@ -589,7 +589,7 @@ CONTAINS
          PNFCL_NSNNFNR(NS_e,  NNF,NR)  =     (1.D0-HYF)*PNFIN_NNFNR(NNF,NR)
          PNFCL_NSNNFNR(NS_D,  NNF,NR)  =(VCD3 /VC3)*HYF*PNFIN_NNFNR(NNF,NR)
          PNFCL_NSNNFNR(NS_He3,NNF,NR)  =(VCHe3/VC3)*HYF*PNFIN_NNFNR(NNF,NR)
-         PNFCL_NSNNFNR(NS_A,  NNF,NR)  =(VCA3 /VC3)*HYF*PNFIN_NNFNR(NNF,NR)
+         PNFCL_NSNNFNR(NS_He4,NNF,NR)  =(VCA3 /VC3)*HYF*PNFIN_NNFNR(NNF,NR)
       ENDDO
 
       RETURN

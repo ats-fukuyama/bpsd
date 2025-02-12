@@ -9,8 +9,8 @@ MODULE trcomm_parm
 ! IMPORTED FROM plcomm
 !     RR,RA,RKAP,RDLT,BB,RIP,
 !     NSM,NSMAX,
-!     NP_P(NSM),NP_N(NSM),NP_A(NSM),
-!     PA(NSM),PZ(NSM),PN(NSM),PNS(NSM),PTPR(NSM),PTPP(NSM),PTS(NSM),
+!     NPA(NSM),
+!     PM(NSM),PZ(NSM),PN(NSM),PNS(NSM),PTPR(NSM),PTPP(NSM),PTS(NSM),
 !     PU(NSM),PUS(NSM),ID_NS(NSM),KID_NS(NSM)
 !     PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2
 !     MODELG,MODELN,MODELQ,MODEL_NPROF
@@ -53,8 +53,8 @@ MODULE trcomm_parm
   REAL(rkind),DIMENSION(NSM):: PT
   REAL(rkind):: RIPS,RIPE
   INTEGER:: NSAMAX,NSFMAX,NSZMAX,NSNMAX
-  INTEGER:: &
-       NS_e,NS_D,NS_T,NS_A,NS_H,NS_He3,NS_C,NS_Fe
+  INTEGER:: & ! NS of bulk species (first in NS)
+       NS_e,NS_D,NS_T,NS_He4,NS_H,NS_He3,NS_C,NS_Fe
   
   ! === profile parameters ===
 

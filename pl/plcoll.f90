@@ -50,7 +50,7 @@ CONTAINS
        RNTE=0.D0
        RNTI=0.D0
        RNZI=0.D0
-       IF(PA(ns).LE.0.1D0) THEN  ! electron or positron
+       IF(PM(ns).LE.0.1D0) THEN  ! electron or positron
           RNE=RNE+RN(ns)
           RNTE=RNTE+RN(ns)*(RTPR(ns)+2.D0*RTPP(ns))*1.D3/3.D0   ! eV unit
        ELSE ! ion
@@ -68,7 +68,7 @@ CONTAINS
        RLAMII=12.1D0+2.3D0*(LOG10(TI)-0.5D0*LOG10(RNE))
 
        DO NS=1,NSMAX
-          IF(PA(NS).LE.0.1D0) THEN ! electron or positron
+          IF(PM(NS).LE.0.1D0) THEN ! electron or positron
              VTE=SQRT(2.D0*TE*AEE/AME)
              RNUEE=RNE*RLAMEE/(1.24D-4*SQRT(TE*1.D-3)**3)
              RNUEI=RNZI*RLAMEI/(1.51D-4*SQRT(TE*1.D-3)**3)
@@ -82,11 +82,11 @@ CONTAINS
              RNU(NS)=RNUE
           ELSE
              TI=(RTPR(NS)+2.D0*RTPP(NS))*1.D3/3.D0
-             VTI=SQRT(2.D0*TI*AEE/(PA(NS)*AMP))
+             VTI=SQRT(2.D0*TI*AEE/(PM(NS)*AMP))
              RNUIE=PZ(NS)**2*RNE*RLAMEI &
-                  /(2.00D-1*SQRT(TE*1.D-3)**3*PA(NS))
+                  /(2.00D-1*SQRT(TE*1.D-3)**3*PM(NS))
              RNUII=RNZI*RLAMII &
-                  /(5.31D-3*SQRT(TI*1.D-3)**3*SQRT(PA(NS)))
+                  /(5.31D-3*SQRT(TI*1.D-3)**3*SQRT(PM(NS)))
              RNUIN=PNN0*SN*0.88D0*VTI
              SELECT CASE(model_coll)
              CASE(1)
@@ -126,7 +126,7 @@ CONTAINS
     RNSUM=0.D0
     RNTSUM=0.D0
     DO NS=1,NSMAX
-       IF(PA(NS).LE.0.1D0) THEN
+       IF(PM(NS).LE.0.1D0) THEN
           RNESUM=RNESUM+RN(NS)
           RNTESUM=RNTESUM+RN(NS)*(RTPR(NS)+2.D0*RTPP(NS))*RKEV/3.D0
        END IF
@@ -141,7 +141,7 @@ CONTAINS
          
     DO NS=1,NSMAX
        IF(RNESUM.GT.0.AND.RTAVE.GT.0.D0) THEN
-          IF(PA(NS).LE.0.1D0) THEN ! electron or positron
+          IF(PM(NS).LE.0.1D0) THEN ! electron or positron
              IF(RTAVE.GT.6.65D0) THEN
                 RLAMEE=8.0D0 &
                       +2.3D0*(LOG10(RTAVE)-0.5D0*LOG10(RNESUM))
@@ -189,14 +189,14 @@ CONTAINS
     PNN0=PPN0/(PTN0*AEE)
 
     DO NS=1,NSMAX
-       IF(PA(NS).LE.0.1D0) THEN ! electron or positron
+       IF(PM(NS).LE.0.1D0) THEN ! electron or positron
           TE=(RTPR(NS)+2.D0*RTPP(NS))*RKEV/3.D0
           VTE=SQRT(2.D0*TE*AEE/AME)
           RNUEE=RN(NS)*RLAMEE &
                /(1.24D-4*SQRT(TE*1.D-3)**3)
           RNUEI=0.D0
           DO NSI=1,NSMAX
-             IF(PA(NS).LE.0.1D0) RNUEI=RNUEI+PZ(NSI)**2*RN(NSI)
+             IF(PM(NS).LE.0.1D0) RNUEI=RNUEI+PZ(NSI)**2*RN(NSI)
           ENDDO
           RNUEI=RNUEI*RLAMEI/(1.51D-4*SQRT(TE*1.D-3)**3)
           RNUEN=PNN0*SVE
@@ -205,11 +205,11 @@ CONTAINS
           RNUN(NS)=RNUEN
        ELSE
           TI=(RTPR(NS)+2.D0*RTPP(NS))*RKEV/3.D0
-          VTI=SQRT(2.D0*TI*AEE/(PA(NS)*AMP))
+          VTI=SQRT(2.D0*TI*AEE/(PM(NS)*AMP))
           RNUIE=PZ(NS)**2*RN(1)*RLAMEI &
-               /(2.00D-1*SQRT(TE*1.D-3)**3*PA(NS))
+               /(2.00D-1*SQRT(TE*1.D-3)**3*PM(NS))
           RNUII=PZ(NS)**4*RN(NS)*RLAMII &
-               /(5.31D-3*SQRT(TI*1.D-3)**3*SQRT(PA(NS)))
+               /(5.31D-3*SQRT(TI*1.D-3)**3*SQRT(PM(NS)))
           RNUIN=PNN0*SNI*0.88D0*VTI
           RNUE(NS)=RNUIE
           RNUI(NS)=RNUII

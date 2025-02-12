@@ -72,7 +72,7 @@
       SUBROUTINE TRPELB
 
       USE TRCOMM, ONLY : AEE, AME, AMM, ANC, ANFE, DR, DVRHO, NRMAX,&
-           & NSM, PA, PELPAT, PELRAD, PELVEL, PI, PNBENG, PZ, PZC,&
+           & NSM, PM, PELPAT, PELRAD, PELVEL, PI, PNBENG, PZ, PZC,&
            & PZFE, RA, RKEV, RN, RPE, RT, SNB, SNF, SPE, rkind
       IMPLICIT NONE
       REAL(rkind)    :: A1, A2, A3, AMA, AMB, AMD, AMP, AMT, ANE,&
@@ -83,14 +83,14 @@
 
       NR = NRMAX
       RP = PELRAD
-      PAP= PA(2)*PELPAT(2)+PA(3)*PELPAT(3)+PA(4)*PELPAT(4)
+      PAP= PM(2)*PELPAT(2)+PM(3)*PELPAT(3)+PM(4)*PELPAT(4)
       ROS= 89.D0*PAP
       AMP= AMM*PAP
 
-      AMD = PA(2)*AMM
-      AMT = PA(3)*AMM
-      AMA = PA(4)*AMM
-      AMB = PA(2)*AMM
+      AMD = PM(2)*AMM
+      AMT = PM(3)*AMM
+      AMA = PM(4)*AMM
+      AMB = PM(2)*AMM
       ANS = ROS/AMP*1.D-20
       VF  = SQRT(2.D0*3.5D3*RKEV/AMA)
       VB  = SQRT(2.D0*PNBENG*RKEV/AMB)
@@ -103,7 +103,7 @@
      &           + RN(NR,4)*PZ(4)   **2/AMA + ANFE(NR)*PZFE(NR)**2/52.D0 &
      &           + ANC (NR)*PZC(NR) **2/12.D0))**(1.D0/3.D0)
 
-      TAUS = 0.2D0*PA(2)*ABS(TE)**1.5D0 /(PZ(2)**2*ANE*COULOG(1,2,ANE,TE))
+      TAUS = 0.2D0*PM(2)*ABS(TE)**1.5D0 /(PZ(2)**2*ANE*COULOG(1,2,ANE,TE))
 
       ANFAST=(SNB(NR)*LOG(1.D0+(VB/VCR)**3) &
             + SNF(NR)*LOG(1.D0+(VF/VCR)**3))*TAUS/3.D0
@@ -159,7 +159,7 @@
 
       SUBROUTINE TRPELC
 
-      USE TRCOMM, ONLY : AMM, DR, DVRHO, NRMAX, NSMAX, PA, PELPAT,&
+      USE TRCOMM, ONLY : AMM, DR, DVRHO, NRMAX, NSMAX, PM, PELPAT,&
            & PELRAD, PELVEL, PI, RA, RN, RT, SPE, rkind
       IMPLICIT NONE
       REAL(rkind)    :: ADIVE, AMP, ANA, ANE, ANP, PAP, PP, ROS, RP,&
@@ -168,7 +168,7 @@
 
       NR = NRMAX
       RP = PELRAD
-      PAP= PA(2)*PELPAT(2)+PA(3)*PELPAT(3)+PA(4)*PELPAT(4)
+      PAP= PM(2)*PELPAT(2)+PM(3)*PELPAT(3)+PM(4)*PELPAT(4)
       ROS= 89.D0*PAP
       AMP= AMM*PAP
 

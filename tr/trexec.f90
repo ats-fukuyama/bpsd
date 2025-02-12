@@ -21,7 +21,7 @@ CONTAINS
      &   MDLEQN, MDLPCK, MDLUF, MDTC, MLM, NEQMAX, NFM, &
      &   NRAMAX, NRMAX, NROMAX, NSM, NSMAX, NSS, NST, NSV, &
      &   NTUM, &
-     &   PA, PZ, PZC, PZFE, RDP, RHOA, RIP, RIPU, &
+     &   PM, PZ, PZC, PZFE, RDP, RHOA, RIP, RIPU, &
      &   RMU0, RN, RT, RU, RW, T, TTRHO, TTRHOG, &
      &   VLOOP, VSEC, X, XV, Y, YV, Z, ZV ,NEQMAXM, DIPDT, &
          RDPVRHOG, abvrhog, rkind
@@ -253,10 +253,10 @@ CONTAINS
                ENDIF
             ELSEIF(NSVN.EQ.3) THEN
                IF(NSTN.EQ.0) THEN
-                  RU(NR,NSSN) = XV(NEQ,NR)/(PA(NSSN)*AMM*RN(NR,NSSN))
+                  RU(NR,NSSN) = XV(NEQ,NR)/(PM(NSSN)*AMM*RN(NR,NSSN))
                ELSE
                   RU(NR,NSSN) = 0.5D0*(XV(NEQ,NR) &
-                       + X(NEQRMAX*(NR-1)+NSTN))/(PA(NSSN)*AMM*RN(NR,NSSN))
+                       + X(NEQRMAX*(NR-1)+NSTN))/(PM(NSSN)*AMM*RN(NR,NSSN))
                ENDIF
             ENDIF
          END DO
@@ -917,7 +917,7 @@ CONTAINS
 
       SUBROUTINE TRATOX
 
-      USE TRCOMM, ONLY : AKDW, AMM, MDTC, NEQMAX, NRMAX, NSMAX, NSS, NSV, PA, RDP, RN, RT, RU, RW, XV, YV, ZV
+      USE TRCOMM, ONLY : AKDW, AMM, MDTC, NEQMAX, NRMAX, NSMAX, NSS, NSV, PM, RDP, RN, RT, RU, RW, XV, YV, ZV
       IMPLICIT NONE
       INTEGER:: NEQ, NR, NS, NSSN, NSVN
 
@@ -933,7 +933,7 @@ CONTAINS
             ELSEIF(NSVN.EQ.2) THEN
                XV(NEQ,NR) = RN(NR,NSSN)*RT(NR,NSSN)
             ELSEIF(NSVN.EQ.3) THEN
-               XV(NEQ,NR) = PA(NSSN)*AMM*RN(NR,NSSN)*RU(NR,NSSN)
+               XV(NEQ,NR) = PM(NSSN)*AMM*RN(NR,NSSN)*RU(NR,NSSN)
             ENDIF
          ENDDO
          YV(  1,NR) = RW(NR,1)
@@ -961,7 +961,7 @@ CONTAINS
       USE TRCOMM, ONLY : &
            AKDW, AMM, ANC, ANFE, ANNU, DR, MDLEQE, MDLEQN, &
            MDTC, NEQMAX, NRMAX, NROMAX, NSM, NSMAX, NSS, NSV, &
-           PA, PZ, PZC, PZFE, RDP, RN, RPSI, RT, RU, RW, &
+           PM, PZ, PZC, PZFE, RDP, RN, RPSI, RT, RU, RW, &
            XV, YV, ZV, RDPVRHOG, DVRHOG, rkind
       IMPLICIT NONE
       INTEGER:: N, NEQ, NEQ1, NR, NS, NSSN, NSSN1, NSVN, NSVN1
@@ -1015,7 +1015,7 @@ CONTAINS
                   ENDIF
                ENDIF
             ELSEIF(NSVN.EQ.3) THEN
-               RU(NR,NSSN) = XV(NEQ,NR)/(PA(NSSN)*AMM*RN(NR,NSSN))
+               RU(NR,NSSN) = XV(NEQ,NR)/(PM(NSSN)*AMM*RN(NR,NSSN))
             ENDIF
          ENDDO
          RW(NR,1) = YV(1,NR)
@@ -1183,7 +1183,7 @@ CONTAINS
 
          NSSN=NSS(NEQ)
          NSVN=NSV(NEQ)
-         IF(NSSN.NE.0) RTM(NSSN)=RT(NR,NSSN)*RKEV/(PA(NSSN)*AMM)
+         IF(NSSN.NE.0) RTM(NSSN)=RT(NR,NSSN)*RKEV/(PM(NSSN)*AMM)
 
 !     /* Coefficients of left hand side variables */
 

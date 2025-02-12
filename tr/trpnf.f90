@@ -7,7 +7,7 @@
       SUBROUTINE TRNFDT
 
       USE TRCOMM, ONLY : &
-           AME, AMM, ANC, ANFE, MDLNF, NRMAX, PA, PBIN, PFCL, &
+           AME, AMM, ANC, ANFE, MDLNF, NRMAX, PM, PBIN, PFCL, &
            PFIN, PI, PNBENG, PNF, PZ, PZC, PZFE, RKEV, &
            RN, RNF, RT, RTF, RW, SNF, TAUF, rkind
       IMPLICIT NONE
@@ -19,9 +19,9 @@
       REAL(rkind)   :: SIGMAM, COULOG, SIGMAB, HY   !FUNCTION
 
 
-      AMD=PA(2)*AMM
-      AMT=PA(3)*AMM
-      AMA=PA(4)*AMM
+      AMD=PM(2)*AMM
+      AMT=PM(3)*AMM
+      AMA=PM(4)*AMM
       VF =SQRT(2.D0*3.5D3 *RKEV/AMA)
 
       DO NR=1,NRMAX
@@ -32,13 +32,13 @@
 !         WRITE(6,*) NR,TD,TT
          SS = SIGMAM(TD,TT)
          IF(MDLNF/2.EQ.1) THEN
-            ZEFFM = (PZ(2)*PZ(2)*RN(NR,2)/PA(2) &
-                    +PZ(3)*PZ(3)*RN(NR,3)/PA(3) &
-                    +PZ(4)*PZ(4)*RN(NR,4)/PA(4) &
+            ZEFFM = (PZ(2)*PZ(2)*RN(NR,2)/PM(2) &
+                    +PZ(3)*PZ(3)*RN(NR,3)/PM(3) &
+                    +PZ(4)*PZ(4)*RN(NR,4)/PM(4) &
                     +PZC(NR)*PZC(NR) *ANC(NR) /12.D0 &
                     +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
-            EC  = 14.8D0*TE*PA(2)*ZEFFM**(2.D0/3.D0)
-            TAUS= 0.2D0*PA(2)*ABS(TE)**1.5D0 /(PZ(2)**2*ANE*COULOG(1,2,ANE,TE))
+            EC  = 14.8D0*TE*PM(2)*ZEFFM**(2.D0/3.D0)
+            TAUS= 0.2D0*PM(2)*ABS(TE)**1.5D0 /(PZ(2)**2*ANE*COULOG(1,2,ANE,TE))
             PTNT= PBIN(NR)*TAUS/(RN(NR,2)*1.D20*PNBENG*RKEV)
             SSB = SIGMAB(PNBENG,EC,TT,PTNT)
          ELSE
@@ -60,7 +60,7 @@
          VC3  = VCD3+VCT3+VCA3
          VCR  = VC3**(1.D0/3.D0)
          HYF=HY(VF/VCR)
-         TAUS = 0.2D0*PA(4)*ABS(TE)**1.5D0 /(PZ(4)**2*ANE*COULOG(1,2,ANE,TE))
+         TAUS = 0.2D0*PM(4)*ABS(TE)**1.5D0 /(PZ(4)**2*ANE*COULOG(1,2,ANE,TE))
          TAUF(NR)= 0.5D0*TAUS*(1.D0-HYF)
          RNF(NR,2)= 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.5D3)
          IF(RNF(NR,2).GT.0.D0) THEN
@@ -186,7 +186,7 @@
       SUBROUTINE TRNFDHe3
 
       USE TRCOMM, ONLY : &
-           AME, AMM, MDLNF, NRMAX, PA, PFCL, &
+           AME, AMM, MDLNF, NRMAX, PM, PFCL, &
            PFIN, PI, PNF, PZ, RKEV, &
            RN, RNF, RT, RTF, RW, SNF, TAUF, rkind
       IMPLICIT NONE
@@ -196,9 +196,9 @@
       INTEGER:: NR
       REAL(rkind)   :: SIGMADHe3, COULOG, HY   !FUNCTION
 
-      AMD=  PA(2)*AMM
-      AMHe3=PA(3)*AMM
-      AMA=  PA(4)*AMM
+      AMD=  PM(2)*AMM
+      AMHe3=PM(3)*AMM
+      AMA=  PM(4)*AMM
       VF =SQRT(2.D0*3.6D3 *RKEV/AMA)
 
       DO NR=1,NRMAX
@@ -226,7 +226,7 @@
          VC3  = VCD3+VCHe3+VCA3
          VCR  = VC3**(1.D0/3.D0)
          HYF=HY(VF/VCR)
-         TAUS = 0.2D0*PA(4)*ABS(TE)**1.5D0 /(PZ(4)**2*ANE*COULOG(1,2,ANE,TE))
+         TAUS = 0.2D0*PM(4)*ABS(TE)**1.5D0 /(PZ(4)**2*ANE*COULOG(1,2,ANE,TE))
          TAUF(NR)= 0.5D0*TAUS*(1.D0-HYF)
          RNF(NR,2)= 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.6D3)
          IF(RNF(NR,2).GT.0.D0) THEN

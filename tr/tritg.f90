@@ -24,7 +24,7 @@
       USE TRCOMM, ONLY : &
            ADDW, ADDWD, ADDWP, AKDW, AKDWD, AKDWP, AR1RHO, AR2RHO, AVDW, &
            AVKDW, BB, CDH, DR, MDDW, MDLEOI, MDLEQN, MDLEQT, MDLKAI, MDLUF, &
-           NGLF, NRMAX, NSM, NSMAX, PA, PHIA, PI, PZ, Q0, QP, RA, RG, RKAP, &
+           NGLF, NRMAX, NSM, NSMAX, PM, PHIA, PI, PZ, Q0, QP, RA, RG, RKAP, &
            RKPRHO, RM, RMJRHO, RMNRHO, RN, RNF, RR, RT, VPAR, VPRP, VTOR, &
            WEXB, WROT, ZEFF, ALPHA, rkind
       USE libitp
@@ -162,7 +162,7 @@
       rmajor_exp=RR  ! geometrical major radius of magnetix axis [m]
 
       zimp_exp=PZ(3)         ! Zimp; finite data is necessary
-      amassimp_exp=PA(3)     ! Aimp; finite data is necessary
+      amassimp_exp=PM(3)     ! Aimp; finite data is necessary
 
       q_exp(1)=0.5D0*(Q0+QP(1))
       DO jm=2,jmaxm
@@ -178,7 +178,7 @@
          elong_exp(jm)=RKPRHO(jm)    ! local elongation
       ENDDO
 
-      amassgas_exp=PA(2) ! atomic num. of working gas
+      amassgas_exp=PM(2) ! atomic num. of working gas
       alpha_e=1.D0       ! ExB shear stabilization (0=off,>0=on)
       x_alpha=1.D0       ! alpha stabilization (0=off,>0=on)
       i_delay=0          ! default(usually recommended)
@@ -457,7 +457,7 @@
 
       USE TRCOMM, ONLY : &
            AR1RHOG, AR2RHOG, BB, DR, EPSRHO, MDDW, MDLKAI, MDLTPF, &
-           NRMAX, NT, PA, PNSS, PTS, PZ, QP, RA, RHOG, RHOM, RJCB, RKAP, &
+           NRMAX, NT, PM, PNSS, PTS, PZ, QP, RA, RHOG, RHOM, RJCB, RKAP, &
            RKEV, RMU0, RN, RR, RT, WEXB, S, rkind
       USE libitp
       IMPLICIT NONE
@@ -477,7 +477,7 @@
          IST=0
       ENDIF
       ZL    = PZ(3)
-      AZL   = PA(3)
+      AZL   = PM(3)
       COLL  = 1.D0
       ELL   = 1.D0
       RLIST = 1.D0
@@ -485,7 +485,7 @@
       RIWL  = 2.D0
       RISBL = 2.D0
       SEARCH= 2.D0
-      PMA   = PA(2)
+      PMA   = PM(2)
       ROTL  = 1.D0
       EPSA  = RA/RR
       DO NR=1,NRMAX-1
@@ -598,7 +598,7 @@
       SUBROUTINE WEILAND_COEF(NR,CHIL,CHEL,DL,CHQL,DQL) !,SCHI,SCHE,SD,SCHQ,SDQ)
 
       USE TRCOMM, ONLY : &
-           ADDW, ADDWD, ADDWP, AKDW, AKDWD, AKDWP, MDLWLD, NSM, PA, rkind
+           ADDW, ADDWD, ADDWP, AKDW, AKDWD, AKDWP, MDLWLD, NSM, PM, rkind
       IMPLICIT NONE
       INTEGER  :: NR
 !      REAL(rkind)     :: SCHE, SCHI, SCHQ, SD, SDQ
@@ -617,7 +617,7 @@
 
 !     It is assumed that De=Di in the followings.
 
-      IF(PA(3).EQ.3.D0) THEN
+      IF(PM(3).EQ.3.D0) THEN
 !         AKDW(NR,1)=SCHE
          AKDW(NR,1)=CHEL(2)
          DO NS=2,NSM

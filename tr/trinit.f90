@@ -45,7 +45,7 @@ CONTAINS
 !        NSZMAX : NUMBER OF IMPURITIES SPECIES
 !        NSNMAX : NUMBER OF NEUTRAL SPECIES
 
-!        PA(NS) : ATOMIC NUMBER
+!        PM(NS) : ATOMIC NUMBER
 !        PZ(NS) : CHARGE NUMBER
 !        PN(NS) : INITIAL NUMBER DENSITY ON AXIS (1.E20 M**-3)
 !        PNS(NS): INITIAL NUMBER DENSITY ON SURFACE (1.E20 M**-3)
@@ -58,7 +58,7 @@ CONTAINS
       NSZMAX=0  ! the number of impurities
       NSNMAX=2  ! the number of neutrals, 0 or 2 fixed
 
-      PA(1)   = AME/AMM
+      PM(1)   = AME/AMM
       PZ(1)   =-1.D0
       PN(1)   = 0.5D0
       PT(1)   = 1.5D0
@@ -67,7 +67,7 @@ CONTAINS
       PU(1)   = 0.D0
       PUS(1)  = 0.D0
 
-      PA(2)   = 2.D0
+      PM(2)   = 2.D0
       PZ(2)   = 1.D0
       PN(2)   = 0.5D0
       PT(2)   = 1.5D0
@@ -76,7 +76,7 @@ CONTAINS
       PU(2)   = 0.D0
       PUS(2)  = 0.D0
 
-      PA(3)   = 3.D0
+      PM(3)   = 3.D0
       PZ(3)   = 1.D0
       PN(3)   = 0.D0
       PT(3)   = 1.5D0
@@ -85,7 +85,7 @@ CONTAINS
       PU(3)   = 0.D0
       PUS(3)  = 0.D0
 
-      PA(4)   = 4.D0
+      PM(4)   = 4.D0
       PZ(4)   = 2.D0
       PN(4)   = 0.D0
       PT(4)   = 1.5D0
@@ -94,7 +94,7 @@ CONTAINS
       PU(4)   = 0.D0
       PUS(4)  = 0.D0
 
-      PA(5)   = 12.D0
+      PM(5)   = 12.D0
       PZ(5)   = 2.D0
       PN(5)   = 0.D0
       PT(5)   = 0.D0
@@ -103,7 +103,7 @@ CONTAINS
       PU(5)   = 0.D0
       PUS(5)  = 0.D0
 
-      PA(6)   = 12.D0
+      PM(6)   = 12.D0
       PZ(6)   = 4.D0
       PN(6)   = 0.D0
       PT(6)   = 0.D0
@@ -113,7 +113,7 @@ CONTAINS
       PUS(6)  = 0.D0
 
       DO NS=7,NSMM
-         PA(NS)  = 2.D0
+         PM(NS)  = 2.D0
          PZ(NS)  = 0.D0
          PN(NS)  = 0.D0
          PT(NS)  = 0.D0

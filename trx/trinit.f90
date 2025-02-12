@@ -58,12 +58,10 @@ CONTAINS
       !  NSZMAX : NUMBER OF IMPURITIES SPECIES
       !  NSNMAX : NUMBER OF NEUTRAL SPECIES
 
-      !  KID_NS(NS): Particle name in two characters
+      !  KID_NS(NS): Particle name in four characters
       !  ID_NS(NS): -1: electron, 0: neutral, 1: ion, 2: fast ion
-      !  NP_P(NS): number of proton (0 for electron)
-      !  NP_N(NS): number of neutron (0 for electron)
-      !  NP_A(NS): Atomic number (0 for electron)
-      !  PA(NS) : Mass NUMBER
+      !  NPA(NS): Atomic number (0 for electron)
+      !  PM(NS) : Mass NUMBER
       !  PZ(NS) : Charge NUMBER
       !  PN(NS) : INITIAL NUMBER DENSITY ON AXIS (1.E20 M**-3)
       !  PNS(NS): INITIAL NUMBER DENSITY ON SURFACE (1.E20 M**-3)
@@ -72,75 +70,33 @@ CONTAINS
       !  PU(NS) : INITIAL TOROIDAL VELOCITY ON AXIS (KEV)
       !  PUS(NS): INITIAL TOROIDAL VELOCITY ON SURFACE (KEV)
 
-      !  Single ion : NS=1:e 2:D
-      !  DT         : NS=1:e 2:D 3:T 4:He4
-      !  DD+DD+DHe3 : NS=1:e 2:D 3:T 4:He4 5:H 6:He3
-
       NSMAX=4
       NSZMAX=0  ! the number of impurities
-      NSNMAX=2  ! the number of neutrals, 0 or 2 fixed
+      NSNMAX=0  ! the number of neutrals
 
       NS_e=1
-      KID_NS(1)= ' e'
-      ID_NS(1) = -1
-      NP_A(1)   = 0
-      PA(1)    = AME/AMP
-      PZ(1)    =-1.D0
+      NPA(NS_e)= 0  
+      PM(NS_e) = AME/AMP
+      PZ(NS_e) =-1.D0
 
       NS_D=2
-      KID_NS(2)= ' D'
-      ID_NS(2) = 1
-      NP_A(2)   = 1
-      PA(2)    = 2.D0
-      PZ(2)    = 1.D0
+      NPA(NS_D)= 1
+      PM(NS_D) = 2.D0
+      PZ(NS_D) = 1.D0
 
       NS_T=3
-      KID_NS(3)= ' T'
-      ID_NS(3) = 1
-      NP_A(3)   = 1
-      PA(3)    = 3.D0
-      PZ(3)    = 1.D0
+      NPA(NS_T)= 1
+      PM(NS_T) = 3.D0
+      PZ(NS_T) = 1.D0
 
-      NS_A=4
-      KID_NS(4)= 'He'
-      ID_NS(4) = 1
-      NP_A(4)   = 2
-      PA(4)    = 4.D0
-      PZ(4)    = 2.D0
+      NS_He4=4
+      NPA(NS_He4)= 2
+      PM(NS_He4) = 4.D0
+      PZ(NS_He4) = 2.D0
 
-      NS_H=5
-      KID_NS(5)= ' H'
-      ID_NS(5) = 1
-      NP_A(5)   = 1
-      PA(5)    = 1.D0
-      PZ(5)    = 1.D0
-
-      NS_He3=6
-      KID_NS(6)= 'He'
-      ID_NS(6) = 1
-      NP_A(6)   = 2
-      PA(6)    = 3.D0
-      PZ(6)    = 2.D0
-
-      NS_C=7
-      KID_NS(7)= ' C'
-      ID_NS(7) = 1
-      NP_A(7)   = 6
-      PA(7)    = 12.D0
-      PZ(7)    = 6.D0
-
-      NS_Fe=8
-      KID_NS(8)= 'Fe'
-      ID_NS(8) = 1
-      NP_A(8)   = 26
-      PA(8)    = 56.D0
-      PZ(8)    = 26.D0
-
-      DO NS=9,NSM
-         KID_NS(NS)= ' H'
-         ID_NS(NS) = 1
-         NP_A(NS)   = 1
-         PA(NS)    = 1.D0
+      DO NS=5,NSM
+         NPA(NS)   = 1
+         PM(NS)    = 1.D0
          PZ(NS)    = 1.D0
       END DO
 

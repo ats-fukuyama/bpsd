@@ -209,4 +209,7 @@ $(OBJDIR)/libgrf.o: $(TASKCOMM) libgrf/grftype.f90 libgrf/grfutils.f90 \
           libgrf/grd2dframe.f90 libgrf/grd1dframe.f90 libgrf.f90 \
           libgrf/grdutils.f90
 
-
+$(OBJDIR)/libpkf/libpdkf_eul.o: libpkf/libpdkf_eul.f90
+$(OBJDIR)/libpkf/libpdkf.o: libpkf/libpdkf.f90
+$(OBJDIR)/libpkf/libpdkf2.o: libpkf/libpdkf2.f90
+$(OBJDIR)/libpkf/libgdkf.o: libpkf/libpgkf.f90

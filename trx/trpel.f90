@@ -101,7 +101,7 @@
       PAP=0.D0
       DO NS=1,NSMAX
          IF(NS.NE.NS_e) THEN
-            PAP=PAP+PA(NS)*PELPAT(NS,npel)
+            PAP=PAP+PM(NS)*PELPAT(NS,npel)
          END IF
       END DO
       ROS= 89.D0*PAP
@@ -113,7 +113,7 @@
       P1   = 3.D0*SQRT(0.5D0*PI)*AME/ANE *(ABS(TE)*RKEV/AME)**1.5D0
       RNZZM=0.D0
       DO NS=1,NSMAX
-         RNZZM=RNZZM+RN(NR,NS)*PZ(NS)**2/(PA(NS)*AMP)
+         RNZZM=RNZZM+RN(NR,NS)*PZ(NS)**2/(PM(NS)*AMP)
       END DO
       VCR=(P1*RNZZM)**(1.D0/3.D0)
 
@@ -123,9 +123,9 @@
       B3=0.D0
       DO NNB=1,NNBMAX
          NSB=NS_NNB(NNB)
-         AMB=PA(NSB)*AMP
+         AMB=PM(NSB)*AMP
          VB=SQRT(2.D0*PNBENG(NNB)*RKEV/AMB)
-         TAUS = 0.2D0*PA(NSB)*ABS(TE)**1.5D0 &
+         TAUS = 0.2D0*PM(NSB)*ABS(TE)**1.5D0 &
               /(PZ(NNB)**2*ANE*COULOG(NS_e,NSB,ANE,TE))
          ANFAST=ANFAST+SNB_NNBNR(NNB,NR)*LOG(1.D0+(VB/VCR)**3)*TAUS/3.D0
          A1=SNB_NNBNR(NNB,NR)*(0.5D0*AMB*VCR*VCR/AEE)**3
@@ -135,8 +135,8 @@
       END DO
       DO NNF=1,NNFMAX
          NSF=NS_NNF(NNF)
-         AMF=PA(NSF)*AMP
-         TAUS = 0.2D0*PA(NSF)*ABS(TE)**1.5D0 &
+         AMF=PM(NSF)*AMP
+         TAUS = 0.2D0*PM(NSF)*ABS(TE)**1.5D0 &
               /(PZ(NSF)**2*ANE*COULOG(NS_e,NSF,ANE,TE))
          ANFAST=ANFAST+SNF_NNFNR(NNF,NR)*LOG(1.D0+(VF/VCR)**3)*TAUS/3.D0
          VF=SQRT(2.D0*ENF_NNF(NNF)*RKEV/AMF)
@@ -200,7 +200,7 @@
       PAP=0.D0
       DO NS=1,NSMAX
          IF(NS.NE.NS_e) THEN
-            PAP=PAP+PA(NS)*PELPAT(NS,npel)
+            PAP=PAP+PM(NS)*PELPAT(NS,npel)
          END IF
       END DO
       ROS= 89.D0*PAP
@@ -209,7 +209,7 @@
 
   100 ANE=RN(NR,NS_e)
       TE =RT(NR,NS_e)
-      ANA=RN(NR,NS_A)
+      ANA=RN(NR,NS_He4)
       ADIVE = ANA/ANE
 
       IF(ADIVE.GT.3.D-2) THEN

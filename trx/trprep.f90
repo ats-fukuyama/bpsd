@@ -10,6 +10,7 @@ CONTAINS
   SUBROUTINE tr_prep(ierr)
 
     USE trcomm
+    USE plprep
     USE trprof
     USE trbpsd
     USE trmetric
@@ -18,76 +19,24 @@ CONTAINS
     USE libsigma
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: ierr
-    INTEGER:: nr,ns,nnf
+    INTEGER:: nr,ns,nnf,npm
+
+    ! --- Intialize pl ---
+
+    CALL pl_prep
 
     ! --- Intialize NS_X ---
-    
-    NS_e=0
-    NS_D=0
-    NS_T=0
-    NS_A=0
-    NS_H=0
-    NS_He3=0
-    NS_C=0
-    NS_Fe=0
-    
-    DO NS=1,NSMAX
-       SELECT CASE(NP_P(NS))
-       CASE(0)
-          IF(NS_e.EQ.0) NS_e=NS
-       CASE(1)
-          SELECT CASE(NP_N(NS))
-          CASE(0)
-             IF(NS_H.EQ.0) NS_H=NS
-          CASE(1)
-             IF(NS_D.EQ.0) NS_D=NS
-          CASE(2)
-             IF(NS_T.EQ.0) NS_T=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=1, NP_N=out of range=',NP_N(NS)
-             STOP
-          END SELECT
-       CASE(2)
-          SELECT CASE(NP_N(NS))
-          CASE(1)
-             IF(NS_He3.EQ.0) NS_He3=NS
-          CASE(2)
-             IF(NS_A.EQ.0) NS_A=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=2, NP_N=out of range=',NP_N(NS)
-             STOP
-          END SELECT
-       CASE(6)
-          SELECT CASE(NP_N(NS))
-          CASE(6)
-             IF(NS_C.EQ.0) NS_C=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=6, NP_N=out of range=',NP_N(NS)
-             STOP
-          END SELECT
-       CASE(26)
-          SELECT CASE(NP_N(NS))
-          CASE(30)
-             IF(NS_Fe.EQ.0) NS_Fe=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=26, NP_N=out of range=',NP_N(NS)
-             STOP
-          END SELECT
-       CASE DEFAULT
-          WRITE(6,*) 'XX tr_prep_ns: NP_P=out of range=',NP_P(NS)
-          STOP
-       END SELECT
-    END DO
-          
 
+    CALL tr_prep_ns
+          
     NFMAX=NNBMAX+NNFMAX
     DO NNF=1,NNFMAX
-       IF(model_nnf(nnf).GE. 0.AND.model_nnf(nnf).LT.10) ns_nnf(nnf)=NS_A
+       IF(model_nnf(nnf).GE. 0.AND.model_nnf(nnf).LT.10) ns_nnf(nnf)=NS_He4
        IF(model_nnf(nnf).GE.10.AND.model_nnf(nnf).LT.20) ns_nnf(nnf)=NS_T
        IF(model_nnf(nnf).GE.20.AND.model_nnf(nnf).LT.30) ns_nnf(nnf)=NS_D
        IF(model_nnf(nnf).GE.30.AND.model_nnf(nnf).LT.40) ns_nnf(nnf)=NS_He3
        IF(model_nnf(nnf).GE.40.AND.model_nnf(nnf).LT.50) ns_nnf(nnf)=NS_H
-       IF(model_nnf(nnf).GE.50.AND.model_nnf(nnf).LT.60) ns_nnf(nnf)=NS_A
+       IF(model_nnf(nnf).GE.50.AND.model_nnf(nnf).LT.60) ns_nnf(nnf)=NS_He4
     END DO
 
     CALL allocate_trcomm(ierr)
@@ -168,85 +117,51 @@ CONTAINS
 
     USE trcomm
     IMPLICIT NONE
-    INTEGER:: ns
+    INTEGER:: ns,npm,id_stop
 
     ! --- Intialize NS_X ---
     
     NS_e=0
     NS_D=0
     NS_T=0
-    NS_A=0
+    NS_He4=0
     NS_H=0
     NS_He3=0
     NS_C=0
     NS_Fe=0
     
     DO NS=1,NSMAX
-       SELECT CASE(NP_P(NS))
+       NPM=NINT(PM(NS))
+       SELECT CASE(NPA(NS))
        CASE(0)
           IF(NS_e.EQ.0) NS_e=NS
        CASE(1)
-          SELECT CASE(NP_N(NS))
-          CASE(0)
-             IF(NS_H.EQ.0) NS_H=NS
+          SELECT CASE(NPM)
           CASE(1)
-             IF(NS_D.EQ.0) NS_D=NS
+             IF(NS_H.EQ.0) NS_H=NS
           CASE(2)
+             IF(NS_D.EQ.0) NS_D=NS
+          CASE(3)
              IF(NS_T.EQ.0) NS_T=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=1, NP_N=out of range=',NP_N(NS)
-             STOP
           END SELECT
        CASE(2)
-          SELECT CASE(NP_N(NS))
-          CASE(1)
+          SELECT CASE(NPM)
+          CASE(3)
              IF(NS_He3.EQ.0) NS_He3=NS
-          CASE(2)
-             IF(NS_A.EQ.0) NS_A=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=2, NP_N=out of range=',NP_N(NS)
-             STOP
+          CASE(4)
+             IF(NS_He4.EQ.0) NS_He4=NS
           END SELECT
        CASE(6)
-          SELECT CASE(NP_N(NS))
-          CASE(6)
+          SELECT CASE(NPM)
+          CASE(12)
              IF(NS_C.EQ.0) NS_C=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=6, NP_N=out of range=',NP_N(NS)
-             STOP
           END SELECT
        CASE(26)
-          SELECT CASE(NP_N(NS))
-          CASE(30)
+          SELECT CASE(NPM)
+          CASE(56)
              IF(NS_Fe.EQ.0) NS_Fe=NS
-          CASE DEFAULT
-             WRITE(6,*) 'XX tr_prep_ns: NP_P=26, NP_N=out of range=',NP_N(NS)
-             STOP
           END SELECT
-       CASE DEFAULT
-          WRITE(6,*) 'XX tr_prep_ns: NP_P=out of range=',NP_P(NS)
-          STOP
        END SELECT
-    END DO
-
-    DO NS=1,NSMAX
-       NP_A(NS)=NP_P(NS)+NP_N(NS)
-       IF(NP_P(NS).EQ.0) THEN
-          KID_NS(NS)='e   '
-          ID_NS(NS)=-1
-          PA(NS)=AME/AMP
-          PZ(NS)=-1.D0
-       ELSE
-          ID_NS(NS)=1
-          PA(NS)=DBLE(NP_A(NS))
-          SELECT CASE(NP_P(NS))
-          CASE(1)
-             SELECT CASE(NP_N(NS))
-             CASE(0)
-                KID_NS(NS)='H   '
-             END SELECT
-          END SELECT
-       END IF
     END DO
   END SUBROUTINE tr_prep_ns
 
@@ -401,7 +316,7 @@ CONTAINS
 
     DO NS=1,NSMAX
        IF(PZ(NS).NE.0.D0) THEN
-          AMZ(NS)=PA(NS)*AMP/PZ(NS)**2
+          AMZ(NS)=PM(NS)*AMP/PZ(NS)**2
        ELSE
           AMZ(NS)=0.D0
        ENDIF
@@ -479,7 +394,7 @@ CONTAINS
 
     REM=AME/AMP
     IF(NS.LE.NSMAX) THEN
-       IF(ABS(PA(NS)-REM).LE.1.D-10) THEN
+       IF(ABS(PM(NS)-REM).LE.1.D-10) THEN
 !     electron
           NEQ=NEQ+1
           NSS(NEQ)=1
@@ -509,14 +424,14 @@ CONTAINS
                 NNS(1)=3
              ENDIF
           ENDIF
-       ELSEIF(PA(NS).EQ.1.D0.OR.ABS(PA(NS)-2.D0).LT.0.5D0) THEN
+       ELSEIF(PM(NS).EQ.1.D0.OR.ABS(PM(NS)-2.D0).LT.0.5D0) THEN
 !     regard the particle whose mass is 1.0 as HYDROGEN
 !     regard the particle whose mass is between 1.5 and 2.5 as DEUTERIUM
 !     If bulk particle is hydrogen, INDH=1
-          IF(PA(NS).EQ.1.D0) INDH=1
+          IF(PM(NS).EQ.1.D0) INDH=1
           NEQ=NEQ+1
 !     If plasma is composed of hydrogen and deuterium, INDHD=1
-          IF(INDH.EQ.1.AND.ABS(PA(NS)-2.D0).LT.0.5D0) THEN
+          IF(INDH.EQ.1.AND.ABS(PM(NS)-2.D0).LT.0.5D0) THEN
              NSS(NEQ)=3
              INDHD=1
           ELSE
@@ -538,7 +453,7 @@ CONTAINS
              ENDDO
 200          CONTINUE
           ENDIF
-       ELSEIF(ABS(PA(NS)-3.D0).LT.0.5D0) THEN
+       ELSEIF(ABS(PM(NS)-3.D0).LT.0.5D0) THEN
 !     regard the particle whose mass is between 2.5 and 3.5 as TRITIUM
           NEQ=NEQ+1
           IF(INDHD.EQ.1) THEN
@@ -562,7 +477,7 @@ CONTAINS
              ENDDO
 300          CONTINUE
           ENDIF
-       ELSEIF(ABS(PA(NS)-4.D0).LT.0.5D0) THEN
+       ELSEIF(ABS(PM(NS)-4.D0).LT.0.5D0) THEN
 !     regard the particle whose mass is between 3.5 and 4.5 as HELIUM
           NEQ=NEQ+1
           NSS(NEQ)=4
@@ -582,7 +497,7 @@ CONTAINS
              ENDDO
 400          CONTINUE
           ENDIF
-       ELSEIF(ABS(PA(NS)-12.D0).LT.3.D0.AND.NSMAX.EQ.3) THEN
+       ELSEIF(ABS(PM(NS)-12.D0).LT.3.D0.AND.NSMAX.EQ.3) THEN
 !     regard the particle whose mass is between 9.0 and 15.0 as CARBON
           NEQ=NEQ+1
           NSS(NEQ)=3
@@ -602,7 +517,7 @@ CONTAINS
              ENDDO
 500          CONTINUE
           ENDIF
-       ELSEIF(PA(NS).EQ.0.D0) THEN
+       ELSEIF(PM(NS).EQ.0.D0) THEN
           IND=-1
        ENDIF
     ENDIF
