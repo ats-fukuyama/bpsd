@@ -36,16 +36,12 @@ contains
     integer(ikind):: nd
 
     do nd=0,speciesx%ndmax-1,3
-       speciesx%kid(nd+1)='species%pa'
+       speciesx%kid(nd+1)='species%pm'
        speciesx%kid(nd+2)='species%pz'
-       speciesx%kid(nd+3)='species%np_p'
-       speciesx%kid(nd+4)='species%np_n'
-       speciesx%kid(nd+5)='species%np_a'
+       speciesx%kid(nd+3)='species%npa'
        speciesx%kunit(nd+1)=' '
        speciesx%kunit(nd+2)=' '
        speciesx%kunit(nd+3)=' '
-       speciesx%kunit(nd+4)=' '
-       speciesx%kunit(nd+5)=' '
     enddo
     RETURN
   END SUBROUTINE bpsd_setup_species_kdata
@@ -91,12 +87,10 @@ contains
     CALL bpsd_setup_species_kdata
 
     do ns=1,species_in%nsmax
-       nd=5*(ns-1)
-       speciesx%data(nd+1)=species_in%data(ns)%pa
+       nd=3*(ns-1)
+       speciesx%data(nd+1)=species_in%data(ns)%pm
        speciesx%data(nd+2)=species_in%data(ns)%pz
-       speciesx%data(nd+3)=species_in%data(ns)%np_p
-       speciesx%data(nd+4)=species_in%data(ns)%np_n
-       speciesx%data(nd+5)=species_in%data(ns)%np_a
+       speciesx%data(nd+3)=species_in%data(ns)%npa
     enddo
     CALL DATE_AND_TIME(speciesx%created_date, &
                        speciesx%created_time, &
@@ -146,12 +140,10 @@ contains
     CALL bpsd_adjust_species_data(species_out%data,species_out%nsmax)
 
     do ns=1,species_out%nsmax
-       nd=5*(ns-1)
-       species_out%data(ns)%pa =speciesx%data(nd+1)
+       nd=3*(ns-1)
+       species_out%data(ns)%pm =speciesx%data(nd+1)
        species_out%data(ns)%pz =speciesx%data(nd+2)
-       species_out%data(ns)%np_p=NINT(speciesx%data(nd+3))
-       species_out%data(ns)%np_n=NINT(speciesx%data(nd+4))
-       species_out%data(ns)%np_a=NINT(speciesx%data(nd+5))
+       species_out%data(ns)%npa=NINT(speciesx%data(nd+3))
     enddo
     speciesx%status=2
     ierr=0
