@@ -16,7 +16,7 @@
       USE fpcalwm
       USE fpcalwr
       USE fpcalr
-      USE fpcalrdem
+      USE fpcaldrrem
       USE libbes,ONLY: beseknx
       USE libmtx
       USE fpreadfit3d
@@ -103,9 +103,19 @@
 
 !     ----- Radial diffusion term -----
 
-      IF(MODELD.EQ.1) CALL FP_CALR
-
-      IF(MODELD.EQ.2) CALL FP_CALRD_EM
+      SELECT CASE(MODELD)
+      CASE(0)
+         CONTINUE
+      CASE(1)
+         CALL fp_calr
+      CASE(2)
+         CALL fp_caldrr_em
+      CASE(3)
+         CALL fp_caldrr_em2
+      CASE DEFAULT
+         WRITE(6,*) 'XX Undefined MODELD: modeld=',modeld
+         STOP
+      END SELECT
 
 !     ----- Particle source term -----
 

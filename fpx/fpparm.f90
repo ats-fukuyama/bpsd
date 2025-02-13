@@ -95,7 +95,7 @@ contains
            IMTX,MODEL_KSP,MODEL_PC,LMAXFP,LMAXE, &
            NGLINE,NGRAPH,LLMAX,LLMAX_NF,IDBGFP, &
            MODEL_DISRUPT,MODEL_Connor_fp,MODEL_BS,MODEL_jfp, &
-           MODEL_LNL,MODEL_RE_pmax,MODELD_n_RE,MODEL_IMPURITY, &
+           MODEL_LNL,MODEL_RE_pmax,MODEL_RE_n,MODEL_IMPURITY, &
            MODEL_SINK,N_IMPU,MODEL_DELTA_F, &
            N_partition_r,N_partition_s,N_partition_p, &
            PMAX,PMAX_BB,EMAX, &
@@ -167,7 +167,7 @@ contains
       WRITE(6,*) '      IMTX,MODEL_KSP,MODEL_PC,LMAXFP,LMAXE,'
       WRITE(6,*) '      NGLINE,NGRAPH,LLMAX,LLMAX_NF,IDBGFP,'
       WRITE(6,*) '      MODEL_DISRUPT,MODEL_Connor_fp,MODEL_BS,MODEL_jfp,'
-      WRITE(6,*) '      MODEL_LNL,MODEL_RE_pmax,MODELD_n_RE,MODEL_IMPURITY,'
+      WRITE(6,*) '      MODEL_LNL,MODEL_RE_pmax,MODEL_RE_n,MODEL_IMPURITY,'
       WRITE(6,*) '      MODEL_SINK,N_IMPU,MODEL_DELTA_F'
       WRITE(6,*) '      N_partition_r,N_partition_s,N_partition_p,'
       WRITE(6,*) '      PMAX,PMAX_BB,EMAX'
@@ -382,7 +382,7 @@ contains
       idata(49)=MODEL_jfp
       idata(50)=MODEL_LNL
       idata(51)=MODEL_RE_pmax
-      idata(52)=MODELD_n_RE
+      idata(52)=MODEL_RE_n
       idata(53)=MODEL_IMPURITY
       idata(54)=MODEL_SINK
       idata(55)=n_impu
@@ -459,7 +459,7 @@ contains
       MODEL_jfp      =idata(49)
       MODEL_LNL      =idata(50)
       MODEL_RE_pmax  =idata(51)
-      MODELD_n_RE    =idata(52)
+      MODEL_RE_n     =idata(52)
       MODEL_IMPURITY =idata(53)
       MODEL_SINK     =idata(54)
       n_impu         =idata(55)
@@ -869,7 +869,7 @@ contains
                    'MODEL_jfp       ',MODEL_jfp
       WRITE(6,606) 'MODEL_LNL       ',MODEL_LNL       , &
                    'MODEL_RE_pmax   ',MODEL_RE_pmax
-      WRITE(6,606) 'MODELD_n_RE     ',MODELD_n_RE     , &
+      WRITE(6,606) 'MODEL_RE_n      ',MODEL_RE_n     , &
                    'MODEL_IMPURITY  ',MODEL_IMPURITY
       WRITE(6,606) 'MODEL_LNL       ',MODEL_LNL       , &
                    'MODEL_RE_pmax   ',MODEL_RE_pmax
@@ -909,13 +909,13 @@ contains
       IF(MODELD.EQ.0)THEN
          WRITE(6,*) 'WITHOUT RADIAL TRANPORT'
       ELSE IF(MODELD.EQ.1)THEN
-         WRITE(6,*) 'WITH RADIAL TRANSPORT (const. for r,p,th, without pinch)'
+         WRITE(6,*) 'WITH RADIAL TRANSPORT (MODELD_RDEP,MODELD_PDEP,'
+         WRITE(6,*) '                       MODELD_EDGE,MODELD_PINCH,'
+         WRITE(6,*) '                       MODELD_BOUNDARY)'
       ELSE IF(MODELD.EQ.2)THEN
-         WRITE(6,*) 'WITH RADIAL TRANSPORT (const. for r,p,th, with pinch)'
+         WRITE(6,*) 'WITH RADIAL TRANSPORT (EM diffusion model)'
       ELSE IF(MODELD.EQ.3)THEN
-         WRITE(6,*) 'WITH RADIAL TRANSPORT (p dependence without pinch)'
-      ELSE IF(MODELD.EQ.4)THEN
-         WRITE(6,*) 'WITH RADIAL TRANSPORT (p dependence with pinch)'
+         WRITE(6,*) 'WITH RADIAL TRANSPORT (EM diffusion model 2)'
       ELSE
          WRITE(6,*) 'XX UNKNOWN MODELD: MODELD =',MODELD
       ENDIF

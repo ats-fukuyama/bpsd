@@ -298,6 +298,7 @@ contains
 !     MODELD: 0 : without radial transport
 !             1 : with radial transport (amp given)
 !             2 : with radial transport (EM diffusion model)
+!             3 : with radial transport (EM diffusion model 2)
 !     MODELD_RDEP : 0 : fixed:    (DRR0-DRRS)*(1.D0-RHON**2)+DRRS 
 !                   1 : magnetic: QLM(NR)*deltaB_B**2 
 !                   2 : CDBM with FACTOR_CDBM
@@ -461,7 +462,7 @@ contains
 !                            1: fixed initial value
 !                            2: fixed disrupted value
 !     MODEL_RE_pmax    : RE non-RE boundary 0=NPMAX, 1=NPC_runaway
-!     MODELD_n_RE      : radial transport of RE density 0=off, 1=on
+!     MODEL_RE_n       : radial transport of RE density 0=off, 1=on
 !     MODEL_IMPURITY   :     0: Default
 !                            1: MGI: satisfy quasi-neutrality
 !     MODEL_SINK       :     0: Default
@@ -483,7 +484,7 @@ contains
       MODEL_jfp=0
       MODEL_LNL=0
       MODEL_RE_pmax=0
-      MODELD_n_RE=0
+      MODEL_RE_n=0
       MODEL_IMPURITY=0
       MODEL_SINK=0
 
