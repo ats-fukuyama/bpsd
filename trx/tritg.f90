@@ -145,7 +145,7 @@
       rmajor_exp=RR  ! geometrical major radius of magnetix axis [m]
 
       zimp_exp=PZ(NS_T)         ! Zimp; finite data is necessary
-      amassimp_exp=PM(NS_T)     ! Aimp; finite data is necessary
+      amassimp_exp=PA(NS_T)     ! Aimp; finite data is necessary
 
       q_exp(1)=0.5D0*(Q0+QP(1))
       DO jm=2,jmaxm
@@ -161,7 +161,7 @@
          elong_exp(jm)=RKPRHO(jm)    ! local elongation
       ENDDO
 
-      amassgas_exp=PM(NS_D) ! atomic num. of working gas
+      amassgas_exp=PA(NS_D) ! atomic num. of working gas
       alpha_e=1.D0       ! ExB shear stabilization (0=off,>0=on)
       x_alpha=1.D0       ! alpha stabilization (0=off,>0=on)
       i_delay=0          ! default(usually recommended)
@@ -457,7 +457,7 @@
          IST=0
       ENDIF
       ZL    = PZ(NS_T)
-      AZL   = PM(NS_T)
+      AZL   = PA(NS_T)
       COLL  = 1.D0
       ELL   = 1.D0
       RLIST = 1.D0
@@ -465,7 +465,7 @@
       RIWL  = 2.D0
       RISBL = 2.D0
       SEARCH= 2.D0
-      PMA   = PM(NS_D)
+      PMA   = PA(NS_D)
       ROTL  = 1.D0
       EPSA  = RA/RR
       DO NR=1,NRMAX-1
@@ -595,7 +595,7 @@
 
 !     It is assumed that De=Di in the followings.
 
-      IF(PM(NS_T).EQ.3.D0) THEN
+      IF(PA(NS_T).EQ.3.D0) THEN
 !         AKDW(NR,1)=SCHE
          AKDW(NR,1)=CHEL(2)
          DO NS=2,NSMAX

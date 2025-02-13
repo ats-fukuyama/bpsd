@@ -424,7 +424,7 @@
 
         USE TRCOMM, ONLY : &
              AEE, AJNB, AME, AMM, ANC, ANFE, EPS0, EPSRHO, MDLUF, NRMAX, &
-             PM, PBCL, PBIN, PI, PNBCD, PNBENG, &
+             PA, PBCL, PBIN, PI, PNBCD, PNBENG, &
              PZ, PZC, PZFE, RKEV, RN, RNF, RT, RTF, RW, TAUB, ZEFF, rkind
       IMPLICIT NONE
       REAL(rkind)    :: AMA, AMB, AMD, AMT, ANE, COULOG, EC, EPS, HY, HYB, &
@@ -433,11 +433,11 @@
       INTEGER :: NR
 
 
-      AMD=AMM*PM(2)
-      AMT=AMM*PM(3)
-      AMA=AMM*PM(4)
-      AMB=AMM*PM(2)
-      PAB=PM(2)
+      AMD=AMM*PA(2)
+      AMT=AMM*PA(3)
+      AMA=AMM*PA(4)
+      AMB=AMM*PA(2)
+      PAB=PA(2)
       PZB=PZ(2)
       VB=SQRT(2.D0*PNBENG*RKEV/AMB)
 
@@ -515,9 +515,9 @@
             AJNB(NR)=0.D0
          ELSE
          TAUS=TAUS0*VE**3/ANE
-         ZEFFM = (PZ(2)  *PZ(2)  *RN(NR,2)/PM(2) &
-     &           +PZ(3)  *PZ(3)  *RN(NR,3)/PM(3) &
-     &           +PZ(4)  *PZ(4)  *RN(NR,3)/PM(4) &
+         ZEFFM = (PZ(2)  *PZ(2)  *RN(NR,2)/PA(2) &
+     &           +PZ(3)  *PZ(3)  *RN(NR,3)/PA(3) &
+     &           +PZ(4)  *PZ(4)  *RN(NR,3)/PA(4) &
      &           +PZC(NR) *PZC(NR) *ANC(NR)/12.D0 &
      &           +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
          EC  = 14.8D0*TE*PAB*ZEFFM**(2.D0/3.D0)

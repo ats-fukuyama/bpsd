@@ -170,9 +170,9 @@ CONTAINS
          TT = RT(NR,NS_T)
          SS = SIGMAM(TD,TT)
          IF(model_nnf(nnf).GE.3) THEN
-            ZEFFM = (PZ(NS_D  )*PZ(NS_D  )*RN(NR,NS_D  )/PM(NS_D  ) &
-                    +PZ(NS_T)  *PZ(NS_T  )*RN(NR,NS_T  )/PM(NS_T  ) &
-                    +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PM(NS_He4) &
+            ZEFFM = (PZ(NS_D  )*PZ(NS_D  )*RN(NR,NS_D  )/PA(NS_D  ) &
+                    +PZ(NS_T)  *PZ(NS_T  )*RN(NR,NS_T  )/PA(NS_T  ) &
+                    +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PA(NS_He4) &
                     +PZC(NR)*PZC(NR) *ANC(NR) /12.D0 &
                     +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
             SSB=0.D0
@@ -182,9 +182,9 @@ CONTAINS
                NS_beam=ns_nnb(nnb)
                IF (NS_beam.EQ.NS_D) THEN
                ! Critiral energy: (5.43) Takamura     
-               EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
+               EC  = 14.8D0*TE*PA(NS_beam)*ZEFFM**(2.D0/3.D0)
                ! Ion-electron slowing time: (3.22) Takamura: 
-               TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 &
+               TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 &
                     /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
                ! weight factor in SIGMAB 
                PTNT= PNB_NNBNR(nnb,NR)*TAUS &
@@ -197,7 +197,7 @@ CONTAINS
 !                    PNBENG(NNB),EC,TAUS
                ELSEIF(NS_beam.EQ.NS_T) THEN
                   RSB = 0
-               ! TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
+               ! TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
                ! ! sf*nj*τsA
                ! ! SSB = SSB + ((((PNB_NNBNR(NNB,NR)))/(AEE*PNBENG(nnb)*RKEV))/(RN(NR,NS_beam))*1.D20) * TAUS*sigmaDbuTbm(TE) 
                ! !sigmaDbuTbm derived from NRL formlary, 1E-26 multiplied to adjust the unit from barn to m^2
@@ -209,9 +209,9 @@ CONTAINS
             
             ! ####### fast ion calculation #######
             ! ! Critiral energy: (5.43) Takamura     
-            ! EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
+            ! EC  = 14.8D0*TE*PA(NS_beam)*ZEFFM**(2.D0/3.D0)
             ! ! Ion-electron slowing time: (3.22) Takamura: 
-            ! TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 &
+            ! TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 &
             !      /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
             ! ! weight factor in SIGMAB 
             ! PTNT= PNB_NNBNR(nnb,NR)*TAUS &
@@ -269,7 +269,7 @@ CONTAINS
          VC3  = VCD3+VCT3+VCA3
          VCR  = VC3**(1.D0/3.D0)
          HYF=HY(VF/VCR)
-         TAUS = 0.2D0*PM(NS_He4)*ABS(TE)**1.5D0 &
+         TAUS = 0.2D0*PA(NS_He4)*ABS(TE)**1.5D0 &
               /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
          TAUF(NNF,NR)= 0.5D0*TAUS*(1.D0-HYF)
          RNF(NR,NNBMAX+NNF) &
@@ -337,14 +337,14 @@ CONTAINS
              TT = RT(NR,NS_T)
              SS = SIGMAM_DD(TD)
              IF(model_nnf(nnf).GE.13) THEN
-               !  ZEFFM = (PZ(NS_D)*PZ(NS_D)*RN(NR,NS_D)/PM(NS_D) &
-               !          +PZ(NS_T)*PZ(NS_T)*RN(NR,NS_T)/PM(NS_T) &
-               !          +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PM(NS_He4) &
+               !  ZEFFM = (PZ(NS_D)*PZ(NS_D)*RN(NR,NS_D)/PA(NS_D) &
+               !          +PZ(NS_T)*PZ(NS_T)*RN(NR,NS_T)/PA(NS_T) &
+               !          +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PA(NS_He4) &
                !          +PZC(NR)*PZC(NR) *ANC(NR) /12.D0 &
                !          +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
-               ZEFFM = (PZ(NS_D  )*PZ(NS_D  )*RN(NR,NS_D  )/PM(NS_D  ) &
-                       +PZ(NS_T  )*PZ(NS_T  )*RN(NR,NS_T  )/PM(NS_T  ) &
-                       +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PM(NS_He4) &
+               ZEFFM = (PZ(NS_D  )*PZ(NS_D  )*RN(NR,NS_D  )/PA(NS_D  ) &
+                       +PZ(NS_T  )*PZ(NS_T  )*RN(NR,NS_T  )/PA(NS_T  ) &
+                       +PZ(NS_He4)*PZ(NS_He4)*RN(NR,NS_He4)/PA(NS_He4) &
                        +PZC(NR) *PZC(NR) *ANC(NR) /12.D0 &
                        +PZFE(NR)*PZFE(NR)*ANFE(NR)/52.D0)/ANE
                 SSB=0.D0
@@ -352,9 +352,9 @@ CONTAINS
                 DO NNB=1,NNBMAX
                    NS_beam=ns_nnb(nnb)
                    ! Critiral energy: (5.43) Takamura     
-                   EC  = 14.8D0*TE*PM(NS_beam)*ZEFFM**(2.D0/3.D0)
+                   EC  = 14.8D0*TE*PA(NS_beam)*ZEFFM**(2.D0/3.D0)
                    ! Ion-electron slowing time: (3.22) Takamura: 
-                   TAUS= 0.2D0*PM(NS_beam)*ABS(TE)**1.5D0 &
+                   TAUS= 0.2D0*PA(NS_beam)*ABS(TE)**1.5D0 &
                         /(PZ(NS_beam)**2*ANE*COULOG(1,NS_beam,ANE,TE))
                    ! weight factor in SIGMAB 
                    PTNT= PNB_NNBNR(nnb,NR)*TAUS &
@@ -392,7 +392,7 @@ CONTAINS
             VC3  = VCD3+VCT3+VCA3
             VCR  = VC3**(1.D0/3.D0)
             HYF=HY(VF/VCR)
-            TAUS = 0.2D0*PM(NS_He4)*ABS(TE)**1.5D0 /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
+            TAUS = 0.2D0*PA(NS_He4)*ABS(TE)**1.5D0 /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
             ! TAUF(NR)= 0.5D0*TAUS*(1.D0-HYF)
             TAUF(nnf,NR) = 0.5D0*TAUS*(1.D0-HYF)
             RNF(NR,2)= 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.5D3)
@@ -576,7 +576,7 @@ CONTAINS
          VC3  = VCD3+VCHe3+VCA3
          VCR  = VC3**(1.D0/3.D0)
          HYF=HY(VF/VCR)
-         TAUS = 0.2D0*PM(NS_He4)*ABS(TE)**1.5D0 /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
+         TAUS = 0.2D0*PA(NS_He4)*ABS(TE)**1.5D0 /(PZ(NS_He4)**2*ANE*COULOG(1,2,ANE,TE))
          TAUF(nnf,NR)= 0.5D0*TAUS*(1.D0-HYF)
          RNF(NR,NNBMAX+NNF) &
               = 2.D0*LOG(1.D0+(VF/VCR)**3)*WF /(3.D0*(1.D0-HYF)*3.6D3)

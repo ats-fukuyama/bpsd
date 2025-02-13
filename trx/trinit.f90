@@ -61,7 +61,7 @@ CONTAINS
       !  KID_NS(NS): Particle name in four characters
       !  ID_NS(NS): -1: electron, 0: neutral, 1: ion, 2: fast ion
       !  NPA(NS): Atomic number (0 for electron)
-      !  PM(NS) : Mass NUMBER
+      !  PA(NS) : Mass NUMBER
       !  PZ(NS) : Charge NUMBER
       !  PN(NS) : INITIAL NUMBER DENSITY ON AXIS (1.E20 M**-3)
       !  PNS(NS): INITIAL NUMBER DENSITY ON SURFACE (1.E20 M**-3)
@@ -76,27 +76,27 @@ CONTAINS
 
       NS_e=1
       NPA(NS_e)= 0  
-      PM(NS_e) = AME/AMP
+      PA(NS_e) = AME/AMP
       PZ(NS_e) =-1.D0
 
       NS_D=2
       NPA(NS_D)= 1
-      PM(NS_D) = 2.D0
+      PA(NS_D) = 2.D0
       PZ(NS_D) = 1.D0
 
       NS_T=3
       NPA(NS_T)= 1
-      PM(NS_T) = 3.D0
+      PA(NS_T) = 3.D0
       PZ(NS_T) = 1.D0
 
       NS_He4=4
       NPA(NS_He4)= 2
-      PM(NS_He4) = 4.D0
+      PA(NS_He4) = 4.D0
       PZ(NS_He4) = 2.D0
 
       DO NS=5,NSM
          NPA(NS)   = 1
-         PM(NS)    = 1.D0
+         PA(NS)    = 1.D0
          PZ(NS)    = 1.D0
       END DO
 

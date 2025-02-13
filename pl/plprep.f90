@@ -30,11 +30,11 @@ CONTAINS
        IF(NPA(NS).EQ.0) THEN  ! electron
           KID_NS(NS)='e   '
           ID_NS(NS)=-1
-          PM(NS)=AME/AMP
+          PA(NS)=AME/AMP
           PZ(NS)=-1.D0
        ELSE                   ! ion
           ID_NS(NS)=1
-          NPM=NINT(PM(NS))
+          NPM=NINT(PA(NS))
           SELECT CASE(NPA(NS))
           CASE(1)
              SELECT CASE(NPM)
@@ -80,7 +80,7 @@ CONTAINS
           END SELECT
           IF(ID_NS(NS).EQ.0) THEN
              WRITE(6,*) 'XX tr_prep_ns: undefined NPA and PM FOR NS !!'
-             WRITE(6,*) 'XX      NS,NPA,PM=',NS,NPA(NS),PM(NS)
+             WRITE(6,*) 'XX      NS,NPA,PM=',NS,NPA(NS),PA(NS)
              ID_STOP=1
              STOP
           END IF

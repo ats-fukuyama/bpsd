@@ -304,7 +304,7 @@
 !        H98Y2: H-mode factor
 
 !     volume-averaged isotopic mass number
-      PAI = (PM(2)*ANSAV(2)+PM(3)*ANSAV(3)+PM(4)*ANSAV(4))  /(ANSAV(2)+ANSAV(3)+ANSAV(4))
+      PAI = (PA(2)*ANSAV(2)+PA(3)*ANSAV(3)+PA(4)*ANSAV(4))  /(ANSAV(2)+ANSAV(3)+ANSAV(4))
 
       TAUE89=4.8D-2*(ABS(RIP)**0.85D0)    *(RR**1.2D0) *(RA**0.3D0)  *(RKAP**0.5D0) &
      &             *(ANLAV(1)**0.1D0)*(ABS(BB)**0.2D0) *(PAI**0.5D0) *(PINT**(-0.5D0))

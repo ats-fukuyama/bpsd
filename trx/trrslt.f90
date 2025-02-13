@@ -309,7 +309,7 @@
       ANSUM=0.D0
       DO NS=1,NSMAX
          IF(ID_NS(NS).EQ.1) THEN ! ion only
-            PMSUM=PMSUM+PM(NS)*ANSAV(NS)
+            PMSUM=PMSUM+PA(NS)*ANSAV(NS)
             ANSUM=ANSUM+ANSAV(NS)
          END IF
       END DO

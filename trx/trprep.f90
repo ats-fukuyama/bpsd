@@ -131,7 +131,7 @@ CONTAINS
     NS_Fe=0
     
     DO NS=1,NSMAX
-       NPM=NINT(PM(NS))
+       NPM=NINT(PA(NS))
        SELECT CASE(NPA(NS))
        CASE(0)
           IF(NS_e.EQ.0) NS_e=NS
@@ -316,7 +316,7 @@ CONTAINS
 
     DO NS=1,NSMAX
        IF(PZ(NS).NE.0.D0) THEN
-          AMZ(NS)=PM(NS)*AMP/PZ(NS)**2
+          AMZ(NS)=PA(NS)*AMP/PZ(NS)**2
        ELSE
           AMZ(NS)=0.D0
        ENDIF
@@ -394,7 +394,7 @@ CONTAINS
 
     REM=AME/AMP
     IF(NS.LE.NSMAX) THEN
-       IF(ABS(PM(NS)-REM).LE.1.D-10) THEN
+       IF(ABS(PA(NS)-REM).LE.1.D-10) THEN
 !     electron
           NEQ=NEQ+1
           NSS(NEQ)=1
@@ -424,14 +424,14 @@ CONTAINS
                 NNS(1)=3
              ENDIF
           ENDIF
-       ELSEIF(PM(NS).EQ.1.D0.OR.ABS(PM(NS)-2.D0).LT.0.5D0) THEN
+       ELSEIF(PA(NS).EQ.1.D0.OR.ABS(PA(NS)-2.D0).LT.0.5D0) THEN
 !     regard the particle whose mass is 1.0 as HYDROGEN
 !     regard the particle whose mass is between 1.5 and 2.5 as DEUTERIUM
 !     If bulk particle is hydrogen, INDH=1
-          IF(PM(NS).EQ.1.D0) INDH=1
+          IF(PA(NS).EQ.1.D0) INDH=1
           NEQ=NEQ+1
 !     If plasma is composed of hydrogen and deuterium, INDHD=1
-          IF(INDH.EQ.1.AND.ABS(PM(NS)-2.D0).LT.0.5D0) THEN
+          IF(INDH.EQ.1.AND.ABS(PA(NS)-2.D0).LT.0.5D0) THEN
              NSS(NEQ)=3
              INDHD=1
           ELSE
@@ -453,7 +453,7 @@ CONTAINS
              ENDDO
 200          CONTINUE
           ENDIF
-       ELSEIF(ABS(PM(NS)-3.D0).LT.0.5D0) THEN
+       ELSEIF(ABS(PA(NS)-3.D0).LT.0.5D0) THEN
 !     regard the particle whose mass is between 2.5 and 3.5 as TRITIUM
           NEQ=NEQ+1
           IF(INDHD.EQ.1) THEN
@@ -477,7 +477,7 @@ CONTAINS
              ENDDO
 300          CONTINUE
           ENDIF
-       ELSEIF(ABS(PM(NS)-4.D0).LT.0.5D0) THEN
+       ELSEIF(ABS(PA(NS)-4.D0).LT.0.5D0) THEN
 !     regard the particle whose mass is between 3.5 and 4.5 as HELIUM
           NEQ=NEQ+1
           NSS(NEQ)=4
@@ -497,7 +497,7 @@ CONTAINS
              ENDDO
 400          CONTINUE
           ENDIF
-       ELSEIF(ABS(PM(NS)-12.D0).LT.3.D0.AND.NSMAX.EQ.3) THEN
+       ELSEIF(ABS(PA(NS)-12.D0).LT.3.D0.AND.NSMAX.EQ.3) THEN
 !     regard the particle whose mass is between 9.0 and 15.0 as CARBON
           NEQ=NEQ+1
           NSS(NEQ)=3
@@ -517,7 +517,7 @@ CONTAINS
              ENDDO
 500          CONTINUE
           ENDIF
-       ELSEIF(PM(NS).EQ.0.D0) THEN
+       ELSEIF(PA(NS).EQ.0.D0) THEN
           IND=-1
        ENDIF
     ENDIF

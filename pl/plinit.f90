@@ -78,7 +78,7 @@
 
 !        NSMAX : Number of particle species
 !        NPA   : number of protons: Atomic number (0 for electron)
-!        PM    : Atomic mass
+!        PA    : Atomic mass number
 !        PZ    : Charge number
 !        PN    : Density at center                     (1.0E20/m**3)
 !        PNS   : Density on plasma surface             (1.0E20/m**3)
@@ -121,7 +121,7 @@
       KID_NS(NS)= 'e   '
       ID_NS(NS) = -1
       NPA(NS)  = 0
-      PM(NS)   = AME/AMP
+      PA(NS)   = AME/AMP
       PZ(NS)   =-1.0D0
       PN(NS)   = 1.0D0
       PNS(NS)  = 0.0D0
@@ -149,7 +149,7 @@
       KID_NS(NS)= 'D   '
       ID_NS(NS) = 1
       NPA(NS)  = 1
-      PM(NS)   = 2.0D0
+      PA(NS)   = 2.0D0
       PZ(NS)   = 1.0D0
       PN(NS)   = 1.0D0
       PNS(NS)  = 0.0D0
@@ -177,7 +177,7 @@
       KID_NS(NS)= 'T   '
       ID_NS(NS) = 1
       NPA(NS)  = 1
-      PM(NS)   = 3.0D0
+      PA(NS)   = 3.0D0
       PZ(NS)   = 1.0D0
 
 !     *** Helium4 ion ***
@@ -187,7 +187,7 @@
       KID_NS(NS)= 'He4 '
       ID_NS(NS) = 1
       NPA(NS)  = 2
-      PM(NS)   = 4.0D0
+      PA(NS)   = 4.0D0
       PZ(NS)   = 2.0D0
 
 !     *** Helium 3 ion ***
@@ -197,7 +197,7 @@
       KID_NS(NS)= 'He3 '
       ID_NS(NS) = 1
       NPA(NS)  = 2
-      PM(NS)   = 3.0D0
+      PA(NS)   = 3.0D0
       PZ(NS)   = 2.0D0
 
       ! *** default proton ***
@@ -206,7 +206,7 @@
          KID_NS(NS)= 'H   '
          ID_NS(NS)= 1
          NPA(NS)  = 1
-         PM(NS)   = 1.0D0
+         PA(NS)   = 1.0D0
          PZ(NS)   = 1.0D0
       END DO
 

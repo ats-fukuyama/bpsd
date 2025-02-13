@@ -202,7 +202,7 @@
       SUBROUTINE TRERAD
 
       USE TRCOMM, ONLY : AEE, AMM, BB, BP, DR, EPSRHO, ER, MDLER, NRMAX, &
-           & PM, PADD, PBM, PNSS, PTS, PZ, QP, RHOG, RHOM, &
+           & PA, PADD, PBM, PNSS, PTS, PZ, QP, RHOG, RHOM, &
            & RJCB, RKEV, RN, RNF, RT, SUMPBM, VPOL, VTOR, rkind
       USE libitp
       IMPLICIT NONE
@@ -250,8 +250,8 @@
                RLNI = -(LOG(RN(NR+1,2))-LOG(RN(NR,2)))*DRL
                RLTI = -(LOG(RT(NR+1,2))-LOG(RT(NR,2)))*DRL
             ENDIF
-            CS = SQRT(TEL*RKEV/(PM(2)*AMM))
-            RHO_S = CS*PM(2)*AMM/(PZ(2)*AEE*BB)
+            CS = SQRT(TEL*RKEV/(PA(2)*AMM))
+            RHO_S = CS*PA(2)*AMM/(PZ(2)*AEE*BB)
             ER(NR) =-BB*( (TIL/TEL)*RHO_S*CS*(RLNI+ALPHA_NEO*RLTI)-EPS/QP(NR)*VTOR(NR))
          ENDIF
       ENDDO
@@ -811,7 +811,7 @@
 
       SUBROUTINE TRAJBS
 
-      USE TRCOMM, ONLY : AJBS, AME, AMM, BB, BP, DR, EPSRHO, NRMAX, NSMAX, PM, PBSCD, PNSS, PTS, PZ, QP, RHOG, RHOM, &
+      USE TRCOMM, ONLY : AJBS, AME, AMM, BB, BP, DR, EPSRHO, NRMAX, NSMAX, PA, PBSCD, PNSS, PTS, PZ, QP, RHOG, RHOM, &
      &                   RJCB, RKEV, RN, RR, RT, ZEFF, rkind
       USE libitp
       IMPLICIT NONE
@@ -835,9 +835,9 @@
 
       IF(PBSCD.LE.0.D0) RETURN
 
-      AMD=PM(2)*AMM
-      AMT=PM(3)*AMM
-      AMA=PM(4)*AMM
+      AMD=PA(2)*AMM
+      AMT=PA(3)*AMM
+      AMA=PA(4)*AMM
 
       DO NR=1,NRMAX-1
 
@@ -858,9 +858,9 @@
          ZEFFL=0.5D0*(ZEFF(NR+1)+ZEFF(NR))
 
          TAUE = FTAUE(ANE,ANDX,TEL,ZEFFL)
-         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PM(2))
-         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PM(3))
-         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PM(4))
+         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PA(2))
+         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PA(3))
+         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PA(4))
 
          VTE=SQRT(TEL*RKEV/AME)
          VTD=SQRT(TDL*RKEV/AMD)
@@ -943,9 +943,9 @@
          ZEFFL=2.D0*ZEFF(NR-1)-ZEFF(NR-2)
 
          TAUE = FTAUE(ANE,ANDX,TEL,ZEFFL)
-         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PM(2))
-         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PM(3))
-         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PM(4))
+         TAUD = FTAUI(ANE,ANDX,TDL,PZ(2),PA(2))
+         TAUT = FTAUI(ANE,ANT ,TTL,PZ(3),PA(3))
+         TAUA = FTAUI(ANE,ANA ,TAL,PZ(4),PA(4))
 
          VTE=SQRT(TEL*RKEV/AME)
          VTD=SQRT(TDL*RKEV/AMD)

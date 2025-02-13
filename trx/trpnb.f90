@@ -525,7 +525,7 @@
            VCA3, VCD3, VCR, VCT3, VE, WB, XB, ZEFFM, ZN, PB, EF
       INTEGER :: NR,NS
 
-      PMB=PM(NS_NNB(NNB))
+      PMB=PA(NS_NNB(NNB))
       PZB=PZ(NS_NNB(NNB))
       AMB=PMB*AMP
       VB=SQRT(2.D0*PNBENG(NNB)*RKEV/AMB)
@@ -591,9 +591,9 @@
             AJNB(NR)=0.D0
          ELSE
             TAUS=TAUS0*VE**3/ANE
-            ZEFFM = (PZ(NS_D  )  *PZ(NS_D  )  *RN(NR,NS_D  )/PM(NS_D  ) &
-                    +PZ(NS_T  )  *PZ(NS_T  )  *RN(NR,NS_T  )/PM(NS_T  ) &
-                    +PZ(NS_He4)  *PZ(NS_He4)  *RN(NR,NS_He4)/PM(NS_He4) &
+            ZEFFM = (PZ(NS_D  )  *PZ(NS_D  )  *RN(NR,NS_D  )/PA(NS_D  ) &
+                    +PZ(NS_T  )  *PZ(NS_T  )  *RN(NR,NS_T  )/PA(NS_T  ) &
+                    +PZ(NS_He4)  *PZ(NS_He4)  *RN(NR,NS_He4)/PA(NS_He4) &
                     +PZC(NR)   *PZC(NR)   *ANC(NR)/12.D0 &
                     +PZFE(NR)  *PZFE(NR)  *ANFE(NR)/52.D0)/ANE
             EC  = 14.8D0*TE*PMB*ZEFFM**(2.D0/3.D0)

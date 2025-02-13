@@ -37,7 +37,7 @@ MODULE TRCOMM
   REAL(rkind), DIMENSION(8) :: &
        CDW
   REAL(rkind), DIMENSION(NSMM) :: &
-       PM,PZ,PN,PNS,PT,PTS,PU,PUS
+       PA,PZ,PN,PNS,PT,PTS,PU,PUS
   INTEGER, DIMENSION(NSMM) :: &
        NPA
   INTEGER:: &

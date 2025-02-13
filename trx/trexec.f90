@@ -297,10 +297,10 @@ CONTAINS
                   RU(NR,NSSN) = 0.D0
                ELSE
                   IF(NSTN.EQ.0) THEN
-                     RU(NR,NSSN) = XV(NEQ,NR)/(PM(NSSN)*AMP*RN(NR,NSSN))
+                     RU(NR,NSSN) = XV(NEQ,NR)/(PA(NSSN)*AMP*RN(NR,NSSN))
                   ELSE
                      RU(NR,NSSN) = 0.5D0*(XV(NEQ,NR) &
-                          + X(NEQRMAX*(NR-1)+NSTN))/(PM(NSSN)*AMP*RN(NR,NSSN))
+                          + X(NEQRMAX*(NR-1)+NSTN))/(PA(NSSN)*AMP*RN(NR,NSSN))
                   ENDIF
                END IF
             ENDIF
@@ -986,7 +986,7 @@ CONTAINS
             ELSEIF(NSVN.EQ.2) THEN
                XV(NEQ,NR) = RN(NR,NSSN)*RT(NR,NSSN)
             ELSEIF(NSVN.EQ.3) THEN
-               XV(NEQ,NR) = PM(NSSN)*AMP*RN(NR,NSSN)*RU(NR,NSSN)
+               XV(NEQ,NR) = PA(NSSN)*AMP*RN(NR,NSSN)*RU(NR,NSSN)
             ENDIF
          ENDDO
          DO NF=1,NFMAX
@@ -1133,7 +1133,7 @@ CONTAINS
                IF(RN(NR,NSSN).LT.1.D-70) THEN
                   RU(NR,NSSN) = 0.D0
                ELSE
-                  RU(NR,NSSN) = XV(NEQ,NR)/(PM(NSSN)*AMP*RN(NR,NSSN))
+                  RU(NR,NSSN) = XV(NEQ,NR)/(PA(NSSN)*AMP*RN(NR,NSSN))
                END IF
             ENDIF
          ENDDO
@@ -1312,7 +1312,7 @@ CONTAINS
          NSSN=NSS(NEQ)
          NSVN=NSV(NEQ)
          IF(NSSN.NE.0) THEN
-            RTM(NSSN)=RT(NR,NSSN)*RKEV/(PM(NSSN)*AMP)
+            RTM(NSSN)=RT(NR,NSSN)*RKEV/(PA(NSSN)*AMP)
             IF(RTM(NSSN).LE.0.D0) THEN
                WRITE(6,'(A,2I6,2ES12.4)') &
                     'XX negative RTM:',nr,nssn,RT(NR,NSSN),RTM(NSSN)
