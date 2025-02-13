@@ -36,7 +36,7 @@ contains
     integer(ikind):: nd
 
     do nd=0,speciesx%ndmax-1,3
-       speciesx%kid(nd+1)='species%pm'
+       speciesx%kid(nd+1)='species%pa'
        speciesx%kid(nd+2)='species%pz'
        speciesx%kid(nd+3)='species%npa'
        speciesx%kunit(nd+1)=' '
@@ -88,7 +88,7 @@ contains
 
     do ns=1,species_in%nsmax
        nd=3*(ns-1)
-       speciesx%data(nd+1)=species_in%data(ns)%pm
+       speciesx%data(nd+1)=species_in%data(ns)%pa
        speciesx%data(nd+2)=species_in%data(ns)%pz
        speciesx%data(nd+3)=species_in%data(ns)%npa
     enddo
@@ -141,7 +141,7 @@ contains
 
     do ns=1,species_out%nsmax
        nd=3*(ns-1)
-       species_out%data(ns)%pm =speciesx%data(nd+1)
+       species_out%data(ns)%pa =speciesx%data(nd+1)
        species_out%data(ns)%pz =speciesx%data(nd+2)
        species_out%data(ns)%npa=NINT(speciesx%data(nd+3))
     enddo
