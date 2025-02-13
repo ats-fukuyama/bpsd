@@ -3,7 +3,7 @@
 MODULE wrcomm_parm
   USE commpi
   USE plcomm
-  USE dpcomm_parm
+  USE dpcomm
   IMPLICIT NONE
   PUBLIC
 

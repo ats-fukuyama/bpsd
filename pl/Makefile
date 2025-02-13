@@ -48,12 +48,9 @@ all : libs pl
 ../eq/libeq.a:
 	(cd ../eq; make libeq.a)
 
-libpl_noeq.a: $(OBJS_NOEQ)
+libpl.a: $(OBJS_NOEQ) $(OBJS_EQ)
 	$(LD) $(LDFLAGS) libpl.a $(OBJS_NOEQ)
 	(cd ../eq; make libeq.a)
-	cp -f libpl.a libpl_noeq.a
-
-libpl.a: libpl_noeq.a $(OBJS_EQ)
 	$(LD) $(LDFLAGS) libpl.a $(OBJS_EQ)
 
 libs:

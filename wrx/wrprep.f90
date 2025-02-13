@@ -22,13 +22,6 @@ CONTAINS
     INTEGER:: nsu
     REAL(rkind):: dth
     EXTERNAL EQCALQ,EQGETB  !,eqget_rzsu
-    INTERFACE
-       SUBROUTINE eqget_rzsu(rsu,zsu,nsumax)
-         USE task_kinds,ONLY: dp
-         REAL(dp),ALLOCATABLE,INTENT(OUT):: rsu(:),zsu(:)
-         INTEGER,INTENT(OUT):: nsumax
-       END SUBROUTINE eqget_rzsu
-    END INTERFACE
     INTEGER:: nrr,nrrmax_wr
     REAL(rkind):: rr_wr,drr_wr
     TYPE(pl_mag_type):: mag_wr
@@ -47,7 +40,7 @@ CONTAINS
              CALL eq_parm(2,LINE,IERR)
              CALL EQCALQ(IERR)
              CALL EQGETB(BB,RR,RIP,RA,RKAP,RDLT,RB)
-             CALL eqget_rzsu(rsu_wr,zsu_wr,nsumax)
+             CALL pl_rzsu(rsu_wr,zsu_wr,nsumax)
              rmax_eq=rsu_wr(1)
              rmin_eq=rsu_wr(1)
              zmax_eq=zsu_wr(1)
@@ -69,7 +62,7 @@ CONTAINS
           CALL eq_read(IERR)
           IF(IERR.EQ.0) THEN
              CALL EQGETB(BB,RR,RIP,RA,RKAP,RDLT,RB)
-             CALL eqget_rzsu(rsu_wr,zsu_wr,nsumax)
+             CALL pl_rzsu(rsu_wr,zsu_wr,nsumax)
              rmax_eq=rsu_wr(1)
              rmin_eq=rsu_wr(1)
              zmax_eq=zsu_wr(1)

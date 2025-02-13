@@ -72,7 +72,7 @@ CONTAINS
 
       NAMELIST /TI/ &
            RR,RA,RKAP,RDLT,BB,RIP,NSMAX, &
-           NP_P,NP_N,NP_A,PM,PZ,PN,PNS,PT,PTS,PU,PUS, &
+           NPA,PM,PZ,PN,PNS,PT,PTS,PU,PUS, &
            ID_NS,NZMIN_NS,NZMAX_NS,NZINI_NS,KID_NS, &
            PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
            MODELG,MODELN,MODELQ,MODEL_PROF,MODEL_NPROF, &
@@ -124,7 +124,7 @@ CONTAINS
     SUBROUTINE ti_plst
 
       WRITE(6,'(A)') '# &TI : RR,RA,RKAP,RDLT,BB,RIP,NSMAX,'
-      WRITE(6,'(A)') '        NP_P,NP_N,NP_A,PM,PZ,PN,PNS,PT,PTS,PU,PUS,'
+      WRITE(6,'(A)') '        NPA,PM,PZ,PN,PNS,PT,PTS,PU,PUS,'
       WRITE(6,'(A)') '        ID_NS,NZMIN_NS,NZMAX_NS,NZINI_NS,KID_NS,'
       WRITE(6,'(A)') '        PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2,'
       WRITE(6,'(A)') '        MODELG,MODELN,MODELQ,MODEL_PROF,MODEL_NPROF,'
@@ -408,9 +408,7 @@ CONTAINS
 
       CALL mtx_broadcast_real8(PM,NSMAX)
       CALL mtx_broadcast_real8(PZ,NSMAX)
-      CALL mtx_broadcast_integer(NP_P,NSMAX)
-      CALL mtx_broadcast_integer(NP_N,NSMAX)
-      CALL mtx_broadcast_integer(NP_A,NSMAX)
+      CALL mtx_broadcast_integer(NPA,NSMAX)
       CALL mtx_broadcast_real8(PN,NSMAX)
       CALL mtx_broadcast_real8(PNS,NSMAX)
       CALL mtx_broadcast_real8(PTPR,NSMAX)

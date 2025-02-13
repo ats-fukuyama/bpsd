@@ -35,7 +35,7 @@ OBJA = $(SRCA:.f=.o)
 OBJ2D=$(SRC2D:.f=.o)
 OBJ3D=$(SRC3D:.f=.o)
 
-LIBS2 = ../pl/libpl.a libeq.a ../lib/libgrf.a ../lib/libtask.a ../../bpsd/libbpsd.a
+LIBS2 = libeq.a ../pl/libpl.a ../lib/libgrf.a ../lib/libtask.a ../../bpsd/libbpsd.a
 LIBS3 = ../pl/libpl.a libeq3.a ../lib/libgrf.a ../lib/libtask.a ../../bpsd/libbpsd.a
 
 .SUFFIXES: .f90

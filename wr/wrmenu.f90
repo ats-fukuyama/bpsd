@@ -49,7 +49,7 @@ CONTAINS
       ELSEIF(KID.EQ.'D') THEN
          READ(LINE(2:),*,ERR=1,END=1) NID
          CALL dp_prep_ns(ierr)
-         IF(ierr.NE.0) EXIT
+         IF(ierr.NE.0) GOTO 1
          IF(NID.EQ.1) THEN
             CALL DPGRP1
          ELSEIF(NID.EQ.2) THEN
@@ -61,12 +61,12 @@ CONTAINS
          ENDIF
       ELSEIF(KID.EQ.'F') THEN
          CALL dp_prep_ns(ierr)
-         IF(ierr.NE.0) EXIT
+         IF(ierr.NE.0) GOTO 1
          CALL DP_ROOT
       ELSEIF(KID.EQ.'R') THEN
          CALL wr_allocate
          CALL wr_setup(ierr)
-         IF(ierr.NE.0) EXIT
+         IF(ierr.NE.0) GOTO 1
          CALL wr_exec(nstat,ierr)
       ELSEIF(KID.EQ.'G') THEN
          CALL WR_GOUT(NSTAT)

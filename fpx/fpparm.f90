@@ -71,7 +71,7 @@ contains
            RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ, &
            PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
            RHOMIN,QMIN,RHOEDG,RHOITB,RHOGMN,RHOGMX, &
-           NP_P,NP_N,NP_A,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS, &
+           NPA,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS, &
            PNITB,PTITB,PUITB,PZCL, &
            KNAMEQ,KNAMWR,KNAMFP,KNAMWM,KNAMPF, &
            KNAMFO,KNAMTR,KNAMEQ2,KID_NS,ID_NS, &
@@ -142,7 +142,7 @@ contains
       WRITE(6,*) '      RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ,'
       WRITE(6,*) '      PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2,'
       WRITE(6,*) '      RHOMIN,QMIN,RHOEDG,RHOITB,RHOGMN,RHOGMX,'
-      WRITE(6,*) '      NP_P,NP_N,NP_A,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS,'
+      WRITE(6,*) '      NPA,PA,PZ,PN,PNS,PTPR,PTPP,PTS,PU,PUS,'
       WRITE(6,*) '      PNITB,PTITB,PUITB,PZCL,'
       WRITE(6,*) '      KNAMEQ,KNAMWR,KNAMFP,KNAMWM,KNAMPF,'
       WRITE(6,*) '      KNAMFO,KNAMTR,KNAMEQ2,KID_NS,ID_NS,'
@@ -281,9 +281,7 @@ contains
       RHOGMN=rdata(14)
       RHOGMX=rdata(15)
 
-      CALL mtx_broadcast_integer(NP_P,NSMAX)
-      CALL mtx_broadcast_integer(NP_N,NSMAX)
-      CALL mtx_broadcast_integer(NP_A,NSMAX)
+      CALL mtx_broadcast_integer(NPA,NSMAX)
       CALL mtx_broadcast_integer(ID_NS,NSMAX)
       CALL mtx_broadcast_real8(PA,NSMAX)
       CALL mtx_broadcast_real8(PZ,NSMAX)
