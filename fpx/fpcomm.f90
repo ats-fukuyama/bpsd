@@ -57,6 +57,7 @@ MODULE fpcomm_parm
       real(rkind):: SPFTOT,SPFR0,SPFRW,SPFENG
       real(rkind):: DRR0,DRRS,FACTOR_CDBM,DRR_EDGE,RHO_EDGE,FACTOR_DRR_EDGE
       real(rkind):: FACTOR_PINCH,deltaB_B
+      REAL(rkind):: DRR_em_amp,DRR_em_r0,DRR_em_rw,DRR_em_kdep
       real(rkind),dimension(NSM):: TLOSS
       real(rkind):: DELT,RIMPL,EPSFP,EPSM,EPSE,EPSDE,H0DE
       real(rkind):: PGMAX,RGMAX,RGMIN

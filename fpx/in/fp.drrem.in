@@ -7,17 +7,46 @@ p
  nsmax=2
  nsamax=2
  nsbmax=2
+ NPA(2)=1
+ PA(2)=2
+ PZ(2)=1
+ PN=1.D0,1.D0
+ PNS=0.1D0,0.1D0
+ PROFN2=1.0
  modeld=2
- rd_em_amp=0.001D0
- nrmax=5
- rmin=0.3
- rmax=0.6
- ntmax=1
+ DRR_em_amp=1.D-3
+ DRR_em_r0=0.65
+ DRR_em_rw=0.05
+ DRR_em_kdep = 30.D0
+ nrmax=7
+ rmin=0.5
+ rmax=0.8
+ delt=0.05D0
+ ntmax=5
  &end
 r
+s
 g
-drr
+n2
+rn
+rt
+f2
+1
+2
 3
+4
+5
+6
+7
+0
+drr
+1
+2
+3
+4
+5
+6
+7
 0
 q
 x

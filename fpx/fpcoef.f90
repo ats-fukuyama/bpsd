@@ -110,8 +110,6 @@
          CALL fp_calr
       CASE(2)
          CALL fp_caldrr_em
-      CASE(3)
-         CALL fp_caldrr_em2
       CASE DEFAULT
          WRITE(6,*) 'XX Undefined MODELD: modeld=',modeld
          STOP

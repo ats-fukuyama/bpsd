@@ -109,6 +109,7 @@ contains
            SPFTOT,SPFR0,SPFRW,SPFENG, &
            DRR0,DRRS,FACTOR_CDBM,DRR_EDGE,RHO_EDGE, &
            FACTOR_DRR_EDGE,FACTOR_PINCH,deltaB_B,TLOSS, &
+           DRR_em_amp,DRR_em_r0,DRR_em_rw,DRR_em_kdep, &
            DELT,RIMPL,EPSFP,EPSM,EPSE,EPSDE,H0DE, &
            PGMAX,RGMAX,RGMIN, &
            T0_quench,tau_quench,tau_mgi, &
@@ -182,6 +183,7 @@ contains
       WRITE(6,*) '      SPFTOT,SPFR0,SPFRW,SPFENG,'
       WRITE(6,*) '      DRR0,DRRS,FACTOR_CDBM,DRR_EDGE,RHO_EDGE,'
       WRITE(6,*) '      FACTOR_DRR_EDGE,FACTOR_PINCH,deltaB_B,TLOSS,'
+      WRITE(6,*) '      DRR_em_amp,DRR_em_r0,DRR_em_rw,DRR_em_kdep,'
       WRITE(6,*) '      DELT,RIMPL,EPSFP,EPSM,EPSE,EPSDE,H0DE,'
       WRITE(6,*) '      PGMAX,RGMAX,RGMIN,'
       WRITE(6,*) '      T0_quench,tau_quench,tau_mgi,'
@@ -569,8 +571,12 @@ contains
       rdata(71)=time_exp_offset
       rdata(72)=RN_NEU0
       rdata(73)=RN_NEUS
-
-      CALL mtx_broadcast_real8(rdata,73)
+      rdata(74)=DRR_em_amp
+      rdata(75)=DRR_em_r0
+      rdata(76)=DRR_em_rw
+      rdata(77)=DRR_em_kdep
+      
+      CALL mtx_broadcast_real8(rdata,77)
 
       R1               =rdata( 1)
       DELR1            =rdata( 2)
@@ -652,6 +658,11 @@ contains
       time_exp_offset  =rdata(71)
       RN_NEU0          =rdata(72)
       RN_NEUS          =rdata(73)
+      
+      DRR_em_amp       =rdata(74)
+      DRR_em_r0        =rdata(75)
+      DRR_em_rw        =rdata(76)
+      DRR_em_kdep      =rdata(77)
 
       CALL mtx_broadcast_real8(pmax,NSMAX)
       CALL mtx_broadcast_real8(pmax_bb,NSMAX)

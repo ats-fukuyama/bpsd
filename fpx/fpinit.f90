@@ -221,10 +221,17 @@ contains
       FACTOR_DRR_EDGE=0.1D0
       FACTOR_PINCH=1.0D0
 
-      ! --- EM diffusion --- model_rd=2
+! --- EM diffusion --- modeld=2
 
-      rd_em_amp=0.0D0      ! delta B / B
-      rd_em_k_ratio=1.D0   ! k_perp/k_para
+!     DRR_em_amp  : amplitude: delta_B / B_0
+!     DRR_em_r0   : radial position [r/a]
+!     DRR_em_rw   : radial width [r/a] (gaussian) DRR_EM EXP[-(r/a-r0)^2/rw^2]
+!     DRR_em_kdep : k_perp/k_para (~ m q R /r)  k_para~1/qR, k_perp~m/r
+      
+      DRR_em_amp  = 0.001D0
+      DRR_em_r0   = 0.5D0
+      DRR_em_rw   = 0.1D0
+      DRR_em_kdep = 30.D0
 
 !-----LOSS--------------------------------------------------------------
 !     TLOSS(ns): loss time [s] (0.D0 for no loss)
