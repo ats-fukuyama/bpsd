@@ -41,17 +41,6 @@ contains
     1 CALL task_parm(mode,'FP',kin,fp_nlin,fp_plst,ierr)
       IF(ierr.NE.0) RETURN
 
-      IF(MODEL_PROF.EQ.0) THEN
-         DO NS=1,NSMAX
-            PROFN1(NS)=PROFN1(1)
-            PROFN2(NS)=PROFN2(1)
-            PROFT1(NS)=PROFT1(1)
-            PROFT2(NS)=PROFT2(1)
-            PROFU1(NS)=PROFU1(1)
-            PROFU2(NS)=PROFu2(1)
-         END DO
-      END IF
-
       CALL fp_check(ierr)
       IF(mode.EQ.0.AND.ierr.NE.0) GO TO 1
       IF(ierr.NE.0) ierr=ierr+100
@@ -220,10 +209,9 @@ contains
       idata( 5)=IDEBUG
       idata( 6)=MODEFR
       idata( 7)=MODEFW
-      idata( 8)=MODEL_PROF
-      idata( 9)=MODEL_PROF
+      idata( 8)=MODEL_PROF_time
 
-      CALL mtx_broadcast_integer(idata,7)
+      CALL mtx_broadcast_integer(idata,8)
       NSMAX =idata( 1)
       MODELG=idata( 2)
       MODELN=idata( 3)
@@ -231,6 +219,7 @@ contains
       IDEBUG=idata( 5)
       MODEFR=idata( 6)
       MODEFW=idata( 7)
+      MODEL_PROF_time=idata(8)
 
       rdata( 1)=RR
       rdata( 2)=RA

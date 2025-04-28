@@ -201,20 +201,20 @@ CONTAINS
       ALP(5) = 1.0D0
       ALP(6) = 1.0D0
       
-      !  ====== Fixed profile =====      
+      !  ====== Given profile =====      
 
-      !  model_nfixed: for density profile
-      !  model_tfixed: for temperature profile
-      !     0: no fixed profile      
-      !     1: fixed profile (x=n for density, x=t for temperatrue) 
-      !     2: fixed profile for rho_min_xfixed <= rho <= rho_max_xfixed
+      !  model_ngiven: for density profile
+      !  model_tgiven: for temperature profile
+      !     0: no given profile      
+      !     1: given profile (x=n for density, x=t for temperatrue) 
+      !     2: given profile for rho_min_xgiven <= rho <= rho_max_xgiven
       !     read parameters from file 'xprof_coef_data'
-      !        ntime_xfixed_max:         number of time points
-      !        ndata_xfixed_max:         number of coefficients
-      !        rho_min_xfixed:           rho minimum of fixed profile
-      !        rho_max_xfixed:           rho maximum of fixed profile
-      !        time_xfixed(ntime):       start time of fixed profile   
-      !        coef_xfixed(ndata,ntime): coefficients of fixed profile
+      !        ntime_xgiven_max:         number of time points
+      !        ndata_xgiven_max:         number of coefficients
+      !        rho_min_xgiven:           rho minimum of given profile
+      !        rho_max_xgiven:           rho maximum of given profile
+      !        time_xgiven(ntime):       start time of given profile   
+      !        coef_xgiven(ndata,ntime): coefficients of given profile
       !        f(nr)=coef(0) &
       !             +0.5D0*coef(1) &
       !             *(tanh((1.D0-coef(2)*coef(3)-rho(nr))/coef(3))+1.D0) &
@@ -222,13 +222,13 @@ CONTAINS
       !             +0.5D0*coef(8)*(1.D0-erf((rho(nr)-coef(9))
       !              /SQRT(2.D0*coef(10))))
       !
-      !  knam_nfixed: density fixed profile file name
-      !  knam_tfixed: temperature fixed profile file name
+      !  knam_ngiven: density given profile file name
+      !  knam_tgiven: temperature given profile file name
       
-      model_nfixed=0
-      model_tfixed=0
-      knam_nfixed='nprof_coef_data'
-      knam_tfixed='tprof_coef_data'
+      model_ngiven=0
+      model_tgiven=0
+      knam_ngiven='nprof_coef_data'
+      knam_tgiven='tprof_coef_data'
 
 
       !  ==== IMPURITY ans neutral PARAMETERS ====

@@ -15,9 +15,12 @@ C
       IF(IERR.NE.0) RETURN
 c
       REWIND(neqdsk)
+      WRITE(6,*) '@@@ point 1'
       read (neqdsk,2000) (case(i),i=1,6),idum,NRGMAX,NZGMAX
+      WRITE(6,*) '@@@ point 2'
       NPSMAX=NRGMAX
       read (neqdsk,2020) rdim,zdim,Rctr,rleft,zmid
+      WRITE(6,*) '@@@ point 3'
       DR=rdim/(NRGMAX-1)
       DZ=zdim/(NZGMAX-1)
       DO NRG=1,NRGMAX
@@ -27,6 +30,7 @@ c
          ZG(NZG)=zmid-0.5D0*zdim+DZ*(NZG-1)
       ENDDO
       read (neqdsk,2020) RAXIS,ZAXIS,PSI0,PSIA,Bctr
+      WRITE(6,*) '@@@ point 4'
 C
       PSI0=2.D0*PI*PSI0
       PSIA=2.D0*PI*PSIA
@@ -40,15 +44,18 @@ C
       read (neqdsk,2020) RIP,simag,xdum,rmaxis,xdum
       RIP=RIP/1.D6
       read (neqdsk,2020) zmaxis,xdum,sibry,xdum,xdum
+      WRITE(6,*) '@@@ point 5'
       read (neqdsk,2020) (TTPS(i),i=1,NPSMAX)
       read (neqdsk,2020) (PPPS(i),i=1,NPSMAX)
       read (neqdsk,2020) (TTDTTPS(i),i=1,NPSMAX)
       read (neqdsk,2020) (DPPPS(i),i=1,NPSMAX)
       read (neqdsk,2020) ((PSIRZ(i,j),i=1,NRGMAX),j=1,NZGMAX)
       read (neqdsk,2020) (QQPS(i),i=1,NPSMAX)
+      WRITE(6,*) '@@@ point 6'
       read (neqdsk,2022) NSUMAX,limitr
       read (neqdsk,2020) (RSU(i),ZSU(i),i=1,NSUMAX)
       read (neqdsk,2020) (rlim(i),zlim(i),i=1,limitr)
+      WRITE(6,*) '@@@ point 7'
 C
       RSUMAX = RSU(1)
       RSUMIN = RSU(1)
@@ -113,6 +120,7 @@ C 1000 CONTINUE
 C
       REWIND(neqdsk)
       CLOSE(neqdsk)
+      WRITE(6,*) '@@@ point 8'
 !      write (6,'(I5,1PE12.4)') (i,QQPS(i),i=1,NPSMAX)
 C
 C      WRITE(6,'(1P3E12.4)') RR,BB,RIP
@@ -148,6 +156,7 @@ c$$$     &              -RR*DPPPS(i)-TTDTTPS(i)/(4.D0*PI**2*RR*RMU0),
 c$$$     &              (-TTPS(i)*DPPPS(i)/BB-DTTPS(i)*BB/RMU0)/(2.D0*PI)
 c$$$      ENDDO
 C
+      WRITE(6,*) '@@@ point 9'
       return
 c     
  2000 format (6a8,3i4)

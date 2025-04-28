@@ -1,12 +1,14 @@
-!   pl module for loading profile data
+! plload.f90
 
-MODULE plp2D
+!   pl module for loading and reading profile data
+
+MODULE pl_p2Ddata
   USE bpsd_kinds
   INTEGER:: NXMAX,NYMAX
   REAL(rkind),DIMENSION(:),ALLOCATABLE:: XD,YD
   REAL(rkind),DIMENSION(:,:,:),ALLOCATABLE:: VA
   REAL(rkind),DIMENSION(:,:,:,:,:),ALLOCATABLE:: UA
-END MODULE plp2D
+END MODULE pl_p2Ddata
 
 MODULE pl_trdata
   USE bpsd_kinds
@@ -19,25 +21,35 @@ END MODULE pl_trdata
 
 MODULE plload
 
-  private
-  public pl_load,pl_read_xprf,pl_read_p2D,pl_read_p2Dmag, &
-         pl_load_trdata,pl_read_trdata
+  PRIVATE
+  PUBLIC  pl_load
+  PUBLIC  pl_load_xprf
+  PUBLIC  pl_read_xprf
+  PRIVATE pl_load_trdata
+  PUBLIC  pl_read_trdata
+  PRIVATE pl_load_p2D
+  PUBLIC  pl_read_p2D
+  PUBLIC  pl_read_p2Dmag
 
 CONTAINS
 
   SUBROUTINE pl_load(ierr)
 
-    USE plcomm,ONLY: modeln,modelg
+    USE plcomm,ONLY: model_prof,modelg
+    USE plprof_TOTAL
+    
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: ierr
   
-    SELECT CASE(modeln)
+    SELECT CASE(model_prof)
     CASE(8)
        CALL pl_load_xprf(ierr)
     CASE(12)
        CALL pl_load_p2D(ierr)
     CASE(21)
        CALL pl_load_trdata(0,ierr)
+    CASE(41)
+       CALL pl_load_TOTAL(ierr)
     END SELECT
 
     SELECT CASE(modelg)
@@ -127,7 +139,7 @@ CONTAINS
       INTEGER:: IERR
 
       IF (Rhol.GT.1.0D0) THEN
-         IF(modeln.EQ.1) THEN
+         IF(model_prof.EQ.1) THEN
             PNL = PNS(NS)
          ELSE
             PNL = 0.D0
@@ -268,7 +280,7 @@ CONTAINS
     SUBROUTINE pl_load_p2D(ierr)
 
       USE plcomm,ONLY: rkind,KNAMPF
-      USE plp2D
+      USE pl_p2Ddata
       USE libspl2d
       USE libfio
       USE libgrf
@@ -427,7 +439,7 @@ CONTAINS
     SUBROUTINE pl_read_p2Dmag(X,Y,BX,BY,BZ,IERR)
 
       USE plcomm,ONLY: rkind
-      USE plp2d
+      USE pl_p2Ddata
       USE libspl2d
       IMPLICIT NONE
       REAL(rkind),INTENT(IN):: X,Y       ! Position
@@ -459,7 +471,7 @@ CONTAINS
     SUBROUTINE pl_read_p2D(X,Y,RN,RTPR,RTPP,RU,IERR)
 
       USE plcomm,ONLY: rkind,NSMAX
-      USE plp2d
+      USE pl_p2Ddata
       USE libspl2d
       IMPLICIT NONE
       REAL(rkind),INTENT(IN):: X,Y    ! Position

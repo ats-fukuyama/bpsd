@@ -40,7 +40,7 @@
             ZEFF(NR)=ZEFF(NR)/RN(NR,1)
          ENDDO
       ELSE
-         IF(MDLEQN.EQ.0) THEN ! fixed density
+         IF(MDLEQN.EQ.0) THEN ! given density
             ZEFF(NR) =0.D0
             DO NS=2,NSMAX
                ZEFF(NR)=ZEFF(NR) + PZ(NS)**2*RN(NR,NS)

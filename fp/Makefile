@@ -85,6 +85,7 @@ clean :
 veryclean: clean
 	-rm -f fp
 
+$(OBJDIR)/fpcomm.o : fpcomm.f90 ../pl/plcomm.f90 ../dp/dpcomm.f90
 $(OBJDIR)/fpmain.o : fpinit.f90 fpparm.f90 fpmain.f90 fpcomm.f90
 $(OBJDIR)/fpmenu.o : fpwrin.f90 fpgout.f90 fpfout.f90 fploop.f90 \
                      fpprep.f90 fpparm.f90 fpfile.f90 fpmenu.f90 fpcomm.f90

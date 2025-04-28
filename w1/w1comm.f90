@@ -19,7 +19,7 @@ MODULE w1comm_parm
   INTEGER:: NMODEL,NALPHA,NDMAX,NSYS,NGDSP,NCDTYP,NXABS
   INTEGER:: MODELN
   INTEGER:: MDLWG,MDLWGS
-  REAL(rkind):: WGZ1,WGZ2,WGAMP,WGNZ
+  REAL(rkind):: WGZ1,WGZ2,WGAMP,WGKZ
   CHARACTER(LEN=80):: job_id
   INTEGER:: nfile_data
   REAL(rkind):: xgmin,xgmax,ygmin,ygmax

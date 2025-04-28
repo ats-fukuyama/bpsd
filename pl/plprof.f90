@@ -5,6 +5,7 @@
     REAL(rkind):: BNX,BNY,BNZ,BABS
     REAL(rkind),DIMENSION(NSM):: RN,RTPR,RTPP,RU,RUPL,RUPR,RUPP,RNUC
     REAL(rkind),DIMENSION(NSM):: RLN,RLRPT,RLTPP,RLU,RLUPL
+    REAL(rkind):: RQP
   END MODULE pllocal
 
   MODULE plprof
@@ -12,9 +13,6 @@
     USE plcomm_type
 
     PRIVATE
-    PUBLIC pl_mag_type
-    PUBLIC pl_prf_type
-    PUBLIC pl_grd_type
     PUBLIC pl_mag_old
     PUBLIC pl_mag
     PUBLIC pl_mag_rz
@@ -32,8 +30,6 @@
     PUBLIC pl_dvdrho
     PUBLIC pl_axis
     PUBLIC pl_rzsu
-    PUBLIC pl_wmxprf
-    PUBLIC wmspl_prof
     PUBLIC pl_getRZ
     PUBLIC pl_getRZB
     PUBLIC pl_getB
@@ -475,21 +471,21 @@
 
     SUBROUTINE pl_prof(RHON,PLF)
 
-        USE plcomm,ONLY: PZ,PN,PTPR,PTPP,PU,PNS,PTS,PUS,PNM,PTM,PUM,NSMAX&
-             &,MODELN,RA,RB, PROFN1,PROFN2,PROFN3,PROFT1,PROFT2,PROFT3,PROFU1&
-             &,PROFU2,PROFU3,PNITB,PTITB,PUITB,RHOITB,RHOEDG
-        USE plload,ONLY: pl_read_trdata
+        USE plcomm
+        USE plload,ONLY: pl_read_trdata,pl_read_xprf
         USE plprof_travis
+        USE plprof_TOTAL
         USE plcoll
         IMPLICIT NONE
-        REAL(rkind),INTENT(IN):: RHON
+        REAL(dp),INTENT(IN):: RHON
         TYPE(pl_prf_type),DIMENSION(NSMAX),INTENT(OUT):: PLF
-        REAL(rkind):: RHOL, FACTN, FACTT, FACTU, FACTITB, PL0, PL,&
-             & FACT, FNX, DFNX, AN, BN, FTX, DFTX, AT, BT, FUX, DFUX,&
-             & AU, BU, VAL, PNL, PTL, profn, proft,FACTNM,FACTTM,FACTUM
-        INTEGER  :: NS
-        REAL(rkind),DIMENSION(NSMAX) :: RN_PL,RT_PL,RTPR_PL,RTPP_PL&
-             &,RU_PL,RUPL_PL
+        REAL(rkind):: &
+             rhol,factn,factt,factu,factitb,pl0,pl, &
+             fact,fnx,dfnx,an,bn,ftx,dftx,at,bt,fux,dfux, &
+             au,bu,val,pnl,ptl,qpl,profn,proft,factnm,facttm,factum
+        INTEGER  :: NS,ierr
+        REAL(rkind),DIMENSION(NSMAX) :: &
+             rn_pl,rt_pl,rtpr_pl,rtpp_pl,ru_pl,rupl_pl
 
         IF(RHON.LE.0.D0) THEN
            RHOL=0.D0
@@ -501,11 +497,11 @@
            RHOL=RHON
         ENDIF
 
-        SELECT CASE(MODELN)
+        SELECT CASE(model_prof)
         CASE(0,1)
            IF(RHOL.GT.1.D0) THEN
               DO NS=1,NSMAX
-                 IF(MODELN.EQ.1) THEN
+                 IF(model_prof.EQ.1) THEN
                     PLF(NS)%RN  =PNS(NS)
                  ELSE
                     PLF(NS)%RN  =0.D0
@@ -622,7 +618,7 @@
 
         CASE(8)
            DO NS=1,NSMAX
-              CALL WMSPL_PROF(Rhol,NS,RN_PL(NS),RT_PL(NS))
+              CALL pl_read_xprf(Rhol,NS,RN_PL(NS),RT_PL(NS))
            ENDDO
 
 !----  Modification for charge neutrality after spline interpolation
@@ -702,6 +698,19 @@
               PLF(NS)%RUPL=0.D0
            END DO
            CALL pl_set_rnuc(plf)
+
+        CASE(41,42)
+           CALL pl_read_prof_total(RHOL,nsmax,rn_pl,rt_pl)
+           DO NS=1,NSMAX
+              PLF(NS)%RN  =rn_pl(ns)
+              PLF(NS)%RTPR=rt_pl(ns)
+              PLF(NS)%RTPP=rt_pl(ns)
+              PLF(NS)%RU  =0.D0
+              PLF(NS)%RUPL=0.D0
+           END DO
+           CALL pl_set_rnuc(plf)
+           IF(model_prof.EQ.42) THEN
+              
         END SELECT
 
         RETURN
@@ -1041,7 +1050,7 @@
 
     SUBROUTINE wmspl_prof(Rhol,NS,PNL,PTL)
 
-      USE plcomm,ONLY: PNS,PTS,modeln
+      USE plcomm,ONLY: PNS,PTS,model_prof
       USE plxprf
       USE libspl1d
       IMPLICIT NONE
@@ -1053,7 +1062,7 @@
       INTEGER:: IERR
 
       IF (Rhol.GT.1.0D0) THEN
-         IF(modeln.EQ.1) THEN
+         IF(model_prof.EQ.1) THEN
             PNL = PNS(NS)
          ELSE
             PNL = 0.D0

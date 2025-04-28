@@ -4,13 +4,14 @@
 EXEC=testbnd testbndc testpcg testdmumps testzmumps
 FLINKER=$(MFC)
 
-PETSC_DIR=/opt/local/lib/petsc
+PETSC_DIR=/opt/local/petsc
+PETSC_ARCH=macports
 INCLUDE_MTX_PETSC=-I${PETSC_DIR}/include -I${PETSC_DIR}/include/petsc
 include ${PETSC_DIR}/lib/petsc/conf/variables
-PETSC_KSP_LIB=/opt/local/lib/petsc/lib/libpetsc.dylib
+PETSC_KSP_LIB=/opt/local/petsc/macports/lib/libpetsc.a
 
-INCLUDE_MTX_MUMPS=-I/opt/local/include
-MUMPS_LIB=-L/opt/local/lib -ldmumps -lzmumps -lmumps_common -lpord -lscalapack -lparmetis -lmetis -L/opt/local/lib/lapack -lblas -llapack
+INCLUDE_MTX_MUMPS=-I/opt/local/petsc/macports/include
+MUMPS_LIB=-L/opt/local/petsc/macports/lib -ldmumps -lzmumps -lmumps_common -lpord -lscalapack -L/opt/local/lib -lparmetis -lmetis -L/opt/local/lib/lapack -lblas -llapack
 
 
 LIBMTXMPI=../mtxp/libmtxmpi.o

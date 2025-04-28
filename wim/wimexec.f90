@@ -944,7 +944,7 @@ CONTAINS
     G2=HP
     G3=Z
     H0=0.5D0
-    EPS=1.D-5
+[O    EPS=1.D-5
     ILST=0
      
     SR1=0.D0

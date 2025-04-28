@@ -23,8 +23,8 @@ MODULE trcomm_parm
   INTEGER, PARAMETER :: NSZM=2     ! Max number of impurity ions species
   INTEGER, PARAMETER :: NSNM=2     ! Max number of neutral species
 
-  INTEGER, PARAMETER :: NTM=10001  ! Max number of time steps to save globals
-  INTEGER, PARAMETER :: NGM=1001   ! Max number of time steps to save profiles
+  INTEGER, PARAMETER :: NTM=100001  ! Max number of time steps to save globals
+  INTEGER, PARAMETER :: NGM=10001   ! Max number of time steps to save profiles
   INTEGER, PARAMETER :: NCTM=110   ! Max number of save variables in globals
   INTEGER, PARAMETER :: NCGM=30    ! Max number of save variables in profiles
   INTEGER, PARAMETER :: NCRTM=75   ! Max number of save variables in profiles
@@ -52,9 +52,6 @@ MODULE trcomm_parm
 
   REAL(rkind),DIMENSION(NSM):: PT
   REAL(rkind):: RIPS,RIPE
-  INTEGER:: NSAMAX,NSFMAX,NSZMAX,NSNMAX
-  INTEGER:: & ! NS of bulk species (first in NS)
-       NS_e,NS_D,NS_T,NS_He4,NS_H,NS_He3,NS_C,NS_Fe
   
   ! === profile parameters ===
 
@@ -62,8 +59,8 @@ MODULE trcomm_parm
   REAL(rkind):: &
        PROFNU1,PROFNU2,PROFJ1,PROFJ2
   REAL(rkind):: ALP(7)
-  INTEGER:: model_nfixed,model_tfixed
-  CHARACTER(LEN=128):: knam_nfixed,knam_tfixed
+  INTEGER:: model_ngiven,model_tgiven
+  CHARACTER(LEN=128):: knam_ngiven,knam_tgiven
 
   ! === impurity and neutral parameters ===
 
@@ -462,7 +459,7 @@ MODULE trcomm
 ! TRMDS
   REAL(rkind)     :: SUMPBM
   INTEGER:: &
-       NEQMAX,NSCMAX,NSTMAX,MDDIAG
+       NEQMAX,NSCMAX,MDDIAG
   INTEGER, DIMENSION(:)  ,ALLOCATABLE :: & ! (NEQM)
        NSS, NSV, NNS, NST
   INTEGER, DIMENSION(:,:),ALLOCATABLE :: & ! (0:NSTM,0:3)
@@ -480,7 +477,7 @@ MODULE trcomm
        RGFLS,   RQFLS
 
 ! fixed profile variables
-  REAL(rkind):: time_initial_nfixed,time_initial_tfixed
+  REAL(rkind):: time_initial_ngiven,time_initial_tgiven
 
 ! *** trcom1 ***
   

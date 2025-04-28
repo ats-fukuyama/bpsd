@@ -59,6 +59,7 @@ CONTAINS
            RMIR,ZBB,Hpitch1,Hpitch2,RRCH,RCOIL,ZCOIL,BCOIL,NCOILMAX, &
            NSMAX,NPA,PA,PZ, &
            PN,PNS,PTPR,PTPP,PTS,PU,PUS,PUPR,PUPP,PNUC,PZCL, &
+           nsfmax,nszmax,nsnmax,nstmax, &
            PNM,PTM,PUM,PROFN3,PROFT3,PROFU3, &
            ID_NS,KID_NS, &
            PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
@@ -70,10 +71,12 @@ CONTAINS
            profn_travis_g,profn_travis_h,profn_travis_p,profn_travis_q, &
            profn_travis_w,proft_travis_g,proft_travis_h,proft_travis_p, &
            proft_travis_q,proft_travis_w, &
-           MODELG,MODELB,MODELN,MODELQ,model_coll,MODEL_PROF,MODEL_NPROF, &
+           MODELG,MODELB,MODELQ,model_coll,MODEL_NPROF, &
+           model_prof,model_prof_time,model_sigv, &
            model_eqdsk_psi, &
            RHOGMN,RHOGMX, &
            KNAMEQ,KNAMWR,KNAMWM,KNAMFP,KNAMFO,KNAMPF, &
+           knam_profg_TOTAL,knam_profm_TOTAL, &
            MODEFR,MODEFW,IDEBUG,mdlplw
 
       READ(NID,PL,IOSTAT=IST,ERR=9800,END=9900)
@@ -121,10 +124,12 @@ CONTAINS
       WRITE(6,*) 'proft_travis_w,'
       WRITE(6,*) 'RHOMIN,QMIN,RHOITB,PNITB,PTITB,PUITB,RHOEDG,'
       WRITE(6,*) 'PPN0,PTN0,RFCL,BAXIS_SCALED,'
-      WRITE(6,*) 'MODELG,MODELB,MODELN,MODELQ,'
-      WRITE(6,*) 'model_coll,MODEL_PROF,MODEL_NPROF,RHOGMN,RHOGMX,'
+      WRITE(6,*) 'MODELG,MODELB,MODELQ,'
+      WRITE(6,*) 'model_coll,MODEL_NPROF,RHOGMN,RHOGMX,'
+      WRITE(6,*) 'model_prof,model_prof_time,model_sigv,'
       WRITE(6,*) 'model_eqdsk_psi,'
       WRITE(6,*) 'KNAMEQ,KNAMWR,KNAMFP,KNAMFO,KNAMEQ2'
+      WRITE(6,*) 'knam_profg_TOTAL,knam_profm_TOTAL'
       WRITE(6,*) 'MODEFW,MODEFR,IDEBUG,mdlplw'
       RETURN
     END SUBROUTINE plplst
@@ -145,8 +150,8 @@ CONTAINS
             WRITE(6,*) 'XX plcheck: INVALID MODELG: MODELG=',MODELG
             IERR=1
          ENDIF
-         IF((MODELN.LT.0).OR.(MODELN.GT.31)) THEN
-            WRITE(6,*) 'XX plcheck: INVALID MODELN: MODELN=',MODELN
+         IF((model_prof.LT.0).OR.(model_prof.GT.41)) THEN
+            WRITE(6,*) 'XX plcheck: INVALID model_prof: model_prof=',model_prof
             IERR=1
          ENDIF
          IF((MODELQ.NE.0).AND.(MODELQ.NE.1)) THEN
@@ -154,8 +159,8 @@ CONTAINS
             IERR=1
          ENDIF
       ELSE
-         IF((MODELN.LT.0).OR.(MODELN.GT.31)) THEN
-            WRITE(6,*) 'XX plcheck: INVALID MODELN: MODELN=',MODELN
+         IF((model_prof.LT.0).OR.(model_prof.GT.41)) THEN
+            WRITE(6,*) 'XX plcheck: INVALID model_prof: model_prof=',model_prof
             IERR=1
          ENDIF
          IF((MODELQ.NE.0).AND.(MODELQ.NE.1).AND.(MODELG.NE.3)) THEN
@@ -196,32 +201,34 @@ CONTAINS
     idata( 1)=NSMAX
     idata( 2)=MODELG
     idata( 3)=MODELB
-    idata( 4)=MODELN
+    idata( 4)=model_prof
     idata( 5)=MODELQ
     idata( 6)=IDEBUG
     idata( 7)=MODEFR
     idata( 8)=MODEFW
     idata( 9)=mdlplw
     idata(10)=model_coll
-    idata(11)=MODEL_PROF
+    idata(11)=model_prof_time
     idata(12)=MODEL_NPROF
     idata(13)=NCOILMAX
+    idata(14)=model_sigv
 
-    CALL mtx_broadcast_integer(idata,13)
+    CALL mtx_broadcast_integer(idata,14)
     
     NSMAX=idata( 1)
     MODELG=idata( 2)
     MODELB=idata( 3)
-    MODELN=idata( 4)
+    model_prof=idata( 4)
     MODELQ=idata( 5)
     IDEBUG=idata( 6)
     MODEFR=idata( 7)
     MODEFW=idata( 8)
     mdlplw=idata( 9)
     model_coll=idata(10)
-    MODEL_PROF=idata(11)
+    model_prof_time=idata(11)
     MODEL_NPROF=idata(12)
     NCOILMAX=idata(13)
+    model_sigv=idata(14)
 
     rdata( 1)=RR
     rdata( 2)=RA
@@ -350,6 +357,8 @@ CONTAINS
     CALL mtx_broadcast_character(KNAMFO,80)
     CALL mtx_broadcast_character(KNAMTR,80)
     CALL mtx_broadcast_character(KNAMEQ2,80)
+    CALL mtx_broadcast_character(knam_profg_TOTAL,128)
+    CALL mtx_broadcast_character(knam_profm_TOTAL,128)
   END SUBROUTINE pl_broadcast
 
 !     ****** SHOW PARAMETERS ******
@@ -384,12 +393,15 @@ CONTAINS
       WRITE(6,601) 'RHOEDG',RHOEDG,'RHOGMN',RHOGMN, &
                    'RHOGMX',RHOGMX
       WRITE(6,604) 'MODELG',MODELG,'MODELB',MODELB, &
-                   'MODELN',MODELN,'MODELQ',MODELQ
+                   'MODELQ',MODELQ
       WRITE(6,604) 'MODEFR',MODEFR,'MODEFW',MODEFW, &
                    'mdlplw',mdlplw
-      WRITE(6,'(A,I5)') ' MODEL_PROF  =',MODEL_PROF
-      WRITE(6,'(A,I5)') ' MODEL_NPROF =',MODEL_NPROF
+      WRITE(6,'(A,I5)') ' model_prof      =',model_prof
+      WRITE(6,'(A,I5)') ' model_prof_time =',model_prof_time
+      WRITE(6,'(A,I5)') ' MODEL_NPROF     =',MODEL_NPROF
       WRITE(6,'(A,I5)') ' model_eqdsk_psi =',model_eqdsk_psi
+      WRITE(6,'(A,I5)') ' model_coll      =',model_coll
+      WRITE(6,'(A,I5)') ' model_sigv      =',model_sigv
 
       WRITE(6,100)
       DO NS=1,NSMAX
@@ -431,6 +443,16 @@ CONTAINS
          END DO
       END IF
 
+      WRITE(6,'(A,A)') 'KNAMEQ  = ',TRIM(KNAMEQ)
+      WRITE(6,'(A,A)') 'KNAMWR  = ',TRIM(KNAMWR)
+      WRITE(6,'(A,A)') 'KNAMFP  = ',TRIM(KNAMFP)
+      WRITE(6,'(A,A)') 'KNAMWM  = ',TRIM(KNAMWM)
+      WRITE(6,'(A,A)') 'KNAMPF  = ',TRIM(KNAMPF)
+      WRITE(6,'(A,A)') 'KNAMFO  = ',TRIM(KNAMFO)
+      WRITE(6,'(A,A)') 'KNAMTR  = ',TRIM(KNAMTR)
+      WRITE(6,'(A,A)') 'KNAMEQ2 = ',TRIM(KNAMEQ2)
+      WRITE(6,'(A,A)') 'knam_profg_TOTAL = ',TRIM(knam_profg_TOTAL)
+      WRITE(6,'(A,A)') 'knam_profm_TOTAL = ',TRIM(knam_profm_TOTAL)
       RETURN
 
   100 FORMAT(' ','NS    NPA         PA          PZ          ', &

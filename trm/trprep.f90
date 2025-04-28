@@ -13,7 +13,7 @@ CONTAINS
     USE trprof
     USE trbpsd
     USE trmetric
-    USE trfixed
+    USE trprof
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: ierr
     INTEGER:: nr,ns,nnf

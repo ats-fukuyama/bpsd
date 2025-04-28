@@ -10,8 +10,8 @@ include ../mtxp/make.mtxp
 #LIB_MTX=$(LIBXMTX_KSP)
 #LIBX_MTX=$(LIBX_MTX_KSP)
 
-FFLAGS=$(OFLAGS)
-#FFLAGS=$(DFLAGS)
+#FFLAGS=$(OFLAGS)
+FFLAGS=$(DFLAGS)
 
 OBJDIR=./obj
 
@@ -25,9 +25,9 @@ ${OBJDIR}/%.o:%.f90
 
 SRCS_NOEQ = plvmec.f90 plcomm.f90 plinit.f90 plparm.f90 \
             platmd.f90 plcoll.f90 \
-            plload.f90 plprep.f90
+            plprof_TOTAL.f90 plprof_travis.f90 plload.f90 plprep.f90
 
-SRCS_EQ=plprof_travis.f90 plprof2d.f90 \
+SRCS_EQ=plprof2d.f90 \
      plprof.f90 plprofw.f90  \
      plgout.f90 plmenu.f90
 
@@ -50,7 +50,7 @@ all : libs pl
 
 libpl.a: $(OBJS_NOEQ) $(OBJS_EQ)
 	$(LD) $(LDFLAGS) libpl.a $(OBJS_NOEQ)
-	(cd ../eq; make libeq.a)
+	(cd ../eq; make clean; make libeq.a)
 	$(LD) $(LDFLAGS) libpl.a $(OBJS_EQ)
 
 libs:
@@ -77,6 +77,7 @@ $(OBJDIR)/platmd.o: platmd.f90 plcomm.f90
 $(OBJDIR)/plcoll.o: plcoll.f90 plcomm.f90 platmd.f90
 $(OBJDIR)/plload.o: plload.f90 plcomm.f90
 $(OBJDIR)/plprep.o: plprep.f90 plcomm.f90
+$(OBJDIR)/plprof_TOTAL.o: plprof_TOTAL.f90 plcomm.f90
 $(OBJDIR)/plprof_travis.o: plprof_travis.f90 plcomm.f90
 $(OBJDIR)/plprof2d.o: plprof2d.f90 plcoll.f90 plload.f90 plcomm.f90
 $(OBJDIR)/plprof.o: plprof.f90 plcomm.f90 plload.f90 \

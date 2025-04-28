@@ -237,7 +237,6 @@ CONTAINS
       WRITE(6,'(A,A)') 'KFNLOG =',TRIM(kfnlog)
       WRITE(6,'(A,A)') 'KFNTXT =',TRIM(kfntxt)
       WRITE(6,'(A,A)') 'KFNCVS =',TRIM(kfncvs)
-
       RETURN
 
 601   FORMAT(' ',A6,'=',1PE11.3 :2X,A6,'=',1PE11.3: &

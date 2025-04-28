@@ -26,7 +26,7 @@ ${OBJDIR}/%.o:%.f90
 
 SRCS=trcomm.f90 trbpsd.f90 libsigma.f90 \
      trinit.f90 trparm.f90 trview.f90 \
-     trmetric.f90 trfixed.f90 trprof.f90 trprep.f90 \
+     trmetric.f90 trprof.f90 trprep.f90 \
      trncls.f90 trcytran.f90 trcoll.f90 \
      trfile.f90 trhelp.f90 \
      trpnf.f90 \
@@ -88,8 +88,8 @@ tr2: $(LIBS2) $(OBJDIR)/trmain.o
 tr3: $(LIBS3) $(OBJDIR)/trmain.o 
 	$(FLINKER) $(OBJDIR)/trmain.o $(LIBS3) -o $@ $(FFLAGS) $(FLIBS) $(LIBX_MTX)
 
-trplot: $(OBJDIR)/trcomm.o $(OBJDIR)/trfixed.o $(OBJDIR)/trplot.o 
-	$(FLINKER) $(OBJDIR)/trcomm.o $(OBJDIR)/trfixed.o $(OBJDIR)/trplot.o $(LIBS) -o $@ $(FFLAGS) $(FLIBS) $(LIBX_MTX)
+trplot: $(OBJDIR)/trcomm.o $(OBJDIR)/trplot.o 
+	$(FLINKER) $(OBJDIR)/trcomm.o $(OBJDIR)/trprof.o $(OBJDIR)/trplot.o $(LIBS) -o $@ $(FFLAGS) $(FLIBS) $(LIBX_MTX)
 
 clean : 
 	-rm -f ./#* ./*~ $(OBJDIR)/*.o $(OBJDIR)/*/*.o $(MOD)/*.mod $(MOD)/*/*.mod core *.a
@@ -111,7 +111,6 @@ $(OBJDIR)/trmenu.o : trmenu.f90 trcomm.f90
 $(OBJDIR)/trinit.o : trinit.f90 trcomm.f90
 $(OBJDIR)/trparm.o : trparm.f90 trcomm.f90
 $(OBJDIR)/trview.o : trview.f90 trcomm.f90
-$(OBJDIR)/trfixed.o : trfixed.f90 trcomm.f90
 $(OBJDIR)/trprep.o : trprep.f90 trcomm.f90
 $(OBJDIR)/trprof.o : trprof.f90 trcomm.f90
 $(OBJDIR)/trmetric.o : trmetric.f90 trcomm.f90
@@ -120,7 +119,7 @@ $(OBJDIR)/trbpsd.o : trbpsd.f90 trcomm.f90
 $(OBJDIR)/tradat.o : tradat.f90 trcomm.f90
 $(OBJDIR)/trcoll.o : trcoll.f90 trcomm.f90
 $(OBJDIR)/trloop.o : trloop.f90 trcomm.f90
-$(OBJDIR)/trexec.o : trexec.f90 trcomm.f90 trfixed.f90
+$(OBJDIR)/trexec.o : trexec.f90 trcomm.f90 trprof.f90
 $(OBJDIR)/trpl.o : trpl.f90 trcomm.f90
 $(OBJDIR)/trrslt.o : trrslt.f90 trcomm.f90
 $(OBJDIR)/trcalc.o : trcalc.f90 trcomm.f90

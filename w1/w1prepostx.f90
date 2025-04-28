@@ -287,7 +287,8 @@ CONTAINS
        END SELECT
     ELSE
        RW=2.D6*PI*RF
-       RKWG=WGNZ*RW/VC
+       !       RKWG=WGNZ*RW/VC
+       RKWG=RKZ
        WRITE(6,'(A,1P3E12.4)') 'RF,RW,VC=',RF,RW,VC
        IF(ABS(RKWG).GT.1.E-8) THEN
           WRITE(6,'(A,1P2E12.4)') 'RKWG,LWG=',RKWG,2.D0*PI/RKWG

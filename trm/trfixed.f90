@@ -1,37 +1,37 @@
-! trfixed.f90
+! trgiven.f90
 
-MODULE trfixed
+MODULE trgiven
 
-  !  *** Define fixed profile of density and temperature ***
+  !  *** Calculate given profile of density and temperature ***
 
   USE task_kinds,ONLY: dp
 
   PRIVATE
                                             ! density profile
-  INTEGER:: ntime_nfixed_max                ! number of time points
-  INTEGER:: ndata_nfixed_max                ! number of coef data
-  REAL(dp),PUBLIC:: rho_min_nfixed,rho_max_nfixed  ! range of fixed profile
-  REAL(dp),PUBLIC,ALLOCATABLE:: time_nfixed(:)     ! time points t_i
-  REAL(dp),ALLOCATABLE:: coef_nfixed(:,:)   ! coef data for t_i<= t <t_{i+1}
+  INTEGER:: ntime_ngiven_max                ! number of time points
+  INTEGER:: ndata_ngiven_max                ! number of coef data
+  REAL(dp),PUBLIC:: rho_min_ngiven,rho_max_ngiven  ! range of given profile
+  REAL(dp),PUBLIC,ALLOCATABLE:: time_ngiven(:)     ! time points t_i
+  REAL(dp),ALLOCATABLE:: coef_ngiven(:,:)   ! coef data for t_i<= t <t_{i+1}
                                             ! temperature profile
-  INTEGER:: ntime_tfixed_max                ! number of time points
-  INTEGER:: ndata_tfixed_max                ! number of coef data
-  REAL(dp),PUBLIC :: rho_min_tfixed,rho_max_tfixed  ! range of fixed profile
-  REAL(dp),PUBLIC,ALLOCATABLE:: time_tfixed(:)     ! time points t_i
-  REAL(dp),ALLOCATABLE:: coef_tfixed(:,:)   ! coef data for t_i<= t <t_{i+1}
+  INTEGER:: ntime_tgiven_max                ! number of time points
+  INTEGER:: ndata_tgiven_max                ! number of coef data
+  REAL(dp),PUBLIC :: rho_min_tgiven,rho_max_tgiven  ! range of given profile
+  REAL(dp),PUBLIC,ALLOCATABLE:: time_tgiven(:)     ! time points t_i
+  REAL(dp),ALLOCATABLE:: coef_tgiven(:,:)   ! coef data for t_i<= t <t_{i+1}
 
-  PUBLIC tr_set_nfixed  ! set coef matrix for n
-  PUBLIC tr_set_tfixed  ! set coef matrix for nT
-  PUBLIC tr_prof_nfixed ! set fixed density profile
-  PUBLIC tr_prof_tfixed ! set fixed temperature profile
-  PUBLIC tr_prep_nfixed ! read fixed density pfofile parameters
-  PUBLIC tr_prep_tfixed ! read fixed temperature profile parameters
+  PUBLIC tr_set_ngiven  ! set coef matrix for n
+  PUBLIC tr_set_tgiven  ! set coef matrix for nT
+  PUBLIC tr_prof_ngiven ! set given density profile
+  PUBLIC tr_prof_tgiven ! set given temperature profile
+  PUBLIC tr_prep_ngiven ! read given density pfofile parameters
+  PUBLIC tr_prep_tgiven ! read given temperature profile parameters
 
 CONTAINS
 
-  !     ***** Routine for fixed density profile *****
+  !     ***** Routine for given density profile *****
       
-  SUBROUTINE tr_set_nfixed(nr,time)
+  SUBROUTINE tr_set_ngiven(nr,time)
 
     USE trcomm
     USE trcomx
@@ -41,13 +41,13 @@ CONTAINS
     REAL(rkind):: rn_local
     INTEGER:: NS,NEQ,NW
 
-    IF(model_nfixed.EQ.0) RETURN
-    IF(time.LE.time_nfixed(1)) return
-    IF(model_nfixed.EQ.2) THEN
-       IF((rm(nr).LT.rho_min_nfixed).OR. &
-            (rm(nr).GT.rho_max_nfixed)) RETURN
+    IF(model_ngiven.EQ.0) RETURN
+    IF(time.LE.time_ngiven(1)) return
+    IF(model_ngiven.EQ.2) THEN
+       IF((rm(nr).LT.rho_min_ngiven).OR. &
+            (rm(nr).GT.rho_max_ngiven)) RETURN
     END IF
-    CALL tr_prof_nfixed(rm(nr),time,rn_local)
+    CALL tr_prof_ngiven(rm(nr),time,rn_local)
     NEQ=NEA(1,1) ! NEQ of electron density equation
     DO NW=1,NEQMAX
        A(NEQ,NW,NR) = 0.D0
@@ -55,8 +55,8 @@ CONTAINS
        C(NEQ,NW,NR) = 0.D0
     END DO
     D(NEQ,NR)=0.D0
-!    B(NEQ,NEQ,NR)=-1.D0/tau_nfixed
-!    D(NEQ,NR)=rn_local/tau_nfixed
+!    B(NEQ,NEQ,NR)=-1.D0/tau_ngiven
+!    D(NEQ,NR)=rn_local/tau_ngiven
     RD(NEQ,NR)=1.D0
     DO NS=2,NSMAX
        NEQ=NEA(NS,1) ! NEQ of density equation
@@ -66,16 +66,16 @@ CONTAINS
           C(NEQ,NW,NR) = 0.D0
        END DO
        D(NEQ,NR)=0.D0
-!       B(NEQ,NEQ,NR)=-1.D0/tau_nfixed
-!       D(NEQ,NR)=pn(ns)/(pz(ns)*pn(1))*rn_local/tau_nfixed
+!       B(NEQ,NEQ,NR)=-1.D0/tau_ngiven
+!       D(NEQ,NR)=pn(ns)/(pz(ns)*pn(1))*rn_local/tau_ngiven
        RD(NEQ,NR)=1.D0
     END DO
     RETURN
-  END SUBROUTINE tr_set_nfixed
+  END SUBROUTINE tr_set_ngiven
       
-  !     ***** Routine for fixed temperature profile *****
+  !     ***** Routine for given temperature profile *****
       
-  SUBROUTINE tr_set_tfixed(nr,time)
+  SUBROUTINE tr_set_tgiven(nr,time)
 
     USE trcomm
     USE trcomx
@@ -85,13 +85,13 @@ CONTAINS
     REAL(rkind):: rt_local
     INTEGER:: NS,NEQ,NW
 
-    IF(model_tfixed.EQ.0) RETURN
-    IF(time.LE.time_tfixed(1)) return
-    IF(model_tfixed.EQ.2) THEN
-       IF((rm(nr).LT.rho_min_tfixed).OR. &
-            (rm(nr).GT.rho_max_tfixed)) RETURN
+    IF(model_tgiven.EQ.0) RETURN
+    IF(time.LE.time_tgiven(1)) return
+    IF(model_tgiven.EQ.2) THEN
+       IF((rm(nr).LT.rho_min_tgiven).OR. &
+            (rm(nr).GT.rho_max_tgiven)) RETURN
     END IF
-    CALL tr_prof_tfixed(rm(nr),time,rt_local)
+    CALL tr_prof_tgiven(rm(nr),time,rt_local)
     NEQ=NEA(1,1) ! NEQ of electron density equation
     DO NW=1,NEQMAX
        A(NEQ,NW,NR) = 0.D0
@@ -99,8 +99,8 @@ CONTAINS
        C(NEQ,NW,NR) = 0.D0
     END DO
     D(NEQ,NR)=0.D0
-!    B(NEQ,NEQ,NR)=-1.D0/tau_tfixed
-!    D(NEQ,NR)=rt_local/tau_tfixed
+!    B(NEQ,NEQ,NR)=-1.D0/tau_tgiven
+!    D(NEQ,NR)=rt_local/tau_tgiven
     RD(NEQ,NR)=1.D0
     DO NS=2,NSMAX
        NEQ=NEA(NS,2) ! NEQ of temperature equation
@@ -110,36 +110,36 @@ CONTAINS
           C(NEQ,NW,NR) = 0.D0
        END DO
        D(NEQ,NR)=0.D0
-!       B(NEQ,NEQ,NR)=-1.D0/tau_tfixed
-!       D(NEQ,NR)=rt_local/tau_tfixed
+!       B(NEQ,NEQ,NR)=-1.D0/tau_tgiven
+!       D(NEQ,NR)=rt_local/tau_tgiven
        RD(NEQ,NR)=1.D0
     END DO
     RETURN
-  END SUBROUTINE tr_set_tfixed
+  END SUBROUTINE tr_set_tgiven
       
-  ! *** set fixed density profile ***
+  ! *** set given density profile ***
   
-  SUBROUTINE tr_prof_nfixed(rho,time,rn)
+  SUBROUTINE tr_prof_ngiven(rho,time,rn)
   
     USE task_kinds,ONLY: dp
     IMPLICIT NONE    
     REAL(dp),INTENT(IN):: rho,time
     REAL(dp),INTENT(OUT):: rn
-    REAL(dp):: tr_func_nfixed
+    REAL(dp):: tr_func_ngiven
     REAL(dp),ALLOCATABLE:: coef(:)
     REAL(dp):: factor
     INTEGER:: id,i,ntime
 
     ! --- find time range ---
 
-    IF(time.LT.time_nfixed(1)) THEN
+    IF(time.LT.time_ngiven(1)) THEN
        RETURN
-    ELSE IF (time.GE.time_nfixed(ntime_nfixed_max)) THEN
-       id=ntime_nfixed_max
+    ELSE IF (time.GE.time_ngiven(ntime_ngiven_max)) THEN
+       id=ntime_ngiven_max
     ELSE
-       DO ntime=1,ntime_nfixed_max-1
-          IF(time.GE.time_nfixed(ntime).AND. &
-               time.LT.time_nfixed(ntime+1)) THEN
+       DO ntime=1,ntime_ngiven_max-1
+          IF(time.GE.time_ngiven(ntime).AND. &
+               time.LT.time_ngiven(ntime+1)) THEN
              id=ntime
           END IF
        END DO
@@ -147,17 +147,17 @@ CONTAINS
 
     ! --- set profile coefficients ---
     
-    ALLOCATE(coef(0:ndata_nfixed_max))
-    IF(id.EQ.ntime_nfixed_max) THEN ! after time_nfixed(ntime_nfixed_max)
-       DO i=0,ndata_nfixed_max
-          coef(i)=coef_nfixed(i,ntime_nfixed_max)
+    ALLOCATE(coef(0:ndata_ngiven_max))
+    IF(id.EQ.ntime_ngiven_max) THEN ! after time_ngiven(ntime_ngiven_max)
+       DO i=0,ndata_ngiven_max
+          coef(i)=coef_ngiven(i,ntime_ngiven_max)
        END DO
-    ELSE ! between time_nfixed(id) and time_nfixed(id+1)
-       factor=(time-time_nfixed(id)) &
-             /(time_nfixed(id+1)-time_nfixed(id))
-       DO i=0,ndata_nfixed_max
-          coef(i)=(1.D0-factor)*coef_nfixed(i,id) &
-                        +factor*coef_nfixed(i,id+1)
+    ELSE ! between time_ngiven(id) and time_ngiven(id+1)
+       factor=(time-time_ngiven(id)) &
+             /(time_ngiven(id+1)-time_ngiven(id))
+       DO i=0,ndata_ngiven_max
+          coef(i)=(1.D0-factor)*coef_ngiven(i,id) &
+                        +factor*coef_ngiven(i,id+1)
        END DO
     END IF
 
@@ -171,32 +171,32 @@ CONTAINS
     rn=rn*1.D-20
     IF(rn.LE.0.D0) rn=1.D-8
     RETURN
-  END SUBROUTINE tr_prof_nfixed
+  END SUBROUTINE tr_prof_ngiven
 
-  ! *** set fixed temperature profile ***
+  ! *** set given temperature profile ***
   
-  SUBROUTINE tr_prof_tfixed(rho,time,rt)
+  SUBROUTINE tr_prof_tgiven(rho,time,rt)
   
     USE task_kinds,ONLY: dp
-    USE trcomm,ONLY: model_tfixed
+    USE trcomm,ONLY: model_tgiven
     IMPLICIT NONE    
     REAL(dp),INTENT(IN):: rho,time
     REAL(dp),INTENT(OUT):: rt
-    REAL(dp):: tr_func_tfixed
+    REAL(dp):: tr_func_tgiven
     REAL(dp),ALLOCATABLE:: coef(:)
     REAL(dp):: factor
     INTEGER:: id,i,ntime
 
     ! --- find time range ---
 
-    IF(time.LE.time_tfixed(1)) THEN
+    IF(time.LE.time_tgiven(1)) THEN
        RETURN
-    ELSE IF (time.GE.time_tfixed(ntime_tfixed_max)) THEN
-       id=ntime_tfixed_max
+    ELSE IF (time.GE.time_tgiven(ntime_tgiven_max)) THEN
+       id=ntime_tgiven_max
     ELSE
-       DO ntime=1,ntime_tfixed_max-1
-          IF(time.GE.time_tfixed(ntime).AND. &
-               time.LE.time_tfixed(ntime+1)) THEN
+       DO ntime=1,ntime_tgiven_max-1
+          IF(time.GE.time_tgiven(ntime).AND. &
+               time.LE.time_tgiven(ntime+1)) THEN
              id=ntime
           END IF
        END DO
@@ -204,21 +204,21 @@ CONTAINS
 
     ! --- set profile coefficients ---
     
-    ALLOCATE(coef(0:ndata_tfixed_max))
-    IF(id.EQ.0) THEN ! before time_nfixed(1)
-       DO i=0,ndata_tfixed_max
-          coef(i)=coef_tfixed(i,1)
+    ALLOCATE(coef(0:ndata_tgiven_max))
+    IF(id.EQ.0) THEN ! before time_ngiven(1)
+       DO i=0,ndata_tgiven_max
+          coef(i)=coef_tgiven(i,1)
        END DO
-    ELSE IF(id.EQ.ntime_tfixed_max) THEN ! after time_nfixed(ntime_nfixed_max)
-       DO i=0,ndata_tfixed_max
-          coef(i)=coef_tfixed(i,ntime_tfixed_max)
+    ELSE IF(id.EQ.ntime_tgiven_max) THEN ! after time_ngiven(ntime_ngiven_max)
+       DO i=0,ndata_tgiven_max
+          coef(i)=coef_tgiven(i,ntime_tgiven_max)
        END DO
-    ELSE ! between time_nfixed(id) and time_nfixed(id+1)
-       factor=(time-time_tfixed(id)) &
-             /(time_tfixed(id+1)-time_tfixed(id))
-       DO i=0,ndata_tfixed_max
-          coef(i)=(1.D0-factor)*coef_tfixed(i,id) &
-                        +factor*coef_tfixed(i,id+1)
+    ELSE ! between time_ngiven(id) and time_ngiven(id+1)
+       factor=(time-time_tgiven(id)) &
+             /(time_tgiven(id+1)-time_tgiven(id))
+       DO i=0,ndata_tgiven_max
+          coef(i)=(1.D0-factor)*coef_tgiven(i,id) &
+                        +factor*coef_tgiven(i,id+1)
        END DO
     END IF
 
@@ -231,52 +231,52 @@ CONTAINS
          +0.5D0*coef(8)*(1.D0-erf((rho-coef(9))/SQRT(2.D0*coef(10))))
     rt=rt*1.D-3
     RETURN
-  END SUBROUTINE tr_prof_tfixed
+  END SUBROUTINE tr_prof_tgiven
 
   ! *** read density profile data from file ***
 
-  SUBROUTINE tr_prep_nfixed
-    USE trcomm,ONLY: knam_nfixed
+  SUBROUTINE tr_prep_ngiven
+    USE trcomm,ONLY: knam_ngiven
     USE libfio
     IMPLICIT NONE
     INTEGER:: nfl,ntime,ndata,ierr
 
     NFL=12
-    CALL fropen(NFL,knam_nfixed,1,0,'fn',ierr)
-    READ(NFL,*) ntime_nfixed_max,ndata_nfixed_max,rho_min_nfixed,rho_max_nfixed
-    IF(ALLOCATED(time_nfixed)) DEALLOCATE(time_nfixed)
-    IF(ALLOCATED(coef_nfixed)) DEALLOCATE(coef_nfixed)
-    ALLOCATE(time_nfixed(ntime_nfixed_max))
-    ALLOCATE(coef_nfixed(0:ndata_nfixed_max,ntime_nfixed_max))
-    DO ntime=1,ntime_nfixed_max
-       READ(NFL,*) time_nfixed(ntime)
-       READ(NFL,*) (coef_nfixed(ndata,ntime),ndata=0,ndata_nfixed_max)
+    CALL fropen(NFL,knam_ngiven,1,0,'fn',ierr)
+    READ(NFL,*) ntime_ngiven_max,ndata_ngiven_max,rho_min_ngiven,rho_max_ngiven
+    IF(ALLOCATED(time_ngiven)) DEALLOCATE(time_ngiven)
+    IF(ALLOCATED(coef_ngiven)) DEALLOCATE(coef_ngiven)
+    ALLOCATE(time_ngiven(ntime_ngiven_max))
+    ALLOCATE(coef_ngiven(0:ndata_ngiven_max,ntime_ngiven_max))
+    DO ntime=1,ntime_ngiven_max
+       READ(NFL,*) time_ngiven(ntime)
+       READ(NFL,*) (coef_ngiven(ndata,ntime),ndata=0,ndata_ngiven_max)
     END DO
     CLOSE(NFL)
     RETURN
-  END SUBROUTINE tr_prep_nfixed
+  END SUBROUTINE tr_prep_ngiven
     
   ! *** read temperature profile data from file ***
 
-  SUBROUTINE tr_prep_tfixed
-    USE trcomm,ONLY: knam_tfixed
+  SUBROUTINE tr_prep_tgiven
+    USE trcomm,ONLY: knam_tgiven
     USE libfio
     IMPLICIT NONE
     INTEGER:: nfl,ntime,ndata,ierr
 
     NFL=12
-    CALL fropen(NFL,knam_tfixed,1,0,'ft',ierr)
-    READ(NFL,*) ntime_tfixed_max,ndata_tfixed_max,rho_min_tfixed,rho_max_tfixed
-    IF(ALLOCATED(time_tfixed)) DEALLOCATE(time_tfixed)
-    IF(ALLOCATED(coef_tfixed)) DEALLOCATE(coef_tfixed)
-    ALLOCATE(time_tfixed(ntime_tfixed_max))
-    ALLOCATE(coef_tfixed(0:ndata_tfixed_max,ntime_tfixed_max))
-    DO ntime=1,ntime_tfixed_max
-       READ(NFL,*) time_tfixed(ntime)
-       READ(NFL,*) (coef_tfixed(ndata,ntime),ndata=0,ndata_tfixed_max)
+    CALL fropen(NFL,knam_tgiven,1,0,'ft',ierr)
+    READ(NFL,*) ntime_tgiven_max,ndata_tgiven_max,rho_min_tgiven,rho_max_tgiven
+    IF(ALLOCATED(time_tgiven)) DEALLOCATE(time_tgiven)
+    IF(ALLOCATED(coef_tgiven)) DEALLOCATE(coef_tgiven)
+    ALLOCATE(time_tgiven(ntime_tgiven_max))
+    ALLOCATE(coef_tgiven(0:ndata_tgiven_max,ntime_tgiven_max))
+    DO ntime=1,ntime_tgiven_max
+       READ(NFL,*) time_tgiven(ntime)
+       READ(NFL,*) (coef_tgiven(ndata,ntime),ndata=0,ndata_tgiven_max)
     END DO
     CLOSE(NFL)
     RETURN
-  END SUBROUTINE tr_prep_tfixed
+  END SUBROUTINE tr_prep_tgiven
   
-END MODULE trfixed
+END MODULE trgiven

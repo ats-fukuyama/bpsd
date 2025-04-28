@@ -24,6 +24,8 @@ CONTAINS
          '## W1 MENU: P,V/PARM  R/RUN  G/GRAF  D/DISP  S,L,W/FILE  Q/QUIT'
 
     CALL TASK_KLIN(line,kid,mode,w1_parm)
+    WRITE(6,*) line
+    IF(mode.EQ.3) stop
     IF(mode /= 1) GOTO 1
 !    IF(nxmax.NE.nxmax_save) THEN  ! data structure was modified
 !       INIT=0

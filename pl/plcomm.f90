@@ -39,9 +39,13 @@ MODULE plcomm_parm
       INTEGER,PARAMETER:: NCOILM=30 ! Maximum number of mirror coils
 
       INTEGER:: NSMAX,NCOILMAX
-      INTEGER:: MODELG,MODELB,MODELN,MODELQ,IDEBUG,MODEFR,MODEFW
+      INTEGER:: nsfmax,nszmax,nsnmax,nstmax
+      INTEGER:: MODELG,MODELB,MODELQ,IDEBUG,MODEFR,MODEFW
       INTEGER:: mdlplw
-      INTEGER:: MODEL_PROF,MODEL_NPROF,model_coll,model_eqdsk_psi
+      INTEGER:: model_prof,model_nprof,model_coll,model_eqdsk_psi
+      INTEGER:: model_prof_time,model_sigv
+      INTEGER:: & ! NS of bulk species (first in NS)
+           NS_e,NS_D,NS_T,NS_He4,NS_H,NS_He3,NS_C,NS_Fe
 
       REAL(rkind):: RR,RA,RB,RKAP,RDLT,BB,Q0,QA,RIP,PROFJ
       REAL(rkind):: RMIR,ZBB,Hpitch1,Hpitch2,RRCH
@@ -67,6 +71,13 @@ MODULE plcomm_parm
 
       CHARACTER(len=80):: KNAMEQ,KNAMWR,KNAMFP,KNAMWM,KNAMPF,KNAMFO,KNAMTR
       CHARACTER(len=80):: KNAMEQ2
+      CHARACTER(len=128):: knam_profg_TOTAL,knam_profm_TOTAL
+
+    CONTAINS
+
+      SUBROUTINE pl_parm_dumm
+        RETURN
+      END SUBROUTINE pl_parm_dumm
 
 END MODULE plcomm_parm
 

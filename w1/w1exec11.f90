@@ -18,6 +18,7 @@ CONTAINS
     INTEGER,INTENT(IN):: NZ
     INTEGER,INTENT(OUT):: IERR
 
+    
     IERR=0
     CALL W1DSPQ
     CALL W1BNDQ(NZ,IERR)
@@ -46,7 +47,9 @@ CONTAINS
     COMPLEX(rkind):: CT0,CT1,CT2,CT3
     COMPLEX(rkind):: CW,CARG,FWP,FWC,WC
     
-! Allocation of local data array
+    WRITE(6,*) '@@@ exec11: RZ=',RZ
+
+    ! Allocation of local data array
 
     IF(ALLOCATED(XM)) DEALLOCATE(XM,YX,YK,CS0,CS1,CS2,CS3)
     ALLOCATE(XM(NXMAX),YX(NXMAX,NSMAX),YK(NXMAX))

@@ -15,7 +15,6 @@ CONTAINS
     USE trbpsd
     USE trmetric
 
-    USE trfixed
     USE libsigma
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: ierr

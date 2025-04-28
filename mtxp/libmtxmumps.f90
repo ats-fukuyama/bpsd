@@ -535,7 +535,6 @@
       REAL(dp),OPTIONAL:: damping_factor,emax,emin
       INTEGER:: i,isum
 
-      WRITE(6,*) '@@@ point 4541'
       call mtx_allgather1_integer(istart-1,istartx)
       call mtx_allgather1_integer(iend,iendx)
       do i=0,nsize-1
@@ -563,7 +562,6 @@
 !         enddo
 !      endif
 
-      WRITE(6,*) '@@@ point 4542'
       call mtx_allgatherv_complex8(bc_loc,iend-istart+1,bc,imax,isizex,istartx)
       do i=1,imax
          idc%RHS(i)=bc(i)
@@ -624,11 +622,9 @@
 !         enddo
 !      endif
 
-      WRITE(6,*) '@@@ point 4543'
       idc%JOB=6
       CALL zmumps(idc)
 
-      WRITE(6,*) '@@@ point 4544'
       CALL mtx_broadcast_complex8(idc%RHS,imax)
       its=0
       RETURN

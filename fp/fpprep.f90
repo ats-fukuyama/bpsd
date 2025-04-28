@@ -451,6 +451,7 @@
 
       SUBROUTINE FPCINI
 
+      USE plcomm
       USE plprof
       IMPLICIT NONE
       integer:: NSA, NR, NTH, NP, NS
@@ -521,6 +522,8 @@
       IMPLICIT NONE
       INTEGER:: ierr, NREND1, keys
       INTEGER,DIMENSION(nsize):: ima1,ima2,npa1,npa2,nra1,nra2,nma1,nma2,insa1,insa2
+      WRITE(6,*) NSAMAX
+      WRITE(6,*) N_partition_s
       ierr=0
       
 !     ----- Check nsize -----

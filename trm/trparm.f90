@@ -63,7 +63,7 @@ CONTAINS
            MDLIMP,PNC,PNFE,PNNU,PNNUS, &
            PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
            PROFNU1,PROFNU2,PROFJ1,PROFJ2,ALP, &
-           model_prof,knam_prof,knam_nfixed,knam_tfixed, &
+           model_prof,knam_prof,knam_ngiven,knam_tgiven, &
            AD0,AV0,CNP,CNH,CDP,CDH,CNN,CDW, &
            MDLKAI,MDLETA,MDLAD,MDLAVK,MDLJBS,MDLKNC,MDLTPF, &
            MDLWLD,MDLDW,MDLCD05, &
@@ -90,7 +90,7 @@ CONTAINS
            MDLEQB,MDLEQN,MDLEQT,MDLEQU,MDLEQZ,MDLEQ0,MDLEQE,MDLEOI, &
            MDLER,MDLNCL,NSLMAX, &
            MDLELM,ELMWID,ELMDUR,ELMNRD,ELMTRD,ELMENH, &
-           MDLTC,MDLPCK,model_nfixed,model_tfixed, &
+           MDLTC,MDLPCK,model_ngiven,model_tgiven, &
            KUFDIR,KUFDev,KUFDCG, &
            KNAMEQ,KNAMEQ2,KNAMTR,KFNLOG,KFNTXT,KFNCVS
 
@@ -142,8 +142,8 @@ CONTAINS
              ' ',8X,'TIME_INT,MODEP,MDNI,MDLJQ,MDLTC,MDLPCK'/ &
              ' ',8X,'KNAMEQ,KNAMEQ2,KNAMTR,KFNLOG,KFNTXT,KFNCVS,'/ &
              ' ',8X,'MDLPSC,NPSCMAX,PSCIN,PSCR0,PSCRW,NSPSC'/ &
-             ' ',8X,'knam_nfixed,knam_tfixed'/ &
-             ' ',8X,'model_nfixed,model_tfixed')
+             ' ',8X,'knam_ngiven,knam_tgiven'/ &
+             ' ',8X,'model_ngiven,model_tgiven')
     END SUBROUTINE trplst
 
 !     ***** CHECK INPUT PARAMETERS *****

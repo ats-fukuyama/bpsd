@@ -325,7 +325,7 @@
 !             12: 2D plane profile (B read from file)
 !             13: 2D plane profile (simple parabolic cylinder)
 
-!        MODELN: Control plasma profile
+!        model_prof: Control plasma profile
 !                   0: Calculated from PN,PNS,PTPR,PTPP,PTS,PU,PUS; PN=0 in SOL
 !                   1: Calculated from PN,PNS,PTPR,PTPP,PTS,PU,PUS; PNS in SOL
 !                   2: n,T from pressure profile; u from PU,PUS; PNS in SOL
@@ -334,6 +334,15 @@
 !                   9: Read from bpsd_plasmaf
 !                  21: Read from trdata
 !                  31: Calculated from profn_travis and proft_travis
+!                  41: Read profile data from TOTAL
+!        model_prof_time: time-dependent plasma profile   
+!                   0: no time dependence
+!                   1: read density profile
+!                   2: read temperature profile
+!                   3: read density and temperature profile
+!                   5: read density profile between rho_min and rho_max
+!                   6: read temperature profil nbetween rho_min and rho_max
+!                   7: read density and temperature profile between min and max
 !        MODELQ: Control safety factor profile (for MODELG=1,2)
 !                   0: Parabolic q profile (Q0,QA,RHOMIN)
 !                   1: Given current profile (RIP,PROFJ)
@@ -341,9 +350,9 @@
 !                   0: nu_coll=PZCL*omega
 !                   1: nu_coll=Coulomb collision freq.
 !                   2: nu_coll=Coulomb collision + neutral collision freq.
-!        MODEL_PROF: profile parameter
-!                   0: PROFX1(NS)=PROFX1(1),PROFX2(NS)=PROFX2(1): compatibility
-!                   1: PROFX1(NS),PROFX2(NS): defined separately
+!        model_sigv: collisional cross section 
+!                   0: sigmav=0.88D-20*vte
+!                   1: sigmav from atomic data
 !        MODEL_NPROF: neutral profile parameter
 !                   0: Flat profile
 !                   1: Flat only in plasma, 0 outside
@@ -353,10 +362,11 @@
 
       MODELG= 2
       MODELB= 0
-      MODELN= 0
+      model_prof= 0
+      model_prof_time= 0
       MODELQ= 0
       model_coll=0
-      MODEL_PROF=0
+      model_sigv=0
       MODEL_NPROF=0
       model_eqdsk_psi=1
 
@@ -416,6 +426,8 @@
       KNAMFO = 'fodata'
       KNAMPF = 'pfdata'
       KNAMTR = 'trdata'
+      knam_profg_TOTAL='data/tr.f011v2.prof'
+      knam_profm_TOTAL='data/tr.f011v2.prof2'
 
 !     ======( FILE IO MODES )======
 

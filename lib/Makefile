@@ -4,10 +4,10 @@ include ../make.header
 .SUFFIXES:
 .SUFFIXES: .f .f90 .mod .o .a
 
-LFLAGS = $(OFLAGS)
-#LFLAGS = $(DFLAGS)
-FFLAGS = $(OFLAGS)
-#FFLAGS = $(DFLAGS)
+#LFLAGS = $(OFLAGS)
+LFLAGS = $(DFLAGS)
+#FFLAGS = $(OFLAGS)
+FFLAGS = $(DFLAGS)
 
 MODINCLUDE= -I $(MOD)
 OBJDIR=./obj
@@ -42,7 +42,8 @@ SRCSGRF   =  libgrf/grftype.f90 libgrf/grfutils.f90 libgrf/grdutils.f90 \
 	     libgrf.f90
 
 SRCSPKF   =  libpkf/libpdkf_eul.f90 libpkf/libpdkf.f90 \
-             libpkf/libpdkf2.f90 libpkf/libpgkf.f90
+             libpkf/libpdkf2.f90 libpkf/libpgkf.f90 \
+             libpkf/wieul.f90
 
 SRCSFIXED =  $(LAPACK)
 
@@ -72,7 +73,7 @@ check :
 
 clean:
 	-rm -f core* a.out *.o */*.o libgrf/*.o libpkf/*.o libufile/*.o $(OBJDIR)/*.o $(OBJDIR)/*/*.o $(MOD)/*.mod $(MOD)/*/*.mod *.a ./*~ ./#* $(MOD)/*.mod
-	-rm -f testairy testbes testell testfem testfem_func testgrd testgrf testqsort testspl testspl3d testpol testduo testrk testtri testde
+	-rm -f testsairy testbes testell testfem testfem_func testgrd testgrf testqsort testspl testspl3d testpol testduo testrk testtri testde
 
 veryclean: clean
 
@@ -115,9 +116,6 @@ testgrd: libtask.a libgrf.a $(OBJDIR)/testgrd.o
 
 testpkf: libtask.a libgrf.a libpkf.a $(OBJDIR)/testpkf.o 
 	$(FCFIXED) $(OBJDIR)/testpkf.o libtask.a libgrf.a libpkf.a $(FFLAGS) -o $@ $(FLIBS)
-
-plotpkf: libtask.a libgrf.a libpkf.a $(OBJDIR)/plotpkf.o 
-	$(FCFIXED) $(OBJDIR)/plotpkf.o libtask.a libgrf.a libpkf.a $(FFLAGS) -o $@ $(FLIBS)
 
 testqsort: libtask.a $(OBJDIR)/testqsort.o 
 	$(FCFREE) $(OBJDIR)/testqsort.o libtask.a libgrf.a $(FFLAGS) -o $@ $(FLIBS)

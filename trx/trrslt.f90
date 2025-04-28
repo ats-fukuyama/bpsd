@@ -895,17 +895,20 @@
       ENDIF
 
       IF(KID.EQ.'6') THEN
-         WRITE(6,651)T,TAUE1,TAUE2,TAUE89,PINT
+         WRITE(6,651)T,TAUE1,TAUE2,TAUE89,PINT,H98Y2,TAUE98
  651     FORMAT(' ','# TIME : ',F7.3,' SEC'/ &
      &          ' ',3X,'TAUE1 =',1PD10.3,'  TAUE2 =',1PD10.3, &
-     &               '  TAUE89=',1PD10.3,'  PINT  =',1PD10.3)
+     &               '  TAUE89=',1PD10.3,'  PINT  =',1PD10.3/ &
+     &          ' ',3X,'H98Y2 =',1PD10.3,'  TAUE98=',1PD10.3)
       ENDIF
 
       IF(KID.EQ.'7'.OR.KID.EQ.'8') THEN
-         WRITE(6,671) T,WPT,TAUE1,TAUE2,TAUE89,BETAN,BETAPA,BETA0,BETAA
+         WRITE(6,671) T,WPT,TAUE1,TAUE2,TAUE89,H98Y2,TAUE98, &
+              BETAN,BETAPA,BETA0,BETAA
   671    FORMAT(' ','# TIME : ',F7.3,' SEC'/ &
      &          ' ',3X,'WPT   =',1PD10.3,'  TAUE1 =',1PD10.3, &
      &               '  TAUE2 =',1PD10.3,'  TAUE89=',1PD10.3/ &
+     &          ' ',3X,'H98Y2 =',1PD10.3,'  TAUE98=',1PD10.3/ &
      &          ' ',3X,'BETAN =',1PD10.3,'  BETAPA=',1PD10.3, &
      &               '  BETA0 =',1PD10.3,'  BETAA =',1PD10.3)
 

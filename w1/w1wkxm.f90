@@ -23,7 +23,7 @@ MODULE w1wkxm
     ALLOCATE(CSOL(2,NXPMAX))
 
     DO NX = 1 , NXPMAX
-         CDSP2 = CD0(1,NX)+CD1(1,NX)**2
+       CDSP2 = CD0(1,NX)+CD1(1,NX)**2
        CDSP1 =-CD0(1,NX)*(CD0(3,NX)+CD0(4,NX))-CD0(2,NX)**2 &
               +2.D0*CD0(2,NX)*CD1(1,NX)*CD1(2,NX) &
               +CD0(1,NX)*CD1(2,NX)**2 &

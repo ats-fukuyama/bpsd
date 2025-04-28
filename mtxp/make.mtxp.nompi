@@ -14,8 +14,8 @@ LIBX_MTX_BND=$(LIB_MTX_BND)
 LIBX_MTX_PCG=$(LIB_MTX_PCG)
 
 ### Selection of default setup ###
-###     overwritten in Makefile in each directory ###
-###     remove comment # of two lines in an appropriate block###
+###    overwritten in Makefile in each directory ###
+###    remove comment # of two lines in an appropriate block###
 
 ## without PETSC, direct band matrix solver
 LIB_MTX=$(LIB_MTX_BND)

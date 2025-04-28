@@ -121,6 +121,8 @@ CONTAINS
       !    ==== PROFILE PARAMETERS ====
 
       !    model_prof: profile model
+      !                0: default profile file with PROFN/T/U/NU/J
+      !               11: dennsity profile
       !    knam_prof: profile data file name
       
       !    PROFN* : PROFILE PARAMETER OF INITIAL DENSITY
@@ -159,10 +161,10 @@ CONTAINS
       ALP(5) = 1.0D0
       ALP(6) = 1.0D0
       
-      !  ====== Fixed profile =====      
+      !  ====== time dependent given profile =====      
 
-      !  model_nfixed: for density profile
-      !  model_tfixed: for temperature profile
+      !  model_ngiven: for density profile
+      !  model_tgiven: for temperature profile
       !     0: no fixed profile      
       !     1: fixed profile (x=n for density, x=t for temperatrue) 
       !     2: fixed profile for rho_min_xfixed <= rho <= rho_max_xfixed
@@ -180,13 +182,13 @@ CONTAINS
       !             +0.5D0*coef(8)*(1.D0-erf((rho(nr)-coef(9))
       !              /SQRT(2.D0*coef(10))))
       !
-      !  knam_nfixed: density fixed profile file name
-      !  knam_tfixed: temperature fixed profile file name
+      !  knam_ngiven: density fixed profile file name
+      !  knam_tgiven: temperature fixed profile file name
       
-      model_nfixed=0
-      model_tfixed=0
-      knam_nfixed='nprof_coef_data'
-      knam_tfixed='tprof_coef_data'
+      model_ngiven=0
+      model_tgiven=0
+      knam_ngiven='nprof_coef_data'
+      knam_tgiven='tprof_coef_data'
 
 
       !  ==== IMPURITY ans neutral PARAMETERS ====
@@ -790,7 +792,6 @@ CONTAINS
       KFNLOG='tr.log'
       KFNTXT='tr.txt'
       KFNCVS='tr.cvs'
-
       RETURN
       END SUBROUTINE tr_init
 END MODULE trinit

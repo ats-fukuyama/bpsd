@@ -16,7 +16,8 @@ MODULE fpcomm_parm
       integer,parameter:: NRAYM=20
       real(rkind),parameter:: rkev=aee*1.D3
 
-      integer:: NSAMAX,NSBMAX,NS_NSA(NSM),NS_NSB(NSM)
+      INTEGER:: nsamax,nsbmax
+      INTEGER:: ns_nsa(NSM),ns_nsb(NSM)
       integer:: NSA_F1,NTH_F1,NR_F1
       integer:: LMAX_WR
       integer:: NBEAMMAX,NSSPB(NBEAMM),NSSPF

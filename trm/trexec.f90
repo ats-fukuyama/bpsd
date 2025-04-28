@@ -17,7 +17,7 @@ CONTAINS
 
       USE TRCOMM
       USE trcomx
-      USE trfixed
+      USE trprof
       USE libbnd
       USE libitp
       IMPLICIT NONE
@@ -25,7 +25,7 @@ CONTAINS
       INTEGER:: I, ICHCK, INFO, J, L, LDB, M, MWRMAX, &
            N, NEQ, NEQ1, NEQRMAX, NR, NRHS, NSSN, NSSN1, &
            NSTN, NSTN1, NSVN, NSVN1, KL, KU, NF
-      INTEGER:: id_nfixed,id_tfixed
+      INTEGER:: id_ngiven,id_tgiven
       REAL(rkind)   :: AJL, FACTOR0, FACTORM, FACTORP, TSL
       REAL(rkind):: rne_local,rt_local
       INTEGER,DIMENSION(NEQMAXM*NRMAX) :: IPIV
@@ -143,19 +143,19 @@ CONTAINS
 !      CALL TRXTOA
 !      GO TO 6000
 
-      id_nfixed=0
-      id_tfixed=0
-      IF(model_nfixed.EQ.1) THEN
-         IF(t.GE.time_nfixed(1)) id_nfixed=1
+      id_ngiven=0
+      id_tgiven=0
+      IF(model_ngiven.EQ.1) THEN
+         IF(t.GE.time_ngiven(1)) id_ngiven=1
       END IF
-      IF(model_nfixed.EQ.2) THEN
-         IF(t.GE.time_nfixed(1)) id_nfixed=2
+      IF(model_ngiven.EQ.2) THEN
+         IF(t.GE.time_ngiven(1)) id_ngiven=2
       END IF
-      IF(model_tfixed.EQ.1) THEN
-         IF(t.GE.time_tfixed(1)) id_tfixed=1
+      IF(model_tgiven.EQ.1) THEN
+         IF(t.GE.time_tgiven(1)) id_tgiven=1
       END IF
-      IF(model_tfixed.EQ.2) THEN
-         IF(t.GE.time_tfixed(1)) id_tfixed=2
+      IF(model_tgiven.EQ.2) THEN
+         IF(t.GE.time_tgiven(1)) id_tgiven=2
       END IF
 
       DO NR=1,NRMAX
@@ -178,11 +178,11 @@ CONTAINS
                RDPVRHOG(NR) = RDP(NR) / DVRHOG(NR)
             ELSEIF(NSVN.EQ.1) THEN
                IF(MDLEQN.NE.0) THEN
-                  IF(id_nfixed.EQ.1.OR. &
-                    (id_nfixed.EQ.2.AND. &
-                     rm(nr).GE.rho_min_nfixed.AND. &
-                     rm(nr).LE.rho_max_nfixed)) THEN
-                     CALL tr_prof_nfixed(rm(nr),t,rne_local)
+                  IF(id_ngiven.EQ.1.OR. &
+                    (id_ngiven.EQ.2.AND. &
+                     rm(nr).GE.rho_min_ngiven.AND. &
+                     rm(nr).LE.rho_max_ngiven)) THEN
+                     CALL tr_prof_ngiven(rm(nr),t,rne_local)
                      IF(nssn.EQ.1) THEN
                         rn(nr,nssn)=rne_local
                      ELSE
@@ -240,11 +240,11 @@ CONTAINS
                   ENDIF
                END IF
             ELSEIF(NSVN.EQ.2) THEN
-               IF(id_tfixed.EQ.1.OR. &
-                 (id_tfixed.EQ.2.AND. &
-                  RM(nr).GE.rho_min_tfixed.AND. &
-                  RM(nr).LE.rho_max_tfixed)) THEN
-                  CALL tr_prof_tfixed(rm(nr),t,rt_local)
+               IF(id_tgiven.EQ.1.OR. &
+                 (id_tgiven.EQ.2.AND. &
+                  RM(nr).GE.rho_min_tgiven.AND. &
+                  RM(nr).LE.rho_max_tgiven)) THEN
+                  CALL tr_prof_tgiven(rm(nr),t,rt_local)
                   RT(nr,nssn)=rt_local
                ELSE
                   IF(RN(NR,NSSN).LT.1.D-70) THEN
@@ -469,7 +469,7 @@ CONTAINS
 
       USE TRCOMM
       USE TRCOMX
-      USE trfixed
+      USE trprof
       IMPLICIT NONE
       INTEGER, INTENT(INOUT):: NEQRMAX
       INTEGER:: KL, MV, MVV, MW, MWMAX, NEQ, NEQ1, NR
@@ -557,8 +557,8 @@ CONTAINS
       CALL TR_IONIZATION(NR)
       CALL TR_CHARGE_EXCHANGE(NR)
 
-      CALL tr_set_nfixed(nr,t)
-      CALL tr_set_tfixed(nr,t)
+      CALL tr_set_ngiven(nr,t)
+      CALL tr_set_tgiven(nr,t)
 
 !     ***** RHS Vector *****
 
@@ -627,8 +627,8 @@ CONTAINS
          CALL TR_IONIZATION(NR)
          CALL TR_CHARGE_EXCHANGE(NR)
 
-         CALL tr_set_nfixed(nr,t)
-         CALL tr_set_tfixed(nr,t)
+         CALL tr_set_ngiven(nr,t)
+         CALL tr_set_tgiven(nr,t)
          
 !     ***** RHS Vector *****
 
@@ -701,8 +701,8 @@ CONTAINS
       CALL TR_IONIZATION(NR)
       CALL TR_CHARGE_EXCHANGE(NR)
 
-      CALL tr_set_nfixed(nr,t)
-      CALL tr_set_tfixed(nr,t)
+      CALL tr_set_ngiven(nr,t)
+      CALL tr_set_tgiven(nr,t)
       
 !     ***** RHS Vector *****
 
@@ -1025,29 +1025,29 @@ CONTAINS
       SUBROUTINE TRXTOA
 
       USE TRCOMM
-      USE trfixed, ONLY: &
-           time_nfixed,time_tfixed, &
-           rho_min_nfixed,rho_max_nfixed,rho_min_tfixed,rho_max_tfixed, &
-           tr_prof_nfixed,tr_prof_tfixed
+      USE trprof, ONLY: &
+           time_ngiven,time_tgiven, &
+           rho_min_ngiven,rho_max_ngiven,rho_min_tgiven,rho_max_tgiven, &
+           tr_prof_ngiven,tr_prof_tgiven
       IMPLICIT NONE
       INTEGER:: N,NEQ,NEQ1,NR,NS,NSSN,NSSN1,NSVN,NSVN1,NSTN,NSTN1,NF
-      INTEGER:: id_nfixed,id_tfixed,ICHECK
+      INTEGER:: id_ngiven,id_tgiven,ICHECK
       REAL(rkind)   :: SUM,rne_local,rt_local
 
       ICHECK=0
-      id_nfixed=0
-      id_tfixed=0
-      IF(model_nfixed.EQ.1) THEN
-         IF(t.GE.time_nfixed(1)) id_nfixed=1
+      id_ngiven=0
+      id_tgiven=0
+      IF(model_ngiven.EQ.1) THEN
+         IF(t.GE.time_ngiven(1)) id_ngiven=1
       END IF
-      IF(model_nfixed.EQ.2) THEN
-         IF(t.GE.time_nfixed(1)) id_nfixed=2
+      IF(model_ngiven.EQ.2) THEN
+         IF(t.GE.time_ngiven(1)) id_ngiven=2
       END IF
-      IF(model_tfixed.EQ.1) THEN
-         IF(t.GE.time_tfixed(1)) id_tfixed=1
+      IF(model_tgiven.EQ.1) THEN
+         IF(t.GE.time_tgiven(1)) id_tgiven=1
       END IF
-      IF(model_tfixed.EQ.2) THEN
-         IF(t.GE.time_tfixed(1)) id_tfixed=2
+      IF(model_tgiven.EQ.2) THEN
+         IF(t.GE.time_tgiven(1)) id_tgiven=2
       END IF
 
       DO NR=1,NRMAX
@@ -1059,11 +1059,11 @@ CONTAINS
                RDPVRHOG(NR)=RDP(NR) / DVRHOG(NR)
             ELSEIF(NSVN.EQ.1) THEN
                IF(MDLEQN.NE.0) THEN
-                  IF(id_nfixed.EQ.1.OR. &
-                    (id_nfixed.EQ.2.AND. &
-                     rm(nr).GE.rho_min_nfixed.AND. &
-                     rm(nr).LE.rho_max_nfixed)) THEN
-                     CALL tr_prof_nfixed(rm(nr),t,rne_local)
+                  IF(id_ngiven.EQ.1.OR. &
+                    (id_ngiven.EQ.2.AND. &
+                     rm(nr).GE.rho_min_ngiven.AND. &
+                     rm(nr).LE.rho_max_ngiven)) THEN
+                     CALL tr_prof_ngiven(rm(nr),t,rne_local)
                      IF(nssn.EQ.1) THEN
                         rn(nr,nssn)=rne_local
                      ELSE
@@ -1098,11 +1098,11 @@ CONTAINS
                   END IF
                ENDIF
             ELSEIF(NSVN.EQ.2) THEN
-               IF(id_tfixed.EQ.1.OR. &
-                 (id_tfixed.EQ.2.AND. &
-                  RM(nr).GE.rho_min_tfixed.AND. &
-                  RM(nr).LE.rho_max_tfixed)) THEN
-                  CALL tr_prof_tfixed(rm(nr),t,rt_local)
+               IF(id_tgiven.EQ.1.OR. &
+                 (id_tgiven.EQ.2.AND. &
+                  RM(nr).GE.rho_min_tgiven.AND. &
+                  RM(nr).LE.rho_max_tgiven)) THEN
+                  CALL tr_prof_tgiven(rm(nr),t,rt_local)
                   RT(nr,nssn)=rt_local
                ELSE
                   IF(RN(NR,NSSN).LT.1.D-70) THEN

@@ -64,8 +64,8 @@ MODULE trcomm_parm
        PROFN1,PROFN2,PROFT1,PROFT2,PROFU1,PROFU2, &
        PROFNU1,PROFNU2,PROFJ1,PROFJ2
   REAL(rkind):: ALP(6)
-  INTEGER:: model_nfixed,model_tfixed
-  CHARACTER(LEN=128):: knam_nfixed,knam_tfixed
+  INTEGER:: model_ngiven,model_tgiven
+  CHARACTER(LEN=128):: knam_ngiven,knam_tgiven
 
   ! === impurity and neutral parameters ===
 
@@ -484,7 +484,7 @@ MODULE trcomm
   REAL(rkind)    :: PHIA=0.D0
   
 ! fixed profile variables
-  REAL(rkind):: time_initial_nfixed,time_initial_tfixed
+  REAL(rkind):: time_initial_ngiven,time_initial_tgiven
 
 !     ************
 !TRPROF

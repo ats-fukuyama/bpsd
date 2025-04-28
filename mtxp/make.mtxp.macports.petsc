@@ -1,7 +1,8 @@
 ### make.mtxp.macport.petsc
-### Setup configureation with mpich, petsc and mumps from macports
+### Setup configureation with mpich and petsc from macports
 
 EXEC=testbnd testbndc testpcg testksp
+FLINKER=$(MFC)
 
 PETSC_DIR=/opt/local/lib/petsc
 INCLUDE_MTX_PETSC=-I${PETSC_DIR}/include -I${PETSC_DIR}/include/petsc
@@ -19,9 +20,9 @@ LIBX_MTX_PCG=$(LIB_MTX_PCG)
 LIBX_MTX_KSP=$(LIB_MTX_KSP) $(PETSC_KSP_LIB)
 LIBX_MTX_MUMPS=
 
-### PART 2: Selection of default setup ###
-###            overwritten in Makefile in each directory ###
-###            remove comment # of two lines in an appropriate  block###
+### Selection of default setup ###
+###    overwritten in Makefile in each directory ###
+###    remove comment # of two lines in an appropriate block###
 
 ## no MPI, band matrix solver
 #LIB_MTX=$(LIB_MTX_BND)
