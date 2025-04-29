@@ -3,7 +3,9 @@
 MODULE trexec
 
   PRIVATE
-  PUBLIC tr_exec,tr_eval,tr_coef_decide
+  PUBLIC tr_exec
+  PUBLIC tr_eval
+  PUBLIC tr_calc_coef
 
 CONTAINS
 
@@ -17,6 +19,7 @@ CONTAINS
 
       USE TRCOMM
       USE trcomx
+      USE trprof
       USE libbnd
       USE libitp
       IMPLICIT NONE
@@ -24,7 +27,7 @@ CONTAINS
       INTEGER:: I, ICHCK, INFO, J, L, LDB, M, MWRMAX, &
            N, NEQ, NEQ1, NEQRMAX, NR, NRHS, NSSN, NSSN1, &
            NSTN, NSTN1, NSVN, NSVN1, KL, KU, NF
-      INTEGER:: id_ngiven,id_tgiven
+      INTEGER:: id_profn,id_proft
       REAL(rkind)   :: AJL, FACTOR0, FACTORM, FACTORP, TSL
       REAL(rkind):: rne_local,rt_local
       INTEGER,DIMENSION(NEQMAXM*NRMAX) :: IPIV
@@ -142,19 +145,19 @@ CONTAINS
 !      CALL TRXTOA
 !      GO TO 6000
 
-      id_ngiven=0
-      id_tgiven=0
-      IF(model_ngiven.EQ.1) THEN
-         IF(t.GE.time_ngiven(1)) id_ngiven=1
+      id_profn=0
+      id_proft=0
+      IF(model_profn_time.EQ.1) THEN
+         IF(t.GE.time_profn(1)) id_profn=1
       END IF
-      IF(model_ngiven.EQ.2) THEN
-         IF(t.GE.time_ngiven(1)) id_ngiven=2
+      IF(model_profn_time.EQ.2) THEN
+         IF(t.GE.time_profn(1)) id_profn=2
       END IF
-      IF(model_tgiven.EQ.1) THEN
-         IF(t.GE.time_tgiven(1)) id_tgiven=1
+      IF(model_proft_time.EQ.1) THEN
+         IF(t.GE.time_proft(1)) id_proft=1
       END IF
-      IF(model_tgiven.EQ.2) THEN
-         IF(t.GE.time_tgiven(1)) id_tgiven=2
+      IF(model_proft_time.EQ.2) THEN
+         IF(t.GE.time_proft(1)) id_proft=2
       END IF
 
       DO NR=1,NRMAX
@@ -177,11 +180,11 @@ CONTAINS
                RDPVRHOG(NR) = RDP(NR) / DVRHOG(NR)
             ELSEIF(NSVN.EQ.1) THEN
                IF(MDLEQN.NE.0) THEN
-                  IF(id_ngiven.EQ.1.OR. &
-                    (id_ngiven.EQ.2.AND. &
-                     rm(nr).GE.rho_min_ngiven.AND. &
-                     rm(nr).LE.rho_max_ngiven)) THEN
-                     CALL tr_prof_ngiven(rm(nr),t,rne_local)
+                  IF(id_profn.EQ.1.OR. &
+                    (id_profn.EQ.2.AND. &
+                     rm(nr).GE.rho_min_profn.AND. &
+                     rm(nr).LE.rho_max_profn)) THEN
+                     CALL tr_prof_profn(rm(nr),t,rne_local)
                      IF(nssn.EQ.1) THEN
                         rn(nr,nssn)=rne_local
                      ELSE
@@ -239,11 +242,11 @@ CONTAINS
                   ENDIF
                END IF
             ELSEIF(NSVN.EQ.2) THEN
-               IF(id_tgiven.EQ.1.OR. &
-                 (id_tgiven.EQ.2.AND. &
-                  RM(nr).GE.rho_min_tgiven.AND. &
-                  RM(nr).LE.rho_max_tgiven)) THEN
-                  CALL tr_prof_tgiven(rm(nr),t,rt_local)
+               IF(id_proft.EQ.1.OR. &
+                 (id_proft.EQ.2.AND. &
+                  RM(nr).GE.rho_min_proft.AND. &
+                  RM(nr).LE.rho_max_proft)) THEN
+                  CALL tr_prof_proft(rm(nr),t,rt_local)
                   RT(nr,nssn)=rt_local
                ELSE
                   IF(RN(NR,NSSN).LT.1.D-70) THEN
@@ -450,6 +453,7 @@ CONTAINS
 
       USE TRCOMM
       USE TRCOMX
+      USE trprof
       IMPLICIT NONE
       INTEGER, INTENT(INOUT):: NEQRMAX
       INTEGER:: KL, MV, MVV, MW, MWMAX, NEQ, NEQ1, NR
@@ -507,7 +511,7 @@ CONTAINS
 
       NR=1
       NSW=1
-      CALL TR_COEF_DECIDE(NR,NSW,DV53)
+      CALL tr_calc_coef(NR,NSW,DV53)
 
       DO NV=1,NEQMAX
       DO NW=1,NEQMAX
@@ -534,8 +538,8 @@ CONTAINS
       CALL TR_IONIZATION(NR)
       CALL TR_CHARGE_EXCHANGE(NR)
 
-      CALL tr_set_ngiven(nr,t)
-      CALL tr_set_tgiven(nr,t)
+      CALL tr_set_profn(nr,t)
+      CALL tr_set_proft(nr,t)
 
 !     ***** RHS Vector *****
 
@@ -582,7 +586,7 @@ CONTAINS
 
       NSW=2
       DO NR=2,NRMAX-1
-         CALL TR_COEF_DECIDE(NR,NSW,DV53)
+         CALL tr_calc_coef(NR,NSW,DV53)
 
          DO NV=1,NEQMAX
          DO NW=1,NEQMAX
@@ -609,8 +613,8 @@ CONTAINS
          CALL TR_IONIZATION(NR)
          CALL TR_CHARGE_EXCHANGE(NR)
 
-         CALL tr_set_ngiven(nr,t)
-         CALL tr_set_tgiven(nr,t)
+         CALL tr_set_profn(nr,t)
+         CALL tr_set_proft(nr,t)
          
 !     ***** RHS Vector *****
 
@@ -659,7 +663,7 @@ CONTAINS
 
       NR=NRMAX
       NSW=3
-      CALL TR_COEF_DECIDE(NR,NSW,DV53)
+      CALL tr_calc_coef(NR,NSW,DV53)
 
       DO NV=1,NEQMAX
       DO NW=1,NEQMAX
@@ -687,8 +691,8 @@ CONTAINS
       CALL TR_IONIZATION(NR)
       CALL TR_CHARGE_EXCHANGE(NR)
 
-      CALL tr_set_ngiven(nr,t)
-      CALL tr_set_tgiven(nr,t)
+      CALL tr_set_profn(nr,t)
+      CALL tr_set_proft(nr,t)
       
 !     ***** RHS Vector *****
 
@@ -1014,23 +1018,23 @@ CONTAINS
       USE trprof  
       IMPLICIT NONE
       INTEGER:: N,NEQ,NEQ1,NR,NS,NSSN,NSSN1,NSVN,NSVN1,NSTN,NSTN1,NF
-      INTEGER:: id_ngiven,id_tgiven,ICHECK
+      INTEGER:: id_profn,id_proft,ICHECK
       REAL(rkind)   :: SUM,rne_local,rt_local
 
       ICHECK=0
-      id_ngiven=0
-      id_tgiven=0
-      IF(model_ngiven.EQ.1) THEN
-         IF(t.GE.time_ngiven(1)) id_ngiven=1
+      id_profn=0
+      id_proft=0
+      IF(model_profn_time.EQ.1) THEN
+         IF(t.GE.time_profn(1)) id_profn=1
       END IF
-      IF(model_ngiven.EQ.2) THEN
-         IF(t.GE.time_ngiven(1)) id_ngiven=2
+      IF(model_profn_time.EQ.2) THEN
+         IF(t.GE.time_profn(1)) id_profn=2
       END IF
-      IF(model_tgiven.EQ.1) THEN
-         IF(t.GE.time_tgiven(1)) id_tgiven=1
+      IF(model_proft_time.EQ.1) THEN
+         IF(t.GE.time_proft(1)) id_proft=1
       END IF
-      IF(model_tgiven.EQ.2) THEN
-         IF(t.GE.time_tgiven(1)) id_tgiven=2
+      IF(model_proft_time.EQ.2) THEN
+         IF(t.GE.time_proft(1)) id_proft=2
       END IF
 
       DO NR=1,NRMAX
@@ -1042,11 +1046,11 @@ CONTAINS
                RDPVRHOG(NR)=RDP(NR) / DVRHOG(NR)
             ELSEIF(NSVN.EQ.1) THEN
                IF(MDLEQN.NE.0) THEN
-                  IF(id_ngiven.EQ.1.OR. &
-                    (id_ngiven.EQ.2.AND. &
-                     rm(nr).GE.rho_min_ngiven.AND. &
-                     rm(nr).LE.rho_max_ngiven)) THEN
-                     CALL tr_prof_ngiven(rm(nr),t,rne_local)
+                  IF(id_profn.EQ.1.OR. &
+                    (id_profn.EQ.2.AND. &
+                     rm(nr).GE.rho_min_profn.AND. &
+                     rm(nr).LE.rho_max_profn)) THEN
+                     CALL tr_prof_profn(rm(nr),t,rne_local)
                      IF(nssn.EQ.1) THEN
                         rn(nr,nssn)=rne_local
                      ELSE
@@ -1081,11 +1085,11 @@ CONTAINS
                   END IF
                ENDIF
             ELSEIF(NSVN.EQ.2) THEN
-               IF(id_tgiven.EQ.1.OR. &
-                 (id_tgiven.EQ.2.AND. &
-                  RM(nr).GE.rho_min_tgiven.AND. &
-                  RM(nr).LE.rho_max_tgiven)) THEN
-                  CALL tr_prof_tgiven(rm(nr),t,rt_local)
+               IF(id_proft.EQ.1.OR. &
+                 (id_proft.EQ.2.AND. &
+                  RM(nr).GE.rho_min_proft.AND. &
+                  RM(nr).LE.rho_max_proft)) THEN
+                  CALL tr_prof_proft(rm(nr),t,rt_local)
                   RT(nr,nssn)=rt_local
                ELSE
                   IF(RN(NR,NSSN).LT.1.D-70) THEN
@@ -1273,11 +1277,11 @@ CONTAINS
 
 !     ***********************************************************
 
-!           DECIDE COEEFICIENTS FOR EQUATIONS
+!           Calc COEEFICIENTS FOR EQUATIONS
 
 !     ***********************************************************
 
-      SUBROUTINE TR_COEF_DECIDE(NR,NSW,DV53)
+      SUBROUTINE tr_calc_coef(NR,NSW,DV53)
 
       USE trcomm
       USE TRCOMX, ONLY : D, RD
@@ -1599,7 +1603,7 @@ CONTAINS
                ELSEIF(NSVN.EQ.3) THEN
                   D(NEQ,NR) = VOID
                ELSE
-                  STOP 'XX TR_COEF_DECIDE: must be NSSV=0 if NSSN=0'
+                  STOP 'XX tr_calc_coef: must be NSSV=0 if NSSN=0'
                ENDIF
             ENDIF
 
@@ -1648,7 +1652,7 @@ CONTAINS
                ELSEIF(NSVN.EQ.3) THEN
                   D(NEQ,NR) = VOID
                ELSE
-                  STOP 'XX TR_COEF_DECIDE: must be NSSV=0 if NSSN=0'
+                  STOP 'XX tr_calc_coef: must be NSSV=0 if NSSN=0'
                ENDIF
             ENDIF
 !     *
@@ -1672,7 +1676,7 @@ CONTAINS
                ELSEIF(NSVN.EQ.3) THEN
                   D(NEQ,NR) = VOID
                ELSE
-                  STOP 'XX TR_COEF_DECIDE: must be NSSV=0 if NSSN=0'
+                  STOP 'XX tr_calc_coef: must be NSSV=0 if NSSN=0'
                ENDIF
             ENDIF
          ENDIF
@@ -1744,7 +1748,7 @@ CONTAINS
  2000 CONTINUE
 
       RETURN
-      END SUBROUTINE TR_COEF_DECIDE
+    END SUBROUTINE tr_calc_coef
 
 !     ***********************************************************
 

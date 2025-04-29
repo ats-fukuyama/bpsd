@@ -347,7 +347,7 @@ CONTAINS
     REAL(rkind),INTENT(OUT):: f
     REAL(rkind),INTENT(IN):: f_nelm(nelm_max)
     INTEGER,INTENT(IN):: id  ! 0 for new search, 1: use nelm previous search
-    INTEGER:: nelm_save
+    INTEGER,SAVE:: nelm_save=0
     
     INTEGER:: nelm
 

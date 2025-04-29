@@ -55,7 +55,7 @@ CONTAINS
     NAMELIST /WF/ BB,RA,RR,RF,AJ,APH,AWD,APOS,NPH,RKZ,&
                   PA,PZ,PN,PNS,PZCL,PTPR,PTPP,PTS,PPN0,PTN0,&
                   NSMAX,NAMAX,MODELI,&
-                  MODELG,MODELB_wf,MODELD,MODELP,MODELN,&
+                  MODELG,MODELB_wf,MODELD,MODELP,model_prof,&
                   model_coll_enhance,factor_coll_enhance, &
                   xpos_coll_enhance,xwidth_coll_enhance, &
                   ypos_coll_enhance,ywidth_coll_enhance, &
@@ -136,7 +136,7 @@ CONTAINS
        WRITE(6,*) '&WF: BB,RA,RR,RF,AJ,APH,AWD,APOS,NPH,RKZ,'
        WRITE(6,*) '     PA,PZ,PN,PNS,PZCL,PTPR,PTPP,PTS,PPN0,PTN0,'
        WRITE(6,*) '     NSMAX,NAMAX,MODELI,'
-       WRITE(6,*) '     MODELG,MODELB_wf,MODELD,MODELP,MODELN,'
+       WRITE(6,*) '     MODELG,MODELB_wf,MODELD,MODELP,model_prof,'
        WRITE(6,*) '     NPRINT,NDRAWD,NDRAWA,NDRAWE,NGRAPH,NDRAWV,'
        WRITE(6,*) '     model_coll_enhance,factor_coll_enhance,'
        WRITE(6,*) '     xpos_coll_enhance,xwidth_coll_enhance,'
@@ -264,7 +264,7 @@ CONTAINS
   WRITE(6,*) '***** CONTROL *****'
   WRITE(6,605) 'MODELG    ',MODELG,'MODELB_wf ',MODELB_wf,&
                'MODELD    ',MODELD,'MODELP    ',MODELP
-  WRITE(6,605) 'MODELN    ',MODELN,'MODELI    ',MODELI
+  WRITE(6,605) 'model_prof',model_prof,'MODELI    ',MODELI
   WRITE(6,605) 'NPRINT    ',NPRINT,'NDRAWD    ',NDRAWD,&
                'NDRAWA    ',NDRAWA,'NDRAWE    ',NDRAWE
   WRITE(6,605) 'NGXMAX    ',NGXMAX,'NGYMAX    ',NGYMAX,&
@@ -317,7 +317,7 @@ SUBROUTINE wfparm_broadcast
      idata(5) =MODELB_wf
      idata(6) =MODELD
      idata(7) =MODELP
-     idata(8) =MODELN
+     idata(8) =model_prof
      idata(9) =NPRINT
      idata(10)=NDRAWD
      idata(11)=NDRAWA
@@ -345,7 +345,7 @@ SUBROUTINE wfparm_broadcast
   MODELB_wf=idata(5)
   MODELD=idata(6)
   MODELP=idata(7)
-  MODELN=idata(8)
+  model_prof=idata(8)
   NPRINT=idata(9)
   NDRAWD=idata(10)
   NDRAWA=idata(11)

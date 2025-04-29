@@ -161,20 +161,20 @@ CONTAINS
       ALP(5) = 1.0D0
       ALP(6) = 1.0D0
       
-      !  ====== time dependent given profile =====      
+      !  ====== time dependent profile =====      
 
-      !  model_ngiven: for density profile
-      !  model_tgiven: for temperature profile
+      !  model_profn_time: for density profile
+      !  model_porft_time: for temperature profile
       !     0: no fixed profile      
       !     1: fixed profile (x=n for density, x=t for temperatrue) 
       !     2: fixed profile for rho_min_xfixed <= rho <= rho_max_xfixed
       !     read parameters from file 'xprof_coef_data'
-      !        ntime_xfixed_max:         number of time points
-      !        ndata_xfixed_max:         number of coefficients
-      !        rho_min_xfixed:           rho minimum of fixed profile
-      !        rho_max_xfixed:           rho maximum of fixed profile
-      !        time_xfixed(ntime):       start time of fixed profile   
-      !        coef_xfixed(ndata,ntime): coefficients of fixed profile
+      !        nmax_profx_time:         number of time points
+      !        ndata_profx_time:         number of coefficients
+      !        rho_min_profx:           rho minimum of fixed profile
+      !        rho_max_profx:           rho maximum of fixed profile
+      !        time_profx(ntime):       start time of fixed profile   
+      !        coef_profx(ndata,ntime): coefficients of fixed profile
       !        f(nr)=coef(0) &
       !             +0.5D0*coef(1) &
       !             *(tanh((1.D0-coef(2)*coef(3)-rho(nr))/coef(3))+1.D0) &
@@ -182,13 +182,13 @@ CONTAINS
       !             +0.5D0*coef(8)*(1.D0-erf((rho(nr)-coef(9))
       !              /SQRT(2.D0*coef(10))))
       !
-      !  knam_ngiven: density fixed profile file name
-      !  knam_tgiven: temperature fixed profile file name
+      !  knam_profn_time: density fixed profile file name
+      !  knam_proft_time: temperature fixed profile file name
       
-      model_ngiven=0
-      model_tgiven=0
-      knam_ngiven='nprof_coef_data'
-      knam_tgiven='tprof_coef_data'
+      model_profn_time=0
+      model_proft_time=0
+      knam_profn_time='nprof_coef_data'
+      knam_proft_time='tprof_coef_data'
 
 
       !  ==== IMPURITY ans neutral PARAMETERS ====

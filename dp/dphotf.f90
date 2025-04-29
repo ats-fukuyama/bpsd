@@ -18,6 +18,8 @@ CONTAINS
 
   SUBROUTINE DP_HOTF(CW,CKPR,CKPP,NSA,mag,CLDISP)
 
+    USE plcomm_type
+    USE plcomm
     USE dpcomm
     USE plprof
     IMPLICIT NONE
@@ -42,6 +44,8 @@ CONTAINS
 
   SUBROUTINE DP_HOTFR(CW,CKPR,CKPP,NSA,mag,CLDISP)
 
+    USE plcomm
+    USE plcomm_type
     USE dpcomm
     USE plprof
     USE libbes,ONLY: bessjn
@@ -259,6 +263,7 @@ CONTAINS
 
   SUBROUTINE DP_HOTFI(CW,CKPR,CKPP,NSA,mag,CLDISP)
 
+    USE plcomm_type
     USE dpcomm
     USE plprof
     USE libbes,ONLY: bessjn

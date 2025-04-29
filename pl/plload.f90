@@ -22,14 +22,14 @@ END MODULE pl_trdata
 MODULE plload
 
   PRIVATE
-  PUBLIC  pl_load
-  PUBLIC  pl_load_xprf
-  PUBLIC  pl_read_xprf
-  PRIVATE pl_load_trdata
-  PUBLIC  pl_read_trdata
-  PRIVATE pl_load_p2D
-  PUBLIC  pl_read_p2D
-  PUBLIC  pl_read_p2Dmag
+  PUBLIC pl_load
+  PUBLIC pl_load_xprf
+  PUBLIC pl_read_xprf
+  PUBLIC pl_load_trdata
+  PUBLIC pl_read_trdata
+  PUBLIC pl_load_p2D
+  PUBLIC pl_read_p2D
+  PUBLIC pl_read_p2Dmag
 
 CONTAINS
 

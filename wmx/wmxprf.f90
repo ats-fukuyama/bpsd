@@ -43,7 +43,7 @@ CONTAINS
 !=======================================================================
 
     USE wmcomm
-    USE plprof,ONLY: pl_load_xprf,pl_read_xprf
+    USE plload,ONLY: pl_load_xprf,pl_read_xprf
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
     INTEGER,SAVE:: NRMAXSV=0,NTHMAXSV=0,NSUMAXSV=0,NSMAXSV=0

@@ -3,6 +3,7 @@
 MODULE dpcomm_parm
 
   USE plcomm_parm
+  USE plcomm_type
   USE commpi
   IMPLICIT NONE
 

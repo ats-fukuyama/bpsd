@@ -213,7 +213,7 @@
       ENDIF
       NSW=3
       NRMAX=NRAMAX
-      CALL TR_COEF_DECIDE(NRL,NSW,DV53)
+      CALL tr_calc_coef(NRL,NSW,DV53)
       NRMAX=NROMAX
       NMK=2
       DRH=DR/DVRHO(NRL)**(2.D0/3.D0)

@@ -709,8 +709,6 @@
               PLF(NS)%RUPL=0.D0
            END DO
            CALL pl_set_rnuc(plf)
-           IF(model_prof.EQ.42) THEN
-              
         END SELECT
 
         RETURN

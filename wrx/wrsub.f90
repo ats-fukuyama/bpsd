@@ -26,10 +26,10 @@ CONTAINS
   
   SUBROUTINE WR_cold_rkperp(omega,R,Z,phi,rkpara,rkperp_1,rkperp_2)
 
-    USE plcomm,ONLY: nsmax
+    USE plcomm,ONLY: nsmax,pl_mag_type
     USE bpsd_constants
     USE pllocal
-    USE plprof,ONLY: pl_mag_type,pl_mag
+    USE plprof,ONLY: pl_mag
     USE plprofw,ONLY: pl_prfw_type,pl_profw
     IMPLICIT NONE
     REAL(rkind),INTENT(IN):: omega,R,Z,phi,rkpara
@@ -624,7 +624,8 @@ CONTAINS
   SUBROUTINE wr_cal_ep(nstp,nray,cepola,cenorm,err)
 
     USE wrcomm
-    USE plprof,ONLY: pl_mag_type,pl_mag
+    USE plcomm,ONLY: pl_mag_type
+    USE plprof,ONLY: pl_mag
     USE dppola,ONLY: dp_pola
     IMPLICIT NONE
     INTEGER,INTENT(IN):: nstp,nray

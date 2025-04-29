@@ -53,6 +53,10 @@ CONTAINS
       WRITE(6,601) 'AD0   ',AD0,   'CHP   ',CHP,   'CWEB  ',CWEB,  'CALF  ',CALF
       WRITE(6,630)     'model_prof  ',model_prof
       WRITE(6,'(A,A)') 'knam_prof   ',knam_prof
+      WRITE(6,'(A,I4)')'model_profn_time',model_profn_time
+      WRITE(6,'(A,A)') 'knam_profn_time ',knam_profn_time
+      WRITE(6,'(A,I4)')'model_proft_time',model_proft_time
+      WRITE(6,'(A,A)') 'knam_proft_time ',knam_proft_time
       IF((MDLKAI.GE.1.AND.MDLKAI.LT.10).OR.ID.EQ.1) &
          WRITE(6,601) 'CKALFA',CKALFA,'CKBETA',CKBETA,'CKGUMA',CKGUMA
 

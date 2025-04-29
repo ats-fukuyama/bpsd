@@ -59,8 +59,8 @@ MODULE trcomm_parm
   REAL(rkind):: &
        PROFNU1,PROFNU2,PROFJ1,PROFJ2
   REAL(rkind):: ALP(7)
-  INTEGER:: model_ngiven,model_tgiven
-  CHARACTER(LEN=128):: knam_ngiven,knam_tgiven
+  INTEGER:: model_profn_time,model_proft_time
+  CHARACTER(LEN=128):: knam_profn_time,knam_proft_time
 
   ! === impurity and neutral parameters ===
 
