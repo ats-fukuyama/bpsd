@@ -1,5 +1,22 @@
-### makeinc.mtxp.macports.mumps
-### Setup configureation with mpich and mumps from macports
+### make.mtxp.macport+.petsc+mumps
+### Setup configureation for mumps with macports
+###    since 'sudo port install mumps' doesn't work on 2025-04-30
+###    directly install petsc with mumps
+###           
+###    Install required ports
+###       sudo port install gmake cmake imake gcc14 mpich
+###       sudo port select gcc mp-gcc14
+###       sudo port select mpi mpich-mp-fortran
+###       sudo port install fftw scalapack superlu hdf5
+###    Download petsc
+###       cd /opt/local/lib
+###       sudo git clone -b release https://gitlab.com/petsc/petsc.git petsc
+###       sudo chown petsc $USER
+###       copy $TASKDIR/mtxp/macports.py .
+###       ./macports.py
+###       export PETSC_DIR=/opt/local/petsc
+###       export PETSC_ARCH=macports
+
 
 EXEC=testbnd testbndc testpcg testdmumps testzmumps
 FLINKER=$(MFC)
