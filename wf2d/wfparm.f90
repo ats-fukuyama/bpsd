@@ -280,7 +280,7 @@ CONTAINS
   WRITE(6,*) '***** CONTROL *****'
   WRITE(6,604) 'MODELG',MODELG,'MODELB',MODELB,&
                'MODELD',MODELD,'MODELI',MODELI
-  WRITE(6,602) 'model_prof',model_prof
+  WRITE(6,605) 'model_prof',model_prof
   WRITE(6,604) 'NPRINT',NPRINT,'NDRAWD',NDRAWD,&
                'NDRAWA',NDRAWA,'NDRAWE',NDRAWE
   WRITE(6,604) 'NGXMAX',NGXMAX,'NGYMAX',NGYMAX,&
