@@ -159,7 +159,7 @@
          irc=irc+1
          IF(irc.gt.nzzmax) THEN
             WRITE(6,'(A,I10)') &
-                 'XX libmtxbnd: mtx_set_matrix: irc overflow: irc=',irc
+                 'XX libmtxdump: mtx_set_matrix: irc overflow: irc=',irc
          ELSE
             ir(irc)=i
             ic(irc)=j
@@ -171,7 +171,7 @@
       irmax=max(irmax,i)
       icmin=min(icmin,j-i)
       icmax=max(icmax,j-i)
-      WRITE(nfl,'(2I8,ES16.8)') i,j,v
+      WRITE(nfl,'(2I8,ES24.16)') i,j,v
       RETURN
       END SUBROUTINE mtx_set_matrix
       
@@ -185,7 +185,7 @@
       b(j)=v
       IF(idebug_save.EQ.2) &
            write(6,'(3I5,1PE12.4)') j,j,0,v
-      WRITE(nfl,'(2I8,ES16.8)') 0,j,v
+      WRITE(nfl,'(2I8,ES24.16)') 0,j,v
       RETURN
       END SUBROUTINE mtx_set_source
       
@@ -197,7 +197,7 @@
       REAL(dp),INTENT(IN):: v ! value to be inserted
 
       x(j)=v
-      WRITE(nfl,'(2I8,ES16.8)') -1,j,v
+      WRITE(nfl,'(2I8,ES24.16)') -1,j,v
       RETURN
       END SUBROUTINE mtx_set_vector
       
@@ -397,7 +397,7 @@
       irmax=max(irmax,i)
       icmin=min(icmin,j-i)
       icmax=max(icmax,j-i)
-      WRITE(nfl,'(2I8,2ES16.8)') i,j,v
+      WRITE(nfl,'(2I8,2ES24.16)') i,j,v
       RETURN
       END SUBROUTINE mtxc_set_matrix
       
@@ -411,7 +411,7 @@
       bc(j)=v
       IF(idebug_save.EQ.2) &
            write(6,'(3I5,1P2E12.4)') j,j,0,v
-      WRITE(nfl,'(2I8,2ES16.8)') 0,j,v
+      WRITE(nfl,'(2I8,2ES24.16)') 0,j,v
       RETURN
       END SUBROUTINE mtxc_set_source
       
@@ -423,7 +423,7 @@
       COMPLEX(dp),INTENT(IN):: v ! value to be inserted
 
       xc(j)=v
-      WRITE(nfl,'(2I8,2ES16.8)') -1,j,v
+      WRITE(nfl,'(2I8,2ES24.16)') -1,j,v
       RETURN
       END SUBROUTINE mtxc_set_vector
       

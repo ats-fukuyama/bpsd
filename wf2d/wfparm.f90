@@ -76,6 +76,7 @@ CONTAINS
                   MODELWF, &
                   NGXMAX,NGYMAX,NGVMAX,IDEBUG, &
                   sort_weight_x,sort_weight_y, &
+                  r_corner,z_corner, &
                   br_corner,bz_corner,bt_corner, &
                   pn_corner,ptpr_corner,ptpp_corner, &
                   tolerance,wdamp,fdamp,gfactor, &
@@ -165,7 +166,8 @@ CONTAINS
        WRITE(6,*) '     phase_wg_min,phase_wg_cen,phase_wg_max,'
        WRITE(6,*) '     MODELWF,'
        WRITE(6,*) '     NGXMAX,NGYMAX,NGVMAX,IDEBUG,'
-       WRITE(6,*) '     sort_weight_x,sort_weight_y'
+       WRITE(6,*) '     sort_weight_x,sort_weight_y,'
+       WRITE(6,*) '     r_corner,z_corner,'
        WRITE(6,*) '     br_corner,bz_corner,bt_corner,'
        WRITE(6,*) '     pn_corner,ptpr_corner,ptpp_corner,'
        WRITE(6,*) '     tolerance,wdamp,fdamp,gfactor,'
@@ -232,7 +234,7 @@ CONTAINS
 698    FORMAT(' ','NS     PA',10X,'PZ',10X,'PN',10X,'PNS',9X, &
              &           'PZCL',8X,'MODELP')
        SELECT CASE(MODELG)
-       CASE(0,12)
+       CASE(0,11,12)
           DO NS=1,NSMAX
              WRITE(6,614) NS,PA(NS),PZ(NS),pn_corner(1,NS),pn_corner(2,NS), &
                           PZCL(NS),MODELP(NS)
