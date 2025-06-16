@@ -95,14 +95,10 @@ CONTAINS
 
     DO nr=2,nrmax_profm_TOTAL
        data_rm(nr)=data_profm(1,nr-1)
-!       data_rn(nr,1)=data_profm( 6,nr-1)*1.D-20  ! n_e
-!       data_rn(nr,2)=data_profm( 7,nr-1)*1.D-20  ! n_D
-!       data_rn(nr,3)=data_profm( 8,nr-1)*1.D-20  ! n_T
-!       data_rn(nr,4)=data_profm(10,nr-1)*1.D-20  ! n_He4
-       data_rn(nr,1)=data_profm( 6,nr-1)  ! n_e
-       data_rn(nr,2)=data_profm( 7,nr-1)  ! n_D
-       data_rn(nr,3)=data_profm( 8,nr-1)  ! n_T
-       data_rn(nr,4)=data_profm(10,nr-1)  ! n_He4
+       data_rn(nr,1)=data_profm( 6,nr-1)*1.D-20  ! n_e
+       data_rn(nr,2)=data_profm( 7,nr-1)*1.D-20  ! n_D
+       data_rn(nr,3)=data_profm( 8,nr-1)*1.D-20  ! n_T
+       data_rn(nr,4)=data_profm(10,nr-1)*1.D-20  ! n_He4
        data_rt(nr,1)=data_profm( 4,nr-1)  ! T_e
        data_rt(nr,2)=data_profm( 5,nr-1)  ! T_D
        data_rt(nr,3)=data_profm( 5,nr-1)  ! T_T
@@ -127,6 +123,7 @@ CONTAINS
                      -data_rt(3,ns)*data_rm(2)**2) &
                      /(data_rm(3)**2-data_rm(2)**2)
     END DO
+    WRITE(6,*) 'nrmax_profm_TOTAL=',nrmax_profm_TOTAL
     DO ns=1,6
        CALL SPL1D(data_rm,data_rn(:,ns),derivm,spline_rn_TOTAL(:,:,ns), &
             nrmax_profm_TOTAL,1,ierr)
@@ -169,6 +166,7 @@ CONTAINS
     STOP
 600 CONTINUE
     nrmax_profg_TOTAL=i
+    WRITE(6,*) 'nrmax_profg_TOTAL=',nrmax_profg_TOTAL
     ALLOCATE(data_profg(27,nrmax_profg_TOTAL))
     ALLOCATE(data_rg(nrmax_profg_TOTAL))
     ALLOCATE(data_qp(nrmax_profg_TOTAL))

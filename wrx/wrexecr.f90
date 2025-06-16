@@ -23,6 +23,7 @@ CONTAINS
     REAL(rkind):: RK,PABSN
     INTEGER:: NRAY,nstp,nsa
 
+    WRITE(6,*) '@@@ point 31'
     nsamax_dp=nsamax_wr
     CALL GUTIME(TIME1)
     DO NRAY=1,NRAYMAX
@@ -32,9 +33,11 @@ CONTAINS
        rnv=VC/omega
 
        CALL wr_setup_start_point(NRAY,RAYS(0,0,NRAY),nstp,IERR)
+       WRITE(6,*) '@@@ point 32'
        nstpmax_nray(nray)=nstp
        IF(IERR.NE.0) CYCLE
        CALL wr_exec_single_ray(NRAY,RAYS(0,0,NRAY),nstp,IERR)
+       WRITE(6,*) '@@@ point 33'
        nstpmax_nray(nray)=nstp
        IF(IERR.NE.0) CYCLE
 
@@ -91,7 +94,8 @@ CONTAINS
     REAL(rkind):: rk_x2,rk_y2,rk_z2,rk_R2,rk_phi2
     REAL(rkind):: alpha_1,alpha_2,diff_1,diff_2
     COMPLEX(rkind):: cepola(3),cenorm(3)
-    
+
+    WRITE(6,*) '@@@ point 311'
     IERR=0
     deg=PI/180.D0
 
@@ -644,9 +648,7 @@ CONTAINS
     DO NSTP = nstp_start+1,NSTPLIM
        PW=Y(7)
        R=SQRT(Y(1)**2+Y(2)**2)
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 1: R=',R
        CALL ODERK(7,wr_fdrv,X0,XE,1,Y,YM,WORK)
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 2: R=',R
 
        IF(idebug_wr(11).NE.0) THEN
           WRITE(6,'(A,I8)') '*** idebug_wr(11): wrrkft_withd0: nstp=',nstp
@@ -656,18 +658,13 @@ CONTAINS
           WRITE(6,'(A,4ES12.4)') '      y4,y5,y6,y7 =',YM(4),YM(5),YM(6),YM(7)
        END IF
 
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 21: R=',R
        DELTA=DISPXR(YM(1),YM(2),YM(3),YM(4),YM(5),YM(6),omega)
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 22: R=',R
        IF (ABS(DELTA).GT.1.0D-6) THEN
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 23: R=',R
           CALL WRMODNWTN(YM,omega,YK)
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 24: R=',R
           DO I=1,3
              YM(I+3) = YK(I)
           END DO
        END IF
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 3: R=',R
 
        YN(0,NSTP)=XE
        DO I=1,7
@@ -677,7 +674,6 @@ CONTAINS
        YN(8,NSTP)=PW-YM(7)
 
        CALL wr_write_line(NSTP,XE,YM,YN(8,NSTP))
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 4: R=',R
 
        DO I=1,7
           Y(I)=YM(I)
@@ -701,7 +697,6 @@ CONTAINS
              GOTO 11
           ENDIF
        END IF
-!       IF(R.LT.0.95D0) WRITE(6,*) '@@@ point 5: R=',R
     END DO
     nstp_end=NSTPLIM
  

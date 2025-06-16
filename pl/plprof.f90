@@ -950,29 +950,29 @@
 
 !     ***** PLASMA BOUNDARY *****
 
-    SUBROUTINE pl_rzsu(RSU,ZSU,NSUMAX)
+    SUBROUTINE pl_rzsu(RSU_pl,ZSU_pl,NSUMAX)
 
       USE plcomm,ONLY: PI,RA,RKAP,RR,MODELG
       IMPLICIT NONE
-      REAL(rkind),ALLOCATABLE,INTENT(OUT) :: RSU(:),ZSU(:)
+      REAL(rkind),ALLOCATABLE,INTENT(OUT) :: RSU_pl(:),ZSU_pl(:)
       INTEGER,INTENT(OUT):: NSUMAX
       REAL(rkind)     :: DTH, TH
       INTEGER  :: NSU
 
       SELECT CASE(MODELG)
       CASE(0:2)
-         IF(ALLOCATED(RSU)) DEALLOCATE(RSU)
-         IF(ALLOCATED(ZSU)) DEALLOCATE(ZSU)
+         IF(ALLOCATED(RSU_pl)) DEALLOCATE(RSU_pl)
+         IF(ALLOCATED(ZSU_pl)) DEALLOCATE(ZSU_pl)
          NSUMAX=256
-         ALLOCATE(RSU(NSUMAX),ZSU(NSUMAX))
+         ALLOCATE(RSU_pl(NSUMAX),ZSU_pl(NSUMAX))
          DTH=2.D0*PI/(NSUMAX-1)
          DO NSU=1,NSUMAX
             TH=(NSU-1)*DTH
-            RSU(NSU)=RR+     RA*COS(TH)
-            ZSU(NSU)=   RKAP*RA*SIN(TH)
+            RSU_pl(NSU)=RR+     RA*COS(TH)
+            ZSU_pl(NSU)=   RKAP*RA*SIN(TH)
          ENDDO
       CASE(3,5,8)
-         CALL GETRSU(RSU,ZSU,NSUMAX)
+         CALL GETRSU(RSU_pl,ZSU_pl,NSUMAX)
       END SELECT
       RETURN
     END SUBROUTINE pl_rzsu

@@ -14,6 +14,7 @@ CONTAINS
     USE wrcomm_parm
     USE dpprep,ONLY: dp_prep_ns
     USE equnit
+    USE plload
     USE plprof
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
@@ -32,12 +33,6 @@ CONTAINS
        IF(INITEQ.EQ.0) THEN
           CALL eq_load(MODELG,KNAMEQ,IERR)
           IF(IERR.EQ.0) THEN
-             WRITE(LINE,'(A,I5)') 'NRMAX =',51
-             CALL eq_parm(2,LINE,IERR)
-             WRITE(LINE,'(A,I5)') 'NTHMAX=',64
-             CALL eq_parm(2,LINE,IERR)
-             WRITE(LINE,'(A,I5)') 'NSUMAX=',64
-             CALL eq_parm(2,LINE,IERR)
              CALL EQCALQ(IERR)
              CALL EQGETB(BB,RR,RIP,RA,RKAP,RDLT,RB)
              CALL pl_rzsu(rsu_wr,zsu_wr,nsumax)
@@ -108,11 +103,12 @@ CONTAINS
        zmin_wr=zaxis_eq+bdr_threshold*(zmin_eq-zaxis_eq)
     END IF
     IF(rmin_wr.LT.0.D0) rmin_wr=0.D0
-    WRITE(6,'(A,4ES12.4)') 'rmin_wr:',rmin_wr,rmax_wr,zmin_wr,zmax_wr
- !            WRITE(6,'(A,4ES12.4)') '_eq:',rmin_eq,rmax_eq,zmin_eq,zmax_eq
- !            WRITE(6,'(A,2ES12.4)') '_ax:',raxis_eq,zaxis_eq
- !            WRITE(6,'(A,4ES12.4)') '_wr:',rmin_wr,rmax_wr,zmin_wr,zmax_wr
+    WRITE(6,'(A,4ES12.4)') '_eq:',rmin_eq,rmax_eq,zmin_eq,zmax_eq
+    WRITE(6,'(A,2ES12.4)') '_ax:',raxis_eq,zaxis_eq
+    WRITE(6,'(A,4ES12.4)') '_wr:',rmin_wr,rmax_wr,zmin_wr,zmax_wr
 
+    CALL pl_load(ierr)
+    
     CALL dp_prep_ns(ierr)
 
     nrrmax_wr=21

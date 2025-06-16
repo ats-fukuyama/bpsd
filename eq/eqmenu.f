@@ -104,9 +104,7 @@ C
          MODELG=5
          CALL EQ_READ(IERR)
          IF(IERR.NE.0) GOTO 11
-         WRITE(6,*) '@@@ point 11'
          CALL EQCALQ(IERR)
-         WRITE(6,*) '@@@ point 12'
          MSTAT=2
 C
       ELSEIF(KID.EQ.'F') THEN

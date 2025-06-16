@@ -83,7 +83,8 @@ CONTAINS
                   model_fdrv,model_fdrv_ds,mode_wline,mode_fig, &
                   SMAX,DELS,UUMIN,EPSRAY,DELRAY,DELDER,DELKR,EPSNW,EPSD0, &
                   mode_beam,pne_threshold,bdr_threshold, &
-                  Rmax_wr,Rmin_wr,Zmax_wr,Zmin_wr,ra_wr,idebug_wr,KNAMWRW
+                  Rmax_wr,Rmin_wr,Zmax_wr,Zmin_wr,ra_wr,idebug_wr,KNAMWRW, &
+                  knam_profm_TOTAL,knam_profg_TOTAL
 
     READ(NID,WR,IOSTAT=IST,ERR=9800,END=9900)
     
@@ -135,6 +136,7 @@ CONTAINS
              9X,'SMAX,DELS,UUMIN,EPSRAY,DELRAY,DELDER,DELKR,EPSNW,EPSD0,'/ &
              9X,'mode_beam,pne_threshold,bdr_thershold'/ &
              9X,'Rmax_wr,Rmin_wr,Zmax_wr,Zmin_wr,ra_wr,idebug_wr'/ &
+             9X,'knam_profm_TOTAL,knam_profg_TOTAL'/ &
              9X,'KNAMWRW')
   END SUBROUTINE WRPLST
 
