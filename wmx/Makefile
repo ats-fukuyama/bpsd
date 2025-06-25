@@ -43,7 +43,6 @@ SRCS = wmcomm.f90 vmcomm.f90 wmlib.f90 wmsub.f90 \
        wmloop.f90 \
        wmeign.f90 wmtaem.f90 \
        wmmenu.f90
-SRC7 = wmeqin.f
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRC7:.f=.o) $(SRCS:.f90=.o))
 
@@ -116,7 +115,7 @@ $(OBJDIR)/wmbooz.o: wmbooz.f90 vmcomm.f90 wmcomm.f90
 $(OBJDIR)/wmvout.o: wmvout.f90 vmcomm.f90 wmcomm.f90
 
 $(OBJDIR)/wmsetg.o: wmsetg.f90 wmdprf.f90 wmxprf.f90 ../pl/plprof.f90 \
-          ../tr/trfile.f90 ../eq/wmeqin.f wmcomm.f90
+          ../tr/trfile.f90 wmcomm.f90
 $(OBJDIR)/wmprof.o: wmprof.f90 ../pl/plprof.f90 wmcomm.f90
 $(OBJDIR)/wmdisp.o: wmdisp.f90 wmprof.f90 ../dp/dptnsr0.f90 ../pl/plprofw.f90 \
           ../pl/plprof.f90 wmcomm.f90

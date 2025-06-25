@@ -433,7 +433,6 @@ CONTAINS
   SUBROUTINE wmsetg_eq(IERR)
 
     USE wmcomm
-    USE wmeqin
     USE libmpi
     IMPLICIT NONE
     INTEGER,INTENT(OUT):: IERR
