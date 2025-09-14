@@ -22,9 +22,9 @@ module bpsd_types
   end type bpsd_device_type
 
   type bpsd_species_data
-     real(rkind) :: pa     ! Mass number (n. of protons + n. of neutrons)
-     real(rkind) :: pz     ! Charge number (n. of protons - n. of electrons)
-     integer ::     npa    ! Atomic number (n. of protons)
+     real(rkind) :: pa    ! Atomic Mass number (n. of protons + n. of neutrons)
+     real(rkind) :: pz    ! Charge number (n. of protons - n. of electrons)
+     integer ::     npa   ! Atomic number (n. of protons)
   end type bpsd_species_data
 
   type bpsd_species_type

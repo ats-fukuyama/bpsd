@@ -79,7 +79,7 @@ contains
 
     if(bpsd_speciesx_init_flag) call bpsd_init_speciesx
 
-    speciesx%ndmax=species_in%nsmax*3
+    speciesx%ndmax=species_in%nsmax*5
     CALL bpsd_adjust_karray(speciesx%kid,speciesx%ndmax)
     CALL bpsd_adjust_karray(speciesx%kunit,speciesx%ndmax)
     CALL bpsd_adjust_array1D(speciesx%data,speciesx%ndmax)
@@ -135,7 +135,7 @@ contains
        return
     endif
 
-    species_out%nsmax=speciesx%ndmax/3
+    species_out%nsmax=speciesx%ndmax/5
 
     CALL bpsd_adjust_species_data(species_out%data,species_out%nsmax)
 
