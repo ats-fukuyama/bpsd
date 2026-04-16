@@ -35,7 +35,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,speciesx%ndmax-1,3
+    do nd=0,speciesx%ndmax-3,3
        speciesx%kid(nd+1)='species%pa'
        speciesx%kid(nd+2)='species%pz'
        speciesx%kid(nd+3)='species%npa'
@@ -79,7 +79,7 @@ contains
 
     if(bpsd_speciesx_init_flag) call bpsd_init_speciesx
 
-    speciesx%ndmax=species_in%nsmax*5
+    speciesx%ndmax=species_in%nsmax*3
     CALL bpsd_adjust_karray(speciesx%kid,speciesx%ndmax)
     CALL bpsd_adjust_karray(speciesx%kunit,speciesx%ndmax)
     CALL bpsd_adjust_array1D(speciesx%data,speciesx%ndmax)
@@ -135,7 +135,7 @@ contains
        return
     endif
 
-    species_out%nsmax=speciesx%ndmax/5
+   species_out%nsmax=speciesx%ndmax/3
 
     CALL bpsd_adjust_species_data(species_out%data,species_out%nsmax)
 

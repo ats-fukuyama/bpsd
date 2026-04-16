@@ -164,7 +164,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_plasmaf_type),intent(out) :: plasmaf_out
+    type(bpsd_plasmaf_type),intent(inout) :: plasmaf_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
     real(dp), dimension(:), ALLOCATABLE :: v
@@ -183,12 +183,12 @@ contains
        return
     endif
 
-    if(plasmaf_out%nrmax.eq.0) then
+    IF(ALLOCATED(plasmaf_out%data)) THEN
+       mode=1
+    ELSE
        mode=0
        plasmaf_out%nrmax = plasmafx%nrmax
-    else
-       mode=1
-    endif
+    END IF
     plasmaf_out%nsmax = (plasmafx%ndmax-1)/12
 
     CALL bpsd_adjust_array1D(plasmaf_out%rho,plasmaf_out%nrmax)
@@ -196,7 +196,7 @@ contains
     CALL bpsd_adjust_plasmaf_data(plasmaf_out%data,plasmaf_out%nrmax, &
                                                    plasmaf_out%nsmax)
 
-!    if(mode.eq.0) then
+    if(mode.eq.0) then
        plasmaf_out%time  = plasmafx%time
        do nr=1,plasmafx%nrmax
           plasmaf_out%rho(nr)=plasmafx%rho(nr)
@@ -219,7 +219,7 @@ contains
        enddo
        ierr=0
        return
-!    endif
+    endif
 
     if(plasmafx%status.eq.2) then
        CALL bpsd_adjust_array3D(plasmafx%spline,4,plasmafx%nrmax, &
