@@ -57,7 +57,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,trmatrixx%ndmax-2,5
+    do nd=0,trmatrixx%ndmax-9,9
        trmatrixx%kid(nd+1)='trmatrix%nip'
        trmatrixx%kid(nd+2)='trmatrix%nim'
        trmatrixx%kid(nd+3)='trmatrix%ncx'
