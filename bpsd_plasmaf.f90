@@ -105,6 +105,7 @@ contains
 
     plasmafx%nrmax=plasmaf_in%nrmax
     plasmafx%ndmax=plasmaf_in%nsmax*12+1
+    plasmafx%time=plasmaf_in%time
     CALL bpsd_adjust_karray(plasmafx%kid,plasmafx%ndmax)
     CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
     CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
@@ -112,7 +113,6 @@ contains
 
     CALL bpsd_setup_plasmaf_kdata
 
-    plasmafx%time = plasmaf_in%time
     do nr=1,plasmaf_in%nrmax
        plasmafx%rho(nr) = plasmaf_in%rho(nr)
        do ns=1,plasmaf_in%nsmax
@@ -164,7 +164,7 @@ contains
 
     use bpsd_subs
     implicit none
-    type(bpsd_plasmaf_type),intent(inout) :: plasmaf_out
+    type(bpsd_plasmaf_type),intent(out) :: plasmaf_out
     integer,intent(out) :: ierr
     integer :: nr, nd, ns, mode
     real(dp), dimension(:), ALLOCATABLE :: v
@@ -182,6 +182,10 @@ contains
        ierr=2
        return
     endif
+
+    plasmaf_out%nrmax=0
+    plasmaf_out%nsmax=0
+    plasmaf_out%time=0.D0
 
     IF(ALLOCATED(plasmaf_out%data)) THEN
        mode=1

@@ -1,3 +1,10 @@
+
+2026/04/20   bpsd_trmatrix.f90: wrong do loop corrected
+                (reported by Dr. Yoshimi)
+
+2026/04/16   bpsd_species.f90: wrong do loop corrected
+                (reported by Dr. Yoshimi)
+
 V1.1   trmatrix and trsource added
        library name changed: bpsdlib.a -> libbpsd.a
 V1.0   public release
