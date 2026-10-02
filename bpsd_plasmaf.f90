@@ -13,6 +13,16 @@ module bpsd_plasmaf
   PUBLIC bpsd_save_plasmaf
   PUBLIC bpsd_load_plasmaf
 
+  ! Single source of truth for the flat plasmafx layout:
+  !   ndmax = nsmax * nfields + nqinv
+  ! where the per-species block of `nfields` slots is followed by a
+  ! single trailing qinv slot (nqinv=1).
+  integer(ikind), parameter :: nfields = 12
+  ! density, temperature, temperature_para, temperature_perp,
+  ! velocity_tor, velocity_pol, velocity_para, velocity_perp,
+  ! zave, z2ave, density_fastion, energy_fastion
+  integer(ikind), parameter :: nqinv   = 1
+
   logical, save :: bpsd_plasmafx_init_flag = .TRUE.
   type(bpsd_data1Dx_type), save :: plasmafx
 
@@ -60,7 +70,7 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-    do nd=0,plasmafx%ndmax-2,12
+    do nd=0,plasmafx%ndmax-nqinv-nfields,nfields
        plasmafx%kid(nd+1)='plasmaf%density'
        plasmafx%kid(nd+2)='plasmaf%temperature'
        plasmafx%kid(nd+3)='plasmaf%temperature_para'
@@ -104,8 +114,12 @@ contains
     if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 
     plasmafx%nrmax=plasmaf_in%nrmax
+<<<<<<< HEAD
     plasmafx%ndmax=plasmaf_in%nsmax*12+1
     plasmafx%time=plasmaf_in%time
+=======
+    plasmafx%ndmax=plasmaf_in%nsmax*nfields+nqinv
+>>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
     CALL bpsd_adjust_karray(plasmafx%kid,plasmafx%ndmax)
     CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
     CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
@@ -116,7 +130,7 @@ contains
     do nr=1,plasmaf_in%nrmax
        plasmafx%rho(nr) = plasmaf_in%rho(nr)
        do ns=1,plasmaf_in%nsmax
-          nd=12*(ns-1)
+          nd=nfields*(ns-1)
           plasmafx%data(nr,nd+1) = plasmaf_in%data(nr,ns)%density
           plasmafx%data(nr,nd+2) = plasmaf_in%data(nr,ns)%temperature
           plasmafx%data(nr,nd+3) = plasmaf_in%data(nr,ns)%temperature_para
@@ -169,6 +183,21 @@ contains
     integer :: nr, nd, ns, mode
     real(dp), dimension(:), ALLOCATABLE :: v
 
+    ! Defensive zero-init of the scalar fields. INTENT(OUT) on a
+    ! derived type with allocatable components leaves scalar fields
+    ! UNDEFINED on entry per Fortran 2003+; the body below tests
+    ! `plasmaf_out%nrmax.eq.0` at line 186 to choose mode 0 vs 1.
+    ! Without this reset that test reads heap garbage and dispatches
+    ! to mode=1 with stale nrmax → bpsd_adjust_array1D leaves rho's
+    ! descriptor in a corrupt state → "Index '1' below lower bound of
+    ! <garbage>" SIGABRT in callers (libtotapi.so via tr_loop ->
+    ! tr_bpsd_get). Confirmed via file-based dump showing
+    ! `ALLOC(rho)=F` AND `out%nrmax=<stale>` at entry. Tracked in
+    ! task-private issue #148.
+    plasmaf_out%nrmax = 0
+    plasmaf_out%nsmax = 0
+    plasmaf_out%time  = 0.0_dp
+
     if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 
     if(plasmafx%status.eq.0) then
@@ -192,8 +221,15 @@ contains
     ELSE
        mode=0
        plasmaf_out%nrmax = plasmafx%nrmax
+<<<<<<< HEAD
     END IF
     plasmaf_out%nsmax = (plasmafx%ndmax-1)/12
+=======
+    else
+       mode=1
+    endif
+    plasmaf_out%nsmax = (plasmafx%ndmax-nqinv)/nfields
+>>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
 
     CALL bpsd_adjust_array1D(plasmaf_out%rho,plasmaf_out%nrmax)
     CALL bpsd_adjust_array1D(plasmaf_out%qinv,plasmaf_out%nrmax)
@@ -205,7 +241,7 @@ contains
        do nr=1,plasmafx%nrmax
           plasmaf_out%rho(nr)=plasmafx%rho(nr)
           do ns=1,plasmaf_out%nsmax
-             nd=12*(ns-1)
+             nd=nfields*(ns-1)
              plasmaf_out%data(nr,ns)%density         =plasmafx%data(nr,nd+1)
              plasmaf_out%data(nr,ns)%temperature     =plasmafx%data(nr,nd+2)
              plasmaf_out%data(nr,ns)%temperature_para=plasmafx%data(nr,nd+3)
@@ -249,7 +285,7 @@ contains
           call bpsd_spl1DF(plasmaf_out%rho(nr),v(nd),plasmafx,nd,ierr)
        enddo
        do ns=1,plasmaf_out%nsmax
-          nd=12*(ns-1)
+          nd=nfields*(ns-1)
           plasmaf_out%data(nr,ns)%density          = v(nd+1)
           plasmaf_out%data(nr,ns)%temperature      = v(nd+2)
           plasmaf_out%data(nr,ns)%temperature_para = v(nd+3)
