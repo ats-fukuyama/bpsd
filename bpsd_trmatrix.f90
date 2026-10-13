@@ -62,27 +62,6 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-<<<<<<< HEAD
-    do nd=0,trmatrixx%ndmax-9,9
-       trmatrixx%kid(nd+1)='trmatrix%nip'
-       trmatrixx%kid(nd+2)='trmatrix%nim'
-       trmatrixx%kid(nd+3)='trmatrix%ncx'
-       trmatrixx%kid(nd+4)='trmatrix%Pec'
-       trmatrixx%kid(nd+5)='trmatrix%Plh'
-       trmatrixx%kid(nd+6)='trmatrix%Pic'
-       trmatrixx%kid(nd+7)='trmatrix%Pbr'
-       trmatrixx%kid(nd+8)='trmatrix%Pcy'
-       trmatrixx%kid(nd+9)='trmatrix%Plr'
-       trmatrixx%kunit(nd+1)='1/(m^3 s)'
-       trmatrixx%kunit(nd+2)='1/(m^3 s)'
-       trmatrixx%kunit(nd+3)='1/(m^3 s)'
-       trmatrixx%kunit(nd+4)='W1/m^3'
-       trmatrixx%kunit(nd+5)='W1/m^3'
-       trmatrixx%kunit(nd+6)='W1/m^3'
-       trmatrixx%kunit(nd+7)='W1/m^3'
-       trmatrixx%kunit(nd+8)='W1/m^3'
-       trmatrixx%kunit(nd+9)='W1/m^3'
-=======
     do nd=0,trmatrixx%ndmax-nfields,nfields
        trmatrixx%kid(nd+1)='trmatrix%Dn'
        trmatrixx%kid(nd+2)='trmatrix%Dp'
@@ -96,7 +75,6 @@ contains
        trmatrixx%kunit(nd+4)='m/s'
        trmatrixx%kunit(nd+5)='m/s'
        trmatrixx%kunit(nd+6)='m/s'
->>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
     enddo
     RETURN
   END SUBROUTINE bpsd_setup_trmatrix_kdata

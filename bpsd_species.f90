@@ -43,15 +43,11 @@ contains
     IMPLICIT NONE
     integer(ikind):: nd
 
-<<<<<<< HEAD
-    do nd=0,speciesx%ndmax-3,3
-=======
     ! Single source of truth for the layout is the `nfields` parameter
     ! at module top. Earlier revisions had ndmax = nsmax*5 with stride
     ! 3, which left 2 trailing slots per species uninitialized and
     ! visible to bpsd_save_data0Dx.
     do nd=0,speciesx%ndmax-nfields,nfields
->>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
        speciesx%kid(nd+1)='species%pa'
        speciesx%kid(nd+2)='species%pz'
        speciesx%kid(nd+3)='species%npa'
@@ -95,11 +91,7 @@ contains
 
     if(bpsd_speciesx_init_flag) call bpsd_init_speciesx
 
-<<<<<<< HEAD
-    speciesx%ndmax=species_in%nsmax*3
-=======
     speciesx%ndmax=species_in%nsmax*nfields
->>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
     CALL bpsd_adjust_karray(speciesx%kid,speciesx%ndmax)
     CALL bpsd_adjust_karray(speciesx%kunit,speciesx%ndmax)
     CALL bpsd_adjust_array1D(speciesx%data,speciesx%ndmax)
@@ -155,11 +147,7 @@ contains
        return
     endif
 
-<<<<<<< HEAD
-   species_out%nsmax=speciesx%ndmax/3
-=======
     species_out%nsmax=speciesx%ndmax/nfields
->>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
 
     CALL bpsd_adjust_species_data(species_out%data,species_out%nsmax)
 

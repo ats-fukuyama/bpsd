@@ -114,12 +114,8 @@ contains
     if(bpsd_plasmafx_init_flag) call bpsd_init_plasmafx
 
     plasmafx%nrmax=plasmaf_in%nrmax
-<<<<<<< HEAD
-    plasmafx%ndmax=plasmaf_in%nsmax*12+1
-    plasmafx%time=plasmaf_in%time
-=======
     plasmafx%ndmax=plasmaf_in%nsmax*nfields+nqinv
->>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
+    plasmafx%time=plasmaf_in%time
     CALL bpsd_adjust_karray(plasmafx%kid,plasmafx%ndmax)
     CALL bpsd_adjust_karray(plasmafx%kunit,plasmafx%ndmax)
     CALL bpsd_adjust_array1D(plasmafx%rho,plasmafx%nrmax)
@@ -212,24 +208,13 @@ contains
        return
     endif
 
-    plasmaf_out%nrmax=0
-    plasmaf_out%nsmax=0
-    plasmaf_out%time=0.D0
-
     IF(ALLOCATED(plasmaf_out%data)) THEN
        mode=1
     ELSE
        mode=0
-       plasmaf_out%nrmax = plasmafx%nrmax
-<<<<<<< HEAD
-    END IF
-    plasmaf_out%nsmax = (plasmafx%ndmax-1)/12
-=======
-    else
-       mode=1
     endif
+    plasmaf_out%nrmax = plasmafx%nrmax
     plasmaf_out%nsmax = (plasmafx%ndmax-nqinv)/nfields
->>>>>>> 599c0e8f04c67718843118fb1846034ba32cf693
 
     CALL bpsd_adjust_array1D(plasmaf_out%rho,plasmaf_out%nrmax)
     CALL bpsd_adjust_array1D(plasmaf_out%qinv,plasmaf_out%nrmax)
